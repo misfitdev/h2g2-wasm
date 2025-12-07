@@ -1,0 +1,249 @@
+/* HintModal Container */
+.container {
+  position: fixed;
+  top: 5px;
+  right: 5px;
+  width: 500px;
+  height: 300px;
+  z-index: 50;
+}
+
+/* Modal Dialog */
+.modal {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid hsl(var(--terminal-green));
+  background-color: hsl(var(--background));
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px dashed hsl(var(--terminal-green));
+}
+
+.titleContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 14px;
+  color: hsl(var(--terminal-green));
+  margin: 0;
+}
+
+.timerDisplay {
+  font-weight: bold;
+  font-size: 14px;
+  color: hsl(var(--terminal-green));
+  min-width: 30px;
+  text-align: right;
+}
+
+.closeButton {
+  font-size: 18px;
+  padding: 2px;
+  color: hsl(var(--terminal-green));
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.closeButton:hover {
+  opacity: 0.8;
+}
+
+/* Content Area */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 8px 8px 0 8px;
+}
+
+.questionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.introText {
+  font-size: 11px;
+  font-family: 'Glass TTY VT220', monospace;
+  color: hsl(var(--terminal-green));
+  margin-bottom: 12px;
+}
+
+.noHints {
+  font-size: 11px;
+  color: hsl(var(--terminal-green-dim));
+}
+
+/* Question Button */
+.questionButton {
+  width: 100%;
+  text-align: left;
+  padding: 8px;
+  border: 1px solid hsl(var(--terminal-green));
+  background-color: transparent;
+  color: hsl(var(--terminal-green));
+  font-size: 11px;
+  font-family: 'Glass TTY VT220', monospace;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.questionButton:hover {
+  background-color: rgba(52, 211, 153, 0.1);
+}
+
+.questionButton:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px hsl(var(--terminal-green));
+}
+
+/* Answer View */
+.answerView {
+  display: flex;
+  flex-direction: column;
+  padding: 0 8px 8px 8px;
+  flex: 1;
+  overflow: hidden;
+}
+
+.backButton {
+  font-size: 10px;
+  font-family: 'Glass TTY VT220', monospace;
+  color: hsl(var(--terminal-green));
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 4px 2px 2px 2px;
+  margin-bottom: 8px;
+  transition: opacity 0.2s;
+  flex-shrink: 0;
+}
+
+.backButton:hover {
+  opacity: 0.8;
+}
+
+.backButton:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px hsl(var(--terminal-green));
+}
+
+/* Question/Answer Sections */
+.section {
+  display: flex;
+  flex-direction: column;
+}
+
+.sectionLabel {
+  font-size: 11px;
+  font-weight: bold;
+  color: hsl(var(--terminal-green));
+  margin-top: 8px;
+  margin-bottom: 4px;
+  flex-shrink: 0;
+}
+
+.sectionContent {
+  font-size: 11px;
+  font-family: 'Glass TTY VT220', monospace;
+  color: hsl(var(--terminal-green));
+  white-space: pre-wrap;
+  overflow-y: auto;
+  flex: 1;
+  position: relative;
+}
+
+.sectionContent.revealing {
+  position: relative;
+}
+
+.revealOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(52, 211, 153, 0.5);
+  backdrop-filter: blur(3px);
+  pointer-events: none;
+  transition: opacity 0.05s linear;
+}
+
+/* Next Hint Button */
+.nextHintContainer {
+  flex-shrink: 0;
+  padding: 8px 0;
+  margin-top: auto;
+  padding-bottom: 4px;
+}
+
+.nextHintButton {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid hsl(var(--terminal-green));
+  background-color: transparent;
+  color: hsl(var(--terminal-green));
+  font-family: 'Glass TTY VT220', monospace;
+  font-size: 11px;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.nextHintButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: rgba(52, 211, 153, 0.15);
+}
+
+.nextHintButton:enabled {
+  opacity: 1;
+}
+
+.nextHintButton:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px hsl(var(--terminal-green));
+}
+
+/* Timer Progress Bar */
+.timerProgress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: hsl(var(--terminal-green));
+  opacity: 0.2;
+  transition: width 0.05s linear;
+}
+
+.timerLabel {
+  position: relative;
+  z-index: 10;
+}
+
+.noMoreHints {
+  font-size: 10px;
+  font-style: italic;
+  color: hsl(var(--terminal-green-dim));
+  margin-top: auto;
+  padding: 8px 0 4px 0;
+  flex-shrink: 0;
+}

@@ -1,0 +1,51 @@
+$schema: https://moonrepo.dev/schemas/moon.json
+
+project:
+  name: web
+  description: React + Vite web application
+
+tasks:
+  install:
+    command: npm install
+    inputs:
+      - package.json
+      - package-lock.json
+    outputs:
+      - node_modules
+
+  dev:
+    command: npm run dev
+    local: true
+    deps:
+      - install
+
+  build:
+    command: npm run build
+    deps:
+      - install
+      - encrusted:build
+      - wasm:bindgen
+    inputs:
+      - package.json
+      - package-lock.json
+      - src/**/*
+      - public/**/*
+      - vite.config.ts
+      - tsconfig.json
+
+  build-dev:
+    command: npm run build:dev
+    deps:
+      - install
+      - encrusted:build
+      - wasm:bindgen
+
+  lint:
+    command: npm run lint
+    deps:
+      - install
+
+  preview:
+    command: npm run preview
+    deps:
+      - install

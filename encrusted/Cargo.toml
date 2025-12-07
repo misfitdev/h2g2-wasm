@@ -1,0 +1,30 @@
+[package]
+authors = ["Sterling DeMille <sterlingdemille+github@gmail.com>"]
+name = "encrusted"
+version = "1.1.0"
+edition = "2021"
+description = "A z-machine (interpreter) for Infocom-era text adventure games"
+repository = "https://github.com/demille/encrusted"
+readme = "README.md"
+license = "MIT"
+
+[lib]
+name = "encrusted"
+path = "src/rust/lib.rs"
+
+[profile.release]
+lto = true
+opt-level = 's'
+
+[dependencies]
+base64 = "0.22.1"
+enum_primitive = "0.1.1"
+rand = "0.8.5"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+crc = "3.4"
+sha2 = "0.10"
+hmac = "0.12"
+generic-array = "0.14.9"
+
+[dev-dependencies]

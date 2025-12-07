@@ -1,0 +1,9 @@
+$schema: https://moonrepo.dev/schemas/tasks.json
+
+tasks:
+  clean:
+    command: bash ${MOON_WORKSPACE_ROOT}/scripts/clean.sh
+    local: true
+    description: Clean all build artifacts, caches, and dependencies
+    options:
+      runFromWorkspaceRoot: true

@@ -1,0 +1,12 @@
+$schema: https://moonrepo.dev/schemas/workspace.json
+
+projects:
+  - apps/*
+  - encrusted
+  - wasm
+
+vcs:
+  manager: git
+
+notifier:
+  webhookUrl: null

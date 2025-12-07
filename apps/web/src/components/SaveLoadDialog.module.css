@@ -1,0 +1,256 @@
+/* Overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: hsl(var(--terminal-black)) / 0.9;
+}
+
+/* Modal Container */
+.modal {
+  width: 100%;
+  max-width: 28rem;
+  border: 1px solid hsl(var(--terminal-green-dim));
+  background-color: hsl(var(--terminal-black));
+  padding: 1rem;
+  color: hsl(var(--terminal-green));
+  text-shadow:
+    0 0 1px hsl(var(--terminal-green)),
+    0 0 2px hsl(var(--terminal-green) / 0.8),
+    0 0 4px hsl(var(--terminal-green) / 0.4);
+  font-family: 'Glass TTY VT220', 'Monaco', 'Consolas', 'Courier New', monospace;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid hsl(var(--terminal-green-dim));
+}
+
+.title {
+  font-size: 1.125rem;
+  font-weight: bold;
+  margin: 0;
+  color: hsl(var(--terminal-green));
+}
+
+.closeButton {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: hsl(var(--terminal-green-dim));
+  padding: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.closeButton:hover {
+  color: hsl(var(--terminal-green));
+}
+
+.closeButton:focus {
+  outline: none;
+  ring: 2px hsl(var(--terminal-green));
+  ring-offset: 2px;
+}
+
+/* Slots Container */
+.slotsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 16rem;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+}
+
+.emptyMessage {
+  color: hsl(var(--terminal-green-dim));
+  text-align: center;
+  padding: 1rem;
+}
+
+/* Slot Item */
+.slotItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+  border: 1px solid hsl(var(--terminal-green-dim));
+  transition: border-color 0.2s;
+}
+
+.slotItem:hover {
+  border-color: hsl(var(--terminal-green));
+}
+
+.slotButton {
+  flex: 1;
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: hsl(var(--terminal-green-dim));
+  text-shadow:
+    0 0 1px hsl(var(--terminal-green-dim) / 0.5);
+  font-family: 'Glass TTY VT220', 'Monaco', 'Consolas', 'Courier New', monospace;
+  font-size: 0.875rem;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.slotButton:hover {
+  color: hsl(var(--terminal-green));
+}
+
+.slotButton:focus {
+  outline: none;
+  ring: 2px hsl(var(--terminal-green));
+  ring-offset: 2px;
+}
+
+.deleteButton {
+  margin-left: 0.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: hsl(var(--terminal-green-dim));
+  padding: 0;
+  width: 1rem;
+  height: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.deleteButton:hover {
+  color: hsl(var(--terminal-red));
+}
+
+.deleteButton:focus {
+  outline: none;
+  ring: 2px hsl(var(--terminal-green));
+  ring-offset: 2px;
+}
+
+/* Save Input Section */
+.inputSection {
+  border-top: 1px solid hsl(var(--terminal-green-dim));
+  padding-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.inputLabel {
+  display: block;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+  color: hsl(var(--terminal-green-dim));
+  text-shadow:
+    0 0 1px hsl(var(--terminal-green-dim) / 0.5);
+}
+
+.inputGroup {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.input {
+  flex: 1;
+  background-color: hsl(var(--terminal-black));
+  border: 1px solid hsl(var(--terminal-green-dim));
+  padding: 0.5rem 0.75rem;
+  color: hsl(var(--terminal-green));
+  text-shadow:
+    0 0 1px hsl(var(--terminal-green)),
+    0 0 2px hsl(var(--terminal-green) / 0.8),
+    0 0 4px hsl(var(--terminal-green) / 0.4);
+  font-family: 'Glass TTY VT220', 'Monaco', 'Consolas', 'Courier New', monospace;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  border-color: hsl(var(--terminal-green));
+  ring: 2px hsl(var(--terminal-green));
+  ring-offset: 2px;
+}
+
+.input::placeholder {
+  color: hsl(var(--terminal-green-dim));
+}
+
+.saveButton {
+  padding: 0.5rem 1rem;
+  border: 1px solid hsl(var(--terminal-green));
+  background: transparent;
+  color: hsl(var(--terminal-green));
+  text-shadow:
+    0 0 1px hsl(var(--terminal-green)),
+    0 0 2px hsl(var(--terminal-green) / 0.8),
+    0 0 4px hsl(var(--terminal-green) / 0.4);
+  cursor: pointer;
+  font-family: 'Glass TTY VT220', 'Monaco', 'Consolas', 'Courier New', monospace;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.saveButton:hover {
+  background-color: hsl(var(--terminal-green));
+  color: hsl(var(--terminal-black));
+  text-shadow: none;
+}
+
+.saveButton:focus {
+  outline: none;
+  ring: 2px hsl(var(--terminal-green));
+  ring-offset: 2px;
+}
+
+/* Cancel Button */
+.cancelSection {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid hsl(var(--terminal-green-dim));
+}
+
+.cancelButton {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid hsl(var(--terminal-green-dim));
+  background: transparent;
+  color: hsl(var(--terminal-green-dim));
+  text-shadow:
+    0 0 1px hsl(var(--terminal-green-dim) / 0.5);
+  cursor: pointer;
+  font-family: 'Glass TTY VT220', 'Monaco', 'Consolas', 'Courier New', monospace;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.cancelButton:hover {
+  color: hsl(var(--terminal-green));
+  text-shadow:
+    0 0 1px hsl(var(--terminal-green)),
+    0 0 2px hsl(var(--terminal-green) / 0.8),
+    0 0 4px hsl(var(--terminal-green) / 0.4);
+  border-color: hsl(var(--terminal-green));
+}
+
+.cancelButton:focus {
+  outline: none;
+  ring: 2px hsl(var(--terminal-green));
+  ring-offset: 2px;
+}

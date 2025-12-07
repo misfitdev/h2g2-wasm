@@ -1,0 +1,1804 @@
+{
+  "sections": [
+    {
+      "name": "Sample Question",
+      "questions": [
+        {
+          "question": "Fungus?",
+          "answers": [
+            "You need a Fire Fungus meter.",
+            "You don't have a Fire Fungus meter.",
+            "So you can't. Remind me never to send you to the store for Fronurbdi Fire Fungus."
+          ],
+          "section": "Sample Question",
+          "tags": [
+            "act:sample",
+            "puz:sample"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "On the Earth",
+      "questions": [
+        {
+          "question": "How do I turn on the light after I wake up?",
+          "answers": [
+            "Have you tried TURN ON THE LIGHT?"
+          ],
+          "section": "On the Earth",
+          "tags": [
+            "act:earth_arthur"
+          ]
+        },
+        {
+          "question": "I can't reach anything from the bed! What do I do?",
+          "answers": [
+            "Maybe you should GET OUT OF THE BED."
+          ],
+          "section": "On the Earth",
+          "tags": [
+            "act:earth_arthur",
+            "loc:bedroom"
+          ]
+        },
+        {
+          "question": "Why am I having trouble picking things up?",
+          "answers": [
+            "The room is spinning because you have a hangover.",
+            "There is _one_ thing you can pick up.",
+            "It's the gown."
+          ],
+          "section": "On the Earth",
+          "tags": [
+            "act:earth_arthur",
+            "loc:bedroom"
+          ]
+        },
+        {
+          "question": "How can I get out of the bedroom?",
+          "answers": [
+            "You keep bouncing off the doorframe because the room is spinning from your hangover.",
+            "You'll have to get rid of it.",
+            "See the previous question.",
+            "There's an aspirin in the pocket of the gown.",
+            "TAKE GOWN. PUT IT ON. OPEN THE POCKET. TAKE THE ANALGESIC."
+          ],
+          "section": "On the Earth",
+          "tags": [
+            "act:earth_arthur",
+            "loc:bedroom"
+          ]
+        },
+        {
+          "question": "What will I need to bring with me when I leave the bedroom?",
+          "answers": [
+            "As in most interactive fiction, it's always best to bring as much as you can carry."
+          ],
+          "section": "On the Earth",
+          "tags": [
+            "act:earth_arthur",
+            "loc:bedroom"
+          ]
+        },
+        {
+          "question": "Is the pile of mail important?",
+          "answers": [
+            "Have you read the mail?",
+            "Now you know what's going on outside the house.",
+            "Also, see the advice in the previous question."
+          ],
+          "section": "On the Earth",
+          "tags": [
+            "act:earth_arthur",
+            "loc:porch"
+          ]
+        },
+        {
+          "question": "What's that bulldozer doing in front of my house?",
+          "answers": [
+            "The backstroke?",
+            "Sorry about that. Have you read the pile of mail on your Front Porch?",
+            "The bulldozer is there to knock down your house to make way for a new highway bypass."
+          ],
+          "section": "On the Earth",
+          "tags": [
+            "act:earth_arthur",
+            "loc:front_of_house"
+          ]
+        },
+        {
+          "question": "Is it important to stop my house from being destroyed?",
+          "answers": [
+            "If you owned a house, even a little ugly one like Arthur's, wouldn't you want to keep it from getting destroyed?",
+            "If you stay in the house until the bulldozer demolishes it, you die.",
+            "If you are standing near the house when the bulldozer demolishes it, a brick hits you, and you die.",
+            "If you try to leave the vicinity of the house, it gets demolished, a brick hits you, and you die.",
+            "In other words, yes."
+          ],
+          "section": "On the Earth",
+          "tags": [
+            "act:earth_arthur",
+            "loc:front_of_house"
+          ]
+        },
+        {
+          "question": "How can I prevent my house from getting demolished?",
+          "answers": [
+            "There's a tried and true method for stopping bulldozers and other unwanted construction apparatus.",
+            "Have you ever tried calling the police from the phone in your bedroom?",
+            "In front of your house, have you ever tried to PROTEST or asked PROSSER, STOP THE BULLDOZER?",
+            "Have you ever tried to STAND IN FRONT OF THE BULLDOZER?",
+            "In case you haven't figured it out from these subtle clues, you want to LIE DOWN IN FRONT OF THE BULLDOZER.",
+            "Actually, because the authors are such swell and generous guys, BLOCK THE BULLDOZER, or STOP THE BULLDOZER, or even just LIE DOWN all work.",
+            "But you have to wait a few turns after you lie down before the bulldozer finally grinds to a halt."
+          ],
+          "section": "On the Earth",
+          "tags": [
+            "act:earth_arthur",
+            "loc:front_of_house"
+          ]
+        },
+        {
+          "question": "What should I do when Ford Prefect shows up?",
+          "answers": [
+            "If you take the towel that Ford is trying to give you, he'll walk away.",
+            "Standing up to follow him at this point is fatal.",
+            "Without Ford you'll never survive the upcoming destruction of the Earth.",
+            "Ford is oblivious to your bulldozer problem. If you wait a few turns, he'll notice the bulldozer, and help you out.",
+            "If you want to save a few turns, rather than just waiting, you can type FORD, WHAT ABOUT MY HOME? as soon as he arrives."
+          ],
+          "section": "On the Earth",
+          "tags": [
+            "act:earth_arthur"
+          ]
+        },
+        {
+          "question": "Should I go with Ford to the Pub?",
+          "answers": [
+            "You'd better not stand up until Prosser is lying down in your place.",
+            "This will happen if you simply wait a few turns after Ford shows up.",
+            "At this point, you should listen to Ford and accompany him to the Pub. If you wait around where you are, you'll be sorry."
+          ],
+          "section": "On the Earth",
+          "tags": [
+            "act:earth_arthur",
+            "loc:pub"
+          ]
+        },
+        {
+          "question": "Should I go with Ford to the Cinema?",
+          "answers": [
+            "According to the article on the back page of Prosser's copy of the _Cottington Gazette_, the Famous Scientist is a real movie buff.",
+            "The Cinema's double feature of \"Citizen Kane\" and \"Earth vs. The Flying Saucers\" sounds promising.",
+            "Remember the warning in the introduction. Don't let the presence or absence of questions influence your play, and don't assume that long answers are associated with important questions."
+          ],
+          "section": "On the Earth",
+          "tags": [
+            "act:earth_arthur"
+          ]
+        },
+        {
+          "question": "What should I do in the Pub?",
+          "answers": [
+            "You came here because of Ford, right?",
+            "Why not do as he says?",
+            "Drink some beer.",
+            "Also, have you noticed the shelf of items behind the bar?"
+          ],
+          "section": "On the Earth",
+          "tags": [
+            "act:earth_arthur",
+            "loc:pub"
+          ]
+        },
+        {
+          "question": "How much beer should I drink?",
+          "answers": [
+            "Ford will keep urging you to drink beer until you've had enough.",
+            "If you've had less than three beers, the shock of the matter transference beam will kill you.",
+            "If you have more than three beers, you'll get drunk and end up partying through the end of the world.",
+            "In other words, you want to drink the beer three times."
+          ],
+          "section": "On the Earth",
+          "tags": [
+            "act:earth_arthur",
+            "loc:pub"
+          ]
+        },
+        {
+          "question": "Is the jukebox important?",
+          "answers": [
+            "Try LISTEN TO THE JUKEBOX or LISTEN TO THE MUSIC.",
+            "The jukebox is just there for atmosphere.",
+            ">>This space intentionally left blank.<<",
+            ">>This space even more intentionally left blank.<<"
+          ],
+          "section": "On the Earth",
+          "tags": [
+            "act:earth_arthur",
+            "loc:pub"
+          ]
+        },
+        {
+          "question": "How can I buy beer?",
+          "answers": [
+            "You can't.",
+            "But so what? Ford buys some for you."
+          ],
+          "section": "On the Earth",
+          "tags": [
+            "act:earth_arthur"
+          ]
+        },
+        {
+          "question": "How can I buy a packet of peanuts?",
+          "answers": [
+            "You can't.",
+            "At least, not when you're Arthur."
+          ],
+          "section": "On the Earth",
+          "tags": [
+            "act:earth_arthur"
+          ]
+        },
+        {
+          "question": "How can I buy a cheese sandwich?",
+          "answers": [
+            "How about BUY A CHEESE SANDWICH?",
+            "Or, BARTENDER, GIVE ME A CHEESE SANDWICH?",
+            "Perhaps ASK BARTENDER FOR A SANDWICH is more up your alley."
+          ],
+          "section": "On the Earth",
+          "tags": [
+            "act:earth_arthur"
+          ]
+        },
+        {
+          "question": "How can I buy some whiskey?",
+          "answers": [
+            "You can't.",
+            "There's no whiskey in the entire game, let alone in the Pub!",
+            "It's not a very good pub, is it?"
+          ],
+          "section": "On the Earth",
+          "tags": [
+            "act:earth_arthur"
+          ]
+        },
+        {
+          "question": "What should I do about the dog?",
+          "answers": [
+            "Have you examined the dog?",
+            "If you haven't figured it out, you'll find out more later."
+          ],
+          "section": "On the Earth",
+          "tags": [
+            "act:earth_arthur",
+            "loc:country_lane"
+          ]
+        },
+        {
+          "question": "What should I do when my house is destroyed?",
+          "answers": [
+            "There's not much you can do about it.",
+            "You might return to Front of House to survey the rubble, or to have it out with Prosser."
+          ],
+          "section": "On the Earth",
+          "tags": [
+            "act:earth_arthur"
+          ]
+        },
+        {
+          "question": "What should I do when the Vogon fleet arrives?",
+          "answers": [
+            "DON'T PANIC.",
+            "Read everything carefully.",
+            "Remember Ford's reason for drinking all that beer?",
+            "It has something to do with that small black device that Ford drops after the fleet arrives.",
+            "Have you tried picking it up?",
+            "Have you tried examining it?",
+            "You want to hitch a ride aboard one of the Vogon ships.",
+            "PUSH THE GREEN BUTTON."
+          ],
+          "section": "On the Earth",
+          "tags": [
+            "act:earth_arthur",
+            "puz:vogon_ship"
+          ]
+        },
+        {
+          "question": "I died from shock during matter transference. What did I do wrong?",
+          "answers": [
+            "See the question about how much beer to drink."
+          ],
+          "section": "On the Earth",
+          "tags": [
+            "act:earth_arthur"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "In the Dark",
+      "questions": [
+        {
+          "question": "Okay, just exactly how do I get out of this Dark?",
+          "answers": [
+            "Have patience.",
+            "Read carefully.",
+            "If you wait a number of times, you'll begin to get some clues.",
+            "The first clue comes the 18th time you've waited; three additional clues come every fifteen WAITs thereafter.",
+            "Try starting again and reading each response to WAITing in the Dark very carefully.",
+            "There's an important difference between the third and fourth responses.",
+            "You are no longer told that you can't smell anything.",
+            "Try SMELL THE DARKNESS or SMELL NOTHING or even just SMELL."
+          ],
+          "section": "In the Dark",
+          "tags": [
+            "act:dark"
+          ]
+        },
+        {
+          "question": "What's the significance of this shadow I see moving around?",
+          "answers": [
+            "That's your way out of Dark.",
+            "You should EXAMINE THE SHADOW, or feel it, or smell it."
+          ],
+          "section": "In the Dark",
+          "tags": [
+            "act:dark"
+          ]
+        },
+        {
+          "question": "Exactly how does Dark work?",
+          "answers": [
+            "You enter Dark when the Earth is destroyed, and at various other points throughout the game.",
+            "Beginning with the fourth time that you read \"There's nothing you can taste...\" (or some paraphrase of that paragraph), one of your five senses will disappear.",
+            "At this point, you should type the sense that no longer appears, such as SMELL or SEE.",
+            "The first time you enter Dark, smell will go away. See the second question in this section.",
+            "The second time you enter Dark, hearing will go away. See the fourth question in this section.",
+            "On subsequent visits to Dark, the sense that disappears will be fairly random. See the following question for more details."
+          ],
+          "section": "In the Dark",
+          "tags": [
+            "act:dark"
+          ]
+        },
+        {
+          "question": "Is there any way to control where I go when I leave Dark?",
+          "answers": [
+            "Not usually.",
+            "Don't continue until you have a cup of tea.",
+            "Don't continue until you actually have real tea, not merely Advanced Tea Substitute (ATS).",
+            "Have you ever examined the cup of tea?",
+            "This response indicates that the tea is a better source of Brownian Motion for the Improbability Drive setup than the ATS. Try it.",
+            "Notice anything different about Dark when you use tea instead of ATS?",
+            "For one thing, a sense is missing right away, rather than after three WAITs.",
+            "More importantly, when you have used tea as a Brownian source, a different sense will be missing each time you WAIT. Thus, with tea, you can \"control Dark.\"",
+            "There are a total of eight exits from Dark. Taste never goes away, so there are two Dark exits for each missing sense.",
+            "There is a way to differentiate between each pair.",
+            "For example, when feel is missing, and you type FEEL DARK, you will be told that it feels \"warm and wet and squishy,\" in which case your current Dark exit is Inside the Sperm Whale. When the response is \"cold and wet and squishy,\" then tasting the liquid will take you to the Living Room of the party. When you are controlling dark, and have determined your current exit as in the previous example, and you don't want to go there, simply WAIT and you will be given a new missing sense and a corresponding new exit. NOTE: You will never get the whale exit unless you are using real tea for your Brownian Source.",
+            "When smell disappears: If the object is \"being waved under your nose,\" then the exit will be the Vogon Hold. If the object is \"waving under your nose,\" the exit is the Lair of the Ravenous Bugblatter Beast of Traal.",
+            "When hearing is missing: If the sound of the star drive is \"coming from far above you,\" then your exit would be Entry Bay Number Two of the Heart of Gold. If it is \"coming from far below you,\" then your exit would be the War Chamber of the battle fleet.",
+            "If seeing is the sense that goes away: When the light \"stabs at the front of your eyes,\" then your exit is the Country Lane. When the light \"stabs at the back of your eyes,\" then your exit is the Presidential Speedboat."
+          ],
+          "section": "In the Dark",
+          "tags": [
+            "act:dark"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Aboard the Vogon Ship",
+      "questions": [
+        {
+          "question": "Where the heck am I?",
+          "answers": [
+            "As your status line says, you are in the Vogon Hold.",
+            "ASK FORD ABOUT THE EARTH.",
+            "The Earth has been destroyed by the Vogon fleet. You and Ford have hitched a ride aboard one of the ships of the Vogon fleet by using the electronic Sub-Etha signaling device, also known as a Thumb."
+          ],
+          "section": "Aboard the Vogon Ship",
+          "tags": [
+            "act:vogon_ship"
+          ]
+        },
+        {
+          "question": "How do I prevent myself from getting groggy and dying?",
+          "answers": [
+            "This is caused by your protein loss during the matter transference beams.",
+            "Do you have anything with a lot of protein in it?",
+            "It's something that Ford just gave you.",
+            "It's one of the primary ingredients of peanut butter and peanut brittle.",
+            "It's frequently found on shelves behind bars in Pubs.",
+            "EAT THE PEANUTS. (Bet you already knew it anyway and were just exposing this last hint hoping for something funny.)"
+          ],
+          "section": "Aboard the Vogon Ship",
+          "tags": [
+            "act:vogon_ship"
+          ]
+        },
+        {
+          "question": "What is that thing Ford puts on his satchel before he lies down for his nap?",
+          "answers": [
+            "That's the Hitchhiker's Guide to the Galaxy.",
+            "It's the single most useful thing an inter-galactic hitchhiker (or Infocom game player) can have.",
+            "See the Hitchhiker's Guide question in the General Questions section for more information."
+          ],
+          "section": "Aboard the Vogon Ship",
+          "tags": [
+            "act:vogon_ship"
+          ]
+        },
+        {
+          "question": "How can I wake Ford?",
+          "answers": [
+            "Have you tried to WAKE FORD?",
+            "You can't wake Ford.",
+            "You'll have to get the babel fish on your own."
+          ],
+          "section": "Aboard the Vogon Ship",
+          "tags": [
+            "act:vogon_ship"
+          ]
+        },
+        {
+          "question": "How can I get the atomic vector plotter out of the glass case?",
+          "answers": [
+            "There's a switch and a keyboard attached to the case.",
+            "If you haven't made a SAVE recently, now might be a good time.",
+            "Try typing something on the keyboard. If you wanted to type \"hello\" on the keyboard, the proper way would be to type TYPE \"HELLO.\"",
+            "Well, perhaps that wasn't such a great idea. Maybe you should try flipping the switch.",
+            "If the recording that played was nothing but gibberish, you'll have to find some way to translate it.",
+            "See the question about the babel fish.",
+            "Once you have the babel fish, try flipping the switch again.",
+            "Now you know what you need to type. It's just a matter of waiting around to hear the Captain's poetry reading. See the question about what's going on in the Captain's Quarters."
+          ],
+          "section": "Aboard the Vogon Ship",
+          "tags": [
+            "act:vogon_ship"
+          ]
+        },
+        {
+          "question": "What is the tall dispensing machine?",
+          "answers": [
+            "Examine it."
+          ],
+          "section": "Aboard the Vogon Ship",
+          "tags": [
+            "act:vogon_ship"
+          ]
+        },
+        {
+          "question": "Why does the dispensing machine go \"click\"?",
+          "answers": [
+            "It's out of fish."
+          ],
+          "section": "Aboard the Vogon Ship",
+          "tags": [
+            "act:vogon_ship"
+          ]
+        },
+        {
+          "question": "What is a babel fish?",
+          "answers": [
+            "Consult the Guide."
+          ],
+          "section": "Aboard the Vogon Ship",
+          "tags": [
+            "act:vogon_ship",
+            "puz:babel_fish"
+          ]
+        },
+        {
+          "question": "How can I get a babel fish?",
+          "answers": [
+            "This puzzle has more clues than a Hitchhiker's Guide Mark IV has options.",
+            "Have you tried pressing the dispenser button?",
+            "You need to block the small hole.",
+            "Let's hope you aren't stuck here, because it only gets harder.",
+            "It has something to do with the hook above the hole.",
+            "You need to hang something on the hook.",
+            "Examine the gown.",
+            "Notice the loop? Hang the gown on the hook, then press the button again.",
+            "Well, you've made a little progress. Don't give up now.",
+            "You'll have to block the drain.",
+            "There's only one thing large enough to completely cover the drain.",
+            "Cover the drain with the towel, then push the button again.",
+            "Oh, well. Forging ahead, you'll have to block the tiny robot panel.",
+            "Standing or lying in front of the panel won't work.",
+            "You'll have to put some object in front of the panel.",
+            "If it isn't bulky enough, the cleaning robot dashes around it.",
+            "Examine all the objects around.",
+            "The satchel is bulky. Put it in front of the panel, then push the button again.",
+            "At this point, brave men have been known to break down and cry.",
+            "Read, very carefully, the paragraph when Ford goes to sleep.",
+            "Note that when you placed the satchel in front of the panel the response was \"The satchel is now _lying on its side_ in front of the panel.\"",
+            "The point of the two previous hints is that you can put an object on top of the satchel.",
+            "Put something on the satchel, then push the dispenser button again.",
+            "Notice that the upper-half-of-the-room cleaning robot just manages to catch the second item.",
+            "Perhaps if there were several items on the satchel, they would all fly in the air and confuse the flying robot.",
+            "Unfortunately, there's only room for one object on the satchel. AA. Do you have an object, or have you seen an object, that when flung into the air might act as many items? BB. Remember that when the upper-half-of-the-room cleaning robot grabbed the babel fish, before you put an object on the satchel, the text said that the fish was \"the only flying junk\" that the robot found. CC. Put the pile of junk mail on the satchel, then press the dispenser button again. DD. Voila! EE.              >>This space intentionally left blank.<< FF. Incidentally, did you know that this is the longest question ever to appear in an InvisiClues hint booklet? GG. You see, the Kwimbucki of Zug Seven are avid interactive fiction fans, but they have one rather eccentric peculiarity. HH. They will not buy any work of interactive fiction unless its hint booklet has at least one question with over 35 hints. II. This is the 35th hint. JJ. Our marketing department will be happy to know that Zug Seven sales have just skyrocketed."
+          ],
+          "section": "Aboard the Vogon Ship",
+          "tags": [
+            "act:vogon_ship",
+            "puz:babel_fish"
+          ]
+        },
+        {
+          "question": "What's that gibberish I keep hearing over the ship's intercom?",
+          "answers": [
+            "It's an announcement in Vogonese, a language not widely taught in the universities around Cottington.",
+            "If you want to understand the announcement, you'll have to discover some way to translate it.",
+            "See the questions about the babel fish.",
+            "The announcement will begin 18 turns after you enter the Vogon Hold, or 3 turns after you obtain the babel fish."
+          ],
+          "section": "Aboard the Vogon Ship",
+          "tags": [
+            "act:vogon_ship"
+          ]
+        },
+        {
+          "question": "quarters?",
+          "answers": [
+            "No.",
+            "If you don't know why the guards are dragging you off, see the question about the gibberish from the intercom.",
+            "The guards will arrive 36 turns after you arrive in the Vogon Hold, or 5 turns after you obtain a babel fish."
+          ],
+          "section": "Aboard the Vogon Ship",
+          "tags": [
+            "act:vogon_ship"
+          ]
+        },
+        {
+          "question": "What's going on here in the Captain's Quarters?",
+          "answers": [
+            "Don't go on unless you've translated the garbled announcement.",
+            "Don't go on until you've figured out what's going on with the glass case and switch and keyboard.",
+            "You are at a Vogon Poetry Appreciation Session. The Vogon Captain is about to read you his favorite poem. The Guide's entry on Vogon Poetry makes clear that this is extremely nasty.",
+            "Because you have already flipped the switch on the glass case and listened to the recording, you know that you'll have to listen to the second verse of the poem in order to get the atomic vector plotter.",
+            "This poetry is painfully awful. Have you tried STOP THE POETRY or COVER MY EARS or DON'T LISTEN TO THE VOGON POETRY?",
+            "\"Why not relax and enjoy it?\"",
+            "When he finishes the first verse the Captain says, \"You didn't look like you enjoyed my poetry at all!\" and then proceeds to have you thrown into space.",
+            "You want to ENJOY THE POETRY, any time between when the Captain begins the poetry reading and when he completes the end of the first verse. If you do so, the Captain will continue on and read the second verse.",
+            "Now that you've heard the glass case's recording _and_ the second verse of the poem, you know what to type on the keyboard in order to acquire the atomic vector plotter. (You'll have to wait until the guards drag you back into the Vogon Hold, of course.)",
+            "For example, if the recording asked you to type the second word from the second verse, and the second word of the second verse was \"lyshus,\" you should type TYPE \"LYSHUS\" when you get back to the Vogon Hold. NOTE: Each time you play the game, the lines of the verse come in different orders. Similarly, the glass case's recording asks for a different number word each time you play."
+          ],
+          "section": "Aboard the Vogon Ship",
+          "tags": [
+            "act:vogon_ship"
+          ]
+        },
+        {
+          "question": "How can I prevent the guards from throwing us in the airlock?",
+          "answers": [
+            "There's no way to prevent this.",
+            "No matter what you do, you'll eventually end up getting spaced.",
+            "However, you should make sure that you've accomplished everything that needs to be accomplished aboard the Vogon ship before this occurs.",
+            "Your main goal aboard the Vogon ship is obtaining the atomic vector plotter."
+          ],
+          "section": "Aboard the Vogon Ship",
+          "tags": [
+            "act:vogon_ship"
+          ]
+        },
+        {
+          "question": "Is there any way to survive getting blown out of the Airlock?",
+          "answers": [
+            "Yes. In fact, there's no way to _not_ survive it.",
+            "If you just wait, you'll be blown into space and find yourself in the Dark again.",
+            "Try examining the Thumb while in the Airlock.",
+            "Apparently, there's another spaceship nearby. Try hitchhiking by pressing the green button.",
+            "This sends you through a matter transference beam, and you find yourself in the Dark again,",
+            "Both methods of surviving the Airlock are equivalent."
+          ],
+          "section": "Aboard the Vogon Ship",
+          "tags": [
+            "act:vogon_ship"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Aboard the Heart of Gold",
+      "questions": [
+        {
+          "question": "I've just arrived in Entry Bay Number Two. Where am I? What's going on?",
+          "answers": [
+            "Listen to Ford.",
+            "Read the sales brochure that's lying on the ground.",
+            "You've just been picked up by a fantastic new spaceship powered by something called an Infinite Improbability Drive. You might want to find out more about it."
+          ],
+          "section": "Aboard the Heart of Gold",
+          "tags": [
+            "act:heart_of_gold"
+          ]
+        },
+        {
+          "question": "Who are those people on the Bridge?",
+          "answers": [
+            "If you stick around until everyone enters the sauna, and pay attention to what everyone is saying, you'll find out.",
+            "The woman is Tricia MacMillan, also known as Trillian. She is an Earthwoman whom you met at a party in Islington not too long ago, at which time you totally failed to impress her. She eventually left the party with a guy named Phil... who is, you realize, the two-headed man standing next to her.",
+            "The man is Zaphod Beeblebrox, current President of the Galaxy, who has stolen this revolutionary new Infinite Improbability Drive-powered spaceship in order to locate the legendary lost planet of Magrathea. Zaphod and Ford know each other.",
+            "That you should be picked up in the vast emptiness of space by a ship inhabited by an acquaintance from your now-destroyed native planet as well as your travelling companion's semi-cousin can only be considered highly improbable. But then, with Infinite Improbability Drives at work, the infinitely improbable is not only possible but quite likely."
+          ],
+          "section": "Aboard the Heart of Gold",
+          "tags": [
+            "act:heart_of_gold"
+          ]
+        },
+        {
+          "question": "How can I enter the sauna?",
+          "answers": [
+            "From the Bridge, head to port.",
+            "There is no way to actually STAY in the sauna.",
+            "Therefore, once Ford, Zaphod, and Trillian enter the sauna, they will be effectively inaccessible to you for the remainder of the game."
+          ],
+          "section": "Aboard the Heart of Gold",
+          "tags": [
+            "act:heart_of_gold"
+          ]
+        },
+        {
+          "question": "Is Eddie (the shipboard computer) important?",
+          "answers": [
+            "Without Eddie, who would make all those fun announcements?",
+            "Eddie is the only one who can turn on the main drive.",
+            "But he won't obey your order to do that, only Zaphod's.",
+            "Eddie's help is indirectly necessary to obtain a cup of tea.",
+            "But in terms of solving puzzles, you can basically ignore Eddie."
+          ],
+          "section": "Aboard the Heart of Gold",
+          "tags": [
+            "act:heart_of_gold"
+          ]
+        },
+        {
+          "question": "Are the controls on the Bridge important?",
+          "answers": [
+            "Have you examined them?",
+            "The large receptacle is important.",
+            "Don't go on until you've figured out how to set up and use the spare Improbability Drive.",
+            "Seriously! Don't go any further unless you've figured out the spare Improbability Drive.",
+            "The large plug from the spare Drive can be plugged into the large receptacle.",
+            "But that isn't necessarily the right thing to do.",
+            "In fact, when you plug in the spare Drive at the wrong time, Eddie warns you that it's only for emergencies.",
+            "Notice that when you use the Drive while it's plugged into the large receptacle, both the large receptacle and the large plug are destroyed.",
+            "You can only use the Drive in connected-to-controls mode _once_ during the course of the game.",
+            "See the question about the missile attack at the end of this section."
+          ],
+          "section": "Aboard the Heart of Gold",
+          "tags": [
+            "act:heart_of_gold"
+          ]
+        },
+        {
+          "question": "How does the Nutrimat work?",
+          "answers": [
+            "All you have to do is touch the touch-sensitive pad.",
+            "The Nutrimat does all the rest, and in seconds you'll have your very own cup of incredibly delicious Advanced Tea Substitute (ATS).",
+            "Well, maybe not so delicious. But at least useful.",
+            "Actually, there is a way to get something else from the Nutrimat.",
+            "It's a cup of tea (_real_ tea, not ATS).",
+            "But first, you'll need something that isn't in the Galley.",
+            "In fact, it isn't even in the Heart of Gold.",
+            "Don't go on unless you have the Nutrimat/Computer Interface (not to be confused with the shipping carton for the Interface).",
+            "Use the Interface.",
+            "Open the service panel and remove the circuit board. Now, put the Interface inside the Nutrimat. Finally, touch the pad!",
+            "Still having trouble getting tea? See the question about the missile attack. It's the last question in this section."
+          ],
+          "section": "Aboard the Heart of Gold",
+          "tags": [
+            "act:heart_of_gold"
+          ]
+        },
+        {
+          "question": "Is the Advanced Tea Substitute useful?",
+          "answers": [
+            "ATS is useful, although drinking it is a bad idea.",
+            "Have you ever examined it?",
+            "Have you discovered a need for a source of Brownian Motion?",
+            "See the question about the spare Improbability Drive."
+          ],
+          "section": "Aboard the Heart of Gold",
+          "tags": [
+            "act:heart_of_gold"
+          ]
+        },
+        {
+          "question": "Is the Pan-Galactic Gargle Blaster useful?",
+          "answers": [
+            "Don't go on until you're actually holding the Gargle Blaster.",
+            "Have you tried drinking it or examining it?",
+            "Have you read the Guide entry on Pan-Galactic Gargle Blasters?",
+            "Read carefully what Zaphod says when he notices that his Gargle Blaster is missing.",
+            "There is absolutely no way that you can be holding a Gargle Blaster. The Nutrimat gives them only to Zaphod. You should never have developed this question."
+          ],
+          "section": "Aboard the Heart of Gold",
+          "tags": [
+            "act:heart_of_gold"
+          ]
+        },
+        {
+          "question": "Is the cup of nectar useful?",
+          "answers": [
+            "Have you ever heard the expression \"nectar of the gods\"?",
+            "Have you ever tried boiling water at very high altitudes?",
+            "Have you ever seen the 1993 remake of \"Citizen Kane\" starring Sly Stallone as Charles Foster Kane?",
+            "Have you ever felt like you developed hints that you shouldn't have?"
+          ],
+          "section": "Aboard the Heart of Gold",
+          "tags": [
+            "act:heart_of_gold"
+          ]
+        },
+        {
+          "question": "Is the cup of tea important?",
+          "answers": [
+            "Don't go on unless you actually have the cup of tea.",
+            "Don't go on unless this cup of tea is _real_ tea, not just Advanced Tea Substitute (ATS).",
+            "Have you ever examined the tea?",
+            "Because it has even more Brownian Motion than the ATS, it will make a better source of it for the spare Improbability Drive. Try it.",
+            "See the question about controlling where you go when you leave Dark, in the section called \"In the Dark.\""
+          ],
+          "section": "Aboard the Heart of Gold",
+          "tags": [
+            "act:heart_of_gold"
+          ]
+        },
+        {
+          "question": "What's the story with the circuit board in the Nutrimat?",
+          "answers": [
+            "You can remove it from the Nutrimat.",
+            "Have you examined it?",
+            "You can flip any of the eight dipswitches.",
+            "You can even flip them while the circuit board is still in the Nutrimat.",
+            "Have you noticed the message in tiny letters on the board?",
+            "There _is_ a way to read that message.",
+            "Don't go on until you've been on Damogran.",
+            "Don't go on until you've opened the toolbox.",
+            "READ THE MESSAGE THROUGH THE MAGNIFYING GLASS."
+          ],
+          "section": "Aboard the Heart of Gold",
+          "tags": [
+            "act:heart_of_gold"
+          ]
+        },
+        {
+          "question": "Is the shipping carton important?",
+          "answers": [
+            "Try examining or reading it.",
+            "Have you opened the carton?",
+            "The Sirius Cybernetics Corporation has apparently screwed up (a common occurrence) and put the wrong item inside the shipping carton.",
+            "You'll be able to find the Nutrimat/Computer Interface elsewhere in the game."
+          ],
+          "section": "Aboard the Heart of Gold",
+          "tags": [
+            "act:heart_of_gold"
+          ]
+        },
+        {
+          "question": "Is the strange gun important?",
+          "answers": [
+            "Have you examined or read it?",
+            "Don't go on unless you've been in the Lair.",
+            "Have you tried shooting the gun at the Beast?",
+            "Have you tried it several times?",
+            "The gun is completely worthless, useless, and unimportant."
+          ],
+          "section": "Aboard the Heart of Gold",
+          "tags": [
+            "act:heart_of_gold"
+          ]
+        },
+        {
+          "question": "Aft End?",
+          "answers": [
+            "Yes, but not without a fight.",
+            "You'll have to argue with the game for a few turns.",
+            "Usually, YES or NO responses are sufficient.",
+            "The proper sequence, from the Corridor, Aft End is AFT. YES. YES. AFT. NO.",
+            "However, there's more. See the next question."
+          ],
+          "section": "Aboard the Heart of Gold",
+          "tags": [
+            "act:heart_of_gold"
+          ]
+        },
+        {
+          "question": "Is there anything important in the Engine Room?",
+          "answers": [
+            "Have you gotten into the Engine Room? If not, you should do so before looking at the next hint.",
+            "The game claims that there's nothing interesting there.",
+            "However, after losing that argument with you, the game is probably a bit peeved and is acting petulant.",
+            "You'll have to be persistent if you want to find out what's in the Engine Room.",
+            "Type LOOK three times. The game will then give in and describe the room and the stuff there."
+          ],
+          "section": "Aboard the Heart of Gold",
+          "tags": [
+            "act:heart_of_gold"
+          ]
+        },
+        {
+          "question": "Is the spare Infinite Improbability Drive important?",
+          "answers": [
+            "Read the Guide entry on Improbability Physics.",
+            "You'll need the atomic vector plotter from the Vogon Hold. If you never got it while you were aboard the Vogon ship, you'll have to start the game over or go back to a saved position.",
+            "You'll also need a good source of Brownian Motion.",
+            "Consult the Hitchhiker's Guide about Brownian Motion.",
+            "Have you seen any hot liquids?",
+            "You'll need the cup of Advanced Tea Substitute (ATS), which you can get from the Nutrimat in the Galley.",
+            "Now that you have all three items (spare Drive, plotter, and cup of ATS), you should be able to figure out how to hook them together.",
+            "Examine all three items.",
+            "You want to plug the small plug (from the Drive) into the small receptacle (in the atomic vector plotter). Also, you want to put the plotter's long dangly bit into the cup of ATS.",
+            "That still leaves the Drive's large plug unattached. See the question about the controls on the Bridge.",
+            "When the spare Drive is hooked up properly, turning it on sends you to Dark. From there you can go to all sorts of neat new places."
+          ],
+          "section": "Aboard the Heart of Gold",
+          "tags": [
+            "act:heart_of_gold",
+            "puz:improbability_drive"
+          ]
+        },
+        {
+          "question": "How can I get past the screening door in the Corridor, Aft End?",
+          "answers": [
+            "This is a very difficult problem.",
+            "Furthermore, you won't be able to tackle it until you're pretty far into the game. Don't let it worry you until you get up around 200 points.",
+            "Don't read any further unless you've gotten the cup of tea (_real_ tea, not Advanced Tea Substitute).",
+            "Don't go any further unless you've been in the Maze.",
+            "Presumably you've tried OPEN THE DOOR.",
+            "You have to show an example of your intelligence to the screening door.",
+            "Read the Guide entry on INTELLIGENCE.",
+            "Can you think of anything contradictory that you could have or do?",
+            "To show your intelligence, there are two specific items that you must be holding at the same time.",
+            "Have you noticed what happens when you take or drop the (real) tea?",
+            "To prove your intelligence to the door, you must be holding TEA and NO TEA at the same time.",
+            "Try going back to the beginning of the game and taking or dropping NO TEA.",
+            "Does the response to that ring any bells?",
+            "Have you ever read or examined the black particle in the Maze?",
+            "Do you know where you are when you are in the Maze? If not, see the questions on the Maze.",
+            "The Maze is your own brain, and the particle is your common sense. Once you have removed the particle, you will no longer be fettered by common sense...",
+            "...and can take NO TEA.",
+            "Spelling it out step by step: First, acquire a cup of tea. Then get rid of the common sense particle in the Maze. TAKE TEA THEN TAKE NO TEA. Finally, show the tea and then the no tea to the screening door. Or, you could save time on the last step and just KNOCK ON THE DOOR while holding the two items.",
+            "Did you die upon passing through the screening door? It's because Marvin lives in the room beyond the door, and his awesome depression pervades the place.",
+            "You'll have to make yourself very happy before entering.",
+            "Have you ever done anything that made you very happy and contented?",
+            "Drink the cup of tea before you enter."
+          ],
+          "section": "Aboard the Heart of Gold",
+          "tags": [
+            "act:heart_of_gold"
+          ]
+        },
+        {
+          "question": "Is Marvin important?",
+          "answers": [
+            "Yes, but not right away.",
+            "Until a point, he won't do anything you tell him to do.",
+            "After that point, he'll grudgingly consent to ONE task.",
+            "Have you ever followed Marvin when he appears around the Heart of Gold?",
+            "He always disappears through a certain door.",
+            "Before Marvin will perform his one task, you must get past the screening door near the aft end of the corridor.",
+            "Don't go on until you've been in Marvin's Pantry.",
+            "Congratulations. You've now impressed Marvin enough for him to listen to one request from you. Do you have any idea what order to give him?",
+            "What puzzles or obstacles still remain that he might help with?",
+            "Try examining the mechanism in the Access Space.",
+            "If you've ever seen the fruit, eating it would provide a big hint.",
+            "You want to order Marvin to open the hatch (as in MARVIN, OPEN THE HATCH). See the question about opening the hatch for more information."
+          ],
+          "section": "Aboard the Heart of Gold",
+          "tags": [
+            "act:heart_of_gold"
+          ]
+        },
+        {
+          "question": "Is the Access Space important?",
+          "answers": [
+            "It houses the mechanism that opens and closes the hatch. Have you ever examined the mechanism?",
+            "See the next question."
+          ],
+          "section": "Aboard the Heart of Gold",
+          "tags": [
+            "act:heart_of_gold"
+          ]
+        },
+        {
+          "question": "How can I open the hatch?",
+          "answers": [
+            "Have you tried OPEN THE HATCH?",
+            "If sirens and lights went off when you tried to open the hatch, then the ship is still in space. You can't open the hatch while the ship is in space, of course. Don't go on to the next hint until the ship has landed.",
+            "Do you remember an announcement when the Heart of Gold landed on Magrathea?",
+            "Eddie (the shipboard computer) is jamming the hatch to prevent anyone from leaving the ship until he's checked to make sure the environment is safe.",
+            "If you wait the 17 years such a check will take, you'll probably die of boredom.",
+            "You'll have to figure out how to override Eddie's wishes by fixing the hatchway mechanism in the Access Space.",
+            "You don't have the necessary intelligence for the task.",
+            "Someone else does.",
+            "Marvin. See the question about Marvin to figure out how to get him to open the hatch.",
+            "Once Marvin has agreed to open the hatch, he tells you to meet him in the Access Space in twelve turns. Make sure you're on hand for that meeting. (Hell hath no depression like a paranoid android scorned.)",
+            "Marvin will ask you for the tool he needs to fix the mechanism.",
+            "You must give him the proper tool or you've blown your one chance to get the hatchway open.",
+            "There are a total of ten tools scattered throughout the game. For a complete list of them, see the question about the tools in the General Questions section.",
+            "Even if you've collected all ten tools, you can only carry one at a time into the Access Space...",
+            "...and you don't have time to go out and get a different one before Marvin gives up and leaves...",
+            "...and the chance of you bringing in the correct tool is very low.",
+            "In fact, Marvin will _never_ ask for any tool you happen to be holding.",
+            "There's a way to figure out in advance what tool Marvin will ask you for.",
+            "See the question about the fluff.",
+            "Don't go on until you've seen the fruit.",
+            "Eat the fruit.",
+            "The glimpse of the future provided by the fruit tells you what tool to bring into the Access Space.",
+            "If you meet Marvin there and give him that tool when he asks for it, he will fix the mechanism and open the hatch.",
+            "You're now awesomely close to the end of the game.",
+            "Go down through the hatch.",
+            "Start waiting for the next exciting Hitchhiker's game."
+          ],
+          "section": "Aboard the Heart of Gold",
+          "tags": [
+            "act:heart_of_gold"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "On Traal",
+      "questions": [
+        {
+          "question": "Is it possible to enter the room that lies southwest from the Lair?",
+          "answers": [
+            "Yes.",
+            "Figuring out how to subdue the Beast would help."
+          ],
+          "section": "On Traal",
+          "tags": [
+            "act:traal"
+          ]
+        },
+        {
+          "question": "How can I stop the Ravenous Bugblatter Beast of Traal from killing me?",
+          "answers": [
+            "The Beast will devour you about five turns after you pop up in its Lair.",
+            "Leaving the room (EAST) will buy you some time.",
+            "Have you read the Guide entry on the Ravenous Bugblatter Beast of Traal?",
+            "You must find a way to prevent yourself from seeing the Beast. The Beast will then decide that since you can't see it, it can't see you!",
+            "Closing your eyes isn't obvious enough for the Beast to notice.",
+            "You have to cover your head with something.",
+            "It's something important, which no interstellar hitchhiker should ever be without.",
+            "The towel. COVER MY HEAD WITH THE TOWEL or PUT THE TOWEL OVER MY EYES or WRAP THE TOWEL AROUND MY HEAD or, well, you get the idea.",
+            "Unfortunately, you can't move around very well with a towel over your eyes. Furthermore, as you may have already noticed, this method is also only temporarily effective."
+          ],
+          "section": "On Traal",
+          "tags": [
+            "act:traal",
+            "puz:traal"
+          ]
+        },
+        {
+          "question": "Why does the beast ask me to say my name?",
+          "answers": [
+            "A good question. Have you tried figuring out the answer yourself?",
+            "Have you been in the Beast's Outer Lair?",
+            "Have you ever tried saying your name as the Beast demands?",
+            "There are at least a dozen ways to say your name: SAY MY NAME or SAY \"ARTHUR DENT\" or SAY \"MY NAME IS ARTHUR DENT\" or SAY \"I AM ARTHUR DENT\" or TELL THE BEAST MY NAME or TELL MY NAME TO THE BEAST. You could also say BEAST, MY NAME IS ARTHUR DENT or BEAST, I'M ARTHUR DENT. There are some others but you've probably got the general idea by now.",
+            "You have to give your correct name to the Beast, or (in a rare moment of Bugblatter Beast perceptivity) it will be able to tell that you're lying. In addition, you can't tell the Beast your name if the Beast thinks it can't see you.",
+            "The Beast's response when you told it your name should provide an additional hint toward why the Beast wants to know your name and how to solve this entire Traal puzzle.",
+            "Still stuck? Go on to the next question."
+          ],
+          "section": "On Traal",
+          "tags": [
+            "act:traal"
+          ]
+        },
+        {
+          "question": "What is the significance of the sandstone memorial?",
+          "answers": [
+            "Have you figured out why the Beast wants to know your name?",
+            "The Beast wants to carve your name in this, his memorial of remembrance, after he has devoured you.",
+            "Have you figured out how to stop the Beast from attacking you, at least on a temporary basis?",
+            "Don't go on until you have figured out how to convince the Beast that it can't see you.",
+            "There's a way to confuse the Beast...",
+            "...into thinking that it has already eaten you.",
+            "You want to carve your name in the memorial, as in CARVE MY NAME ON THE SANDSTONE MEMORIAL.",
+            "Of course, you'll need something to carve with.",
+            "It's not any of the tools.",
+            "It's something found on Traal.",
+            "Use one of the sharp stones that are lying on the ground.",
+            "First you have to tell the Beast your name and cover your head with the towel.",
+            "It is now safe to remove the towel from your head, and to go southwest from the Lair."
+          ],
+          "section": "On Traal",
+          "tags": [
+            "act:traal"
+          ]
+        },
+        {
+          "question": "Are the tall walls around the courtyard important?",
+          "answers": [
+            "If you could climb them, you might be able to escape the Beast.",
+            "If you could collapse them onto the Beast, that just might do it in.",
+            "If you could transmute them into steaming mounds of Qurmeesian Mega-Rhino flank steaks, the Beast might start in on those and ignore your few measly pounds of stringy flesh.",
+            "Unfortunately, you can't do any of the above."
+          ],
+          "section": "On Traal",
+          "tags": [
+            "act:traal"
+          ]
+        },
+        {
+          "question": "Are the bleached bones important?",
+          "answers": [
+            "Don't go on until you've found the black paint.",
+            "Have you tried painting the bones with the paint?",
+            "Where does the Beast go when he sees the black bones?",
+            "Black paint? Remember the warning in the introduction! Developing the hints to random questions will spoil the game for you. Stick to just those points where you're stuck."
+          ],
+          "section": "On Traal",
+          "tags": [
+            "act:traal"
+          ]
+        },
+        {
+          "question": "Are the sharp stones important?",
+          "answers": [
+            "Yes.",
+            "Have you examined them?",
+            "See the question about the sandstone memorial."
+          ],
+          "section": "On Traal",
+          "tags": [
+            "act:traal"
+          ]
+        },
+        {
+          "question": "What is the point of this whole Traal scene?",
+          "answers": [
+            "First, you'll have to figure out how to \"neutralize\" the Beast.",
+            "Don't go on until the Beast is sleeping.",
+            "Have you been in the Inner Lair?",
+            "Go southwest from the Lair.",
+            "The entire point of this scene is to get that Nutrimat/Computer interface.",
+            "You have a limited number of moves to get the Interface, after the Beast falls asleep and before the Fronurbdian Beasthunters arrive."
+          ],
+          "section": "On Traal",
+          "tags": [
+            "act:traal",
+            "meta:scoring",
+            "puz:traal"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "On Damogran",
+      "questions": [
+        {
+          "question": "Who am I?",
+          "answers": [
+            "Ask the game! (Type WHO AM I?)"
+          ],
+          "section": "On Damogran",
+          "tags": [
+            "act:damogran"
+          ]
+        },
+        {
+          "question": "Where am I?",
+          "answers": [
+            "You're on Damogran. If you'd like to know more about it, consult the Hitchhiker's Guide."
+          ],
+          "section": "On Damogran",
+          "tags": [
+            "act:damogran"
+          ]
+        },
+        {
+          "question": "How can I open the toolbox?",
+          "answers": [
+            "Have you tried OPEN THE TOOLBOX?",
+            "Since it's locked, you'll need to find a key.",
+            "Try typing WHERE IS THE KEY while on the speedboat.",
+            "There aren't a lot of hiding places around the boat.",
+            "SEARCH THE PILOT SEAT or LOOK UNDER THE CUSHION."
+          ],
+          "section": "On Damogran",
+          "tags": [
+            "act:damogran"
+          ]
+        },
+        {
+          "question": "How can I stop myself from cracking up against the rocks?",
+          "answers": [
+            "Have you tried to EXAMINE THE CONTROLS?",
+            "Try PUSH THE AUTOPILOT BUTTON.",
+            "The autopilot doesn't seem concerned about your situation, since it just takes a look around and then shuts itself off.",
+            "You need to give the autopilot some impetus to go to work.",
+            "Instead of steering toward the channel, try steering toward the cliff or the rocky spire.",
+            "After three turns of heading toward an obstacle, the autopilot will kick on and navigate you safely to your destination."
+          ],
+          "section": "On Damogran",
+          "tags": [
+            "act:damogran"
+          ]
+        },
+        {
+          "question": "What should I do when the boat docks?",
+          "answers": [
+            "Leave the boat. Type NORTH or LEAVE THE BOAT."
+          ],
+          "section": "On Damogran",
+          "tags": [
+            "act:damogran"
+          ]
+        },
+        {
+          "question": "What should I do when I reach the Dais?",
+          "answers": [
+            "You're here for the dedication ceremonies of the Heart of Gold. You obviously have the crowd eating out of your hands.",
+            "You might try smiling, or waving, or making a speech.",
+            "Mainly, though, you just need to wait until Trillian shows up."
+          ],
+          "section": "On Damogran",
+          "tags": [
+            "act:damogran"
+          ]
+        },
+        {
+          "question": "What do I do about the Guards?",
+          "answers": [
+            "Don't go on unless you're on the Dais and Trillian is there.",
+            "Trillian isn't really attacking you. It's just part of your plan to steal the Heart of Gold.",
+            "The guards don't know that you're planning to steal the Heart of Gold, so they're on your side.",
+            "You're President of the Galaxy! The guards will probably listen to your orders.",
+            "You should say GUARDS, DON'T SHOOT or GUARDS, DROP THE PHOTON RIFLES.",
+            "If you're still having troubles with the guards, see the next question."
+          ],
+          "section": "On Damogran",
+          "tags": [
+            "act:damogran"
+          ]
+        },
+        {
+          "question": "Is there any way to enter the Heart of Gold from the Dais?",
+          "answers": [
+            "Until Trillian shows up, the game won't even let you try.",
+            "After Trillian shows up, attempting to enter the Heart of Gold is deadly.",
+            "Don't go on unless you've disarmed the guards (see the previous question).",
+            "This isn't helpful all by itself, since the guards pick up their rifles and still shoot you if you break for the ship.",
+            "You must figure out a way to get rid of the guards or the rifles permanently.",
+            "The guards will _not_ leave the scene, no matter what you do.",
+            "Trying to shoot the guards doesn't work either.",
+            "There is, however, a way to dispose of the rifles.",
+            "Take the blaster from Trillian and shoot the rifles. Alternatively you can just ASK TRILLIAN TO SHOOT THE PILE OF RIFLES.",
+            "Once you've destroyed the rifles, it's safe to enter the ship."
+          ],
+          "section": "On Damogran",
+          "tags": [
+            "act:damogran",
+            "puz:heart_of_gold"
+          ]
+        },
+        {
+          "question": "What's the point of the whole Damogran scene?",
+          "answers": [
+            "Don't go on until you've ended the scene by successfully entering the Heart of Gold. (If you were killed by the guards while attempting to enter, you did _not_ enter \"successfully.\")",
+            "Have you opened the toolbox?",
+            "If you've opened the toolbox, then you've certainly found both the seat cushion fluff and the laser-assisted monkey wrench. Getting these two items are [sic] the ultimate goal of the Damogran scene."
+          ],
+          "section": "On Damogran",
+          "tags": [
+            "act:damogran",
+            "meta:scoring",
+            "puz:damogran"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "At the Party",
+      "questions": [
+        {
+          "question": "Who am I?",
+          "answers": [
+            "Ask the game. (Type WHO AM I?)"
+          ],
+          "section": "At the Party",
+          "tags": [
+            "act:party"
+          ]
+        },
+        {
+          "question": "Where am I?",
+          "answers": [
+            "Remember what happened when you first reached the Bridge of the Heart of Gold?",
+            "This is the Party where Arthur Dent tried to pick up Tricia MacMillan (but, you'll recall, failed completely).",
+            "Thanks to the wild vagaries of Improbability Physics, you have not only travelled back in time, you have changed your identity as well."
+          ],
+          "section": "At the Party",
+          "tags": [
+            "act:party"
+          ]
+        },
+        {
+          "question": "What should I do about Phil?",
+          "answers": [
+            "If you try to talk to Phil, he doesn't notice, and invariably leaves the room.",
+            "Have you examined him?",
+            "The draped cage on his shoulder does _not_ contain a bird.",
+            "The cage is hiding Phil's second head.",
+            "Phil is actually Zaphod Beeblebrox in disguise. He has undoubtedly dropped by this Islington party as part of some interstellar party-crashing hop.",
+            "If you recall from the events on the Bridge of the Heart of Gold, you (Trillian) eventually left...er, will leave...the party with Zaphod/Phil.",
+            "But that won't happen until you do something else. See the question about the point of the party scene."
+          ],
+          "section": "At the Party",
+          "tags": [
+            "act:party"
+          ]
+        },
+        {
+          "question": "What should I do about Arthur?",
+          "answers": [
+            "Arthur keeps trying to start a conversation with you, but he's too shy and embarrassed. If you try to talk to him, he finds your tone rather cool, and moves away.",
+            "Have you examined him?",
+            "Notice the fluff?",
+            "If you take the fluff from his jacket, it will \"break the ice\" and Arthur will begin jabbering.",
+            "Did you notice that you can't take the fluff until you drop one of the other things you're carrying (handbag, wine, hors d'oeuvres)? You can't hold more than three things while you're at the party."
+          ],
+          "section": "At the Party",
+          "tags": [
+            "act:party"
+          ]
+        },
+        {
+          "question": "What should I do about the hostess?",
+          "answers": [
+            "You're usually able to avoid her.",
+            "If you try to talk to her, you'll learn the meaning of the phrase \"bored to death.\"",
+            "If you drop your glass of wine, your handbag, or your plate of hors d'oeuvres, the hostess will come over and pester you about it. She won't leave you alone until you take the item that you dropped."
+          ],
+          "section": "At the Party",
+          "tags": [
+            "act:party"
+          ]
+        },
+        {
+          "question": "How can I leave the apartment?",
+          "answers": [
+            "Try going south from the Living Room.",
+            "Dying will get you back to Dark, but that's probably not what you had in mind.",
+            "There is a way to leave the apartment, but you'll have to solve a puzzle first. See the next question."
+          ],
+          "section": "At the Party",
+          "tags": [
+            "act:party"
+          ]
+        },
+        {
+          "question": "What is the point of the party scene?",
+          "answers": [
+            "There's an item at the party that you have to get back to the Heart of Gold.",
+            "That item is the unsightly piece of jacket fluff.",
+            "Read all the previous questions in this section of the hint booklet.",
+            "You want to get \"picked up\" by Phil. However, he won't take any notice of you until you take the fluff and get Arthur talking to you.",
+            "In order to take the fluff, though, you'll have to drop something. This will cause the hostess to start hovering around you. Phil is much too smart to approach you when you're with the hostess.",
+            "So, to get Phil to come over, you'll have to take the item that the hostess keeps offering you. To do so, you'll have to drop something, and the piece of fluff is the only thing you have that you can drop without setting off the hostess again.",
+            "There _is_ a way to stop holding the fluff _without_ dropping it.",
+            "Look at what you're carrying again.",
+            "You can put the fluff in your handbag.",
+            "Naturally, the fluff is still in the handbag when you eventually get back to the Heart of Gold. You need only go to the Bridge or wherever you left the handbag, open it, and take the jacket fluff.",
+            "If you're still confused, one sequence of moves that will \"solve\" the party scene is: EXAMINE ARTHUR. DROP THE WINE. TAKE THE JACKET FLUFF. OPEN THE HANDBAG. PUT THE FLUFF IN THE HANDBAG. TAKE THE WINE. Then just WAIT until Phil comes up and escorts you away. You will end up in Dark."
+          ],
+          "section": "At the Party",
+          "tags": [
+            "act:party",
+            "meta:scoring",
+            "puz:party"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "The Earth, Revisited",
+      "questions": [
+        {
+          "question": "Who am I?",
+          "answers": [
+            "Ask the game. (Type WHO AM I?)"
+          ],
+          "section": "The Earth, Revisited",
+          "tags": [
+            "act:earth_revisited"
+          ]
+        },
+        {
+          "question": "Where should I go?",
+          "answers": [
+            "You are reliving the last few minutes before the destruction of the Earth...",
+            "...this time as Ford Prefect rather than Arthur Dent.",
+            "The Improbability Drive has sent you back in time and has also changed your identity.",
+            "You want to do what Ford did when you were Arthur.",
+            "Go north to Front of House."
+          ],
+          "section": "The Earth, Revisited",
+          "tags": [
+            "act:earth_revisited"
+          ]
+        },
+        {
+          "question": "What should I do about that feeling of uneasiness?",
+          "answers": [
+            "Have you tried waiting a few turns?",
+            "Obviously, you're doing the wrong thing.",
+            "You shouldn't be in the Pub at this point.",
+            "See the previous question."
+          ],
+          "section": "The Earth, Revisited",
+          "tags": [
+            "act:earth_revisited"
+          ]
+        },
+        {
+          "question": "What should I do about Arthur?",
+          "answers": [
+            "According to the introductory text for this scene, why did you come here?",
+            "What did Ford do at this point when you were Arthur?",
+            "Try to give the towel to Arthur.",
+            "The towel is inside your satchel."
+          ],
+          "section": "The Earth, Revisited",
+          "tags": [
+            "act:earth_revisited"
+          ]
+        },
+        {
+          "question": "What should I do about Prosser?",
+          "answers": [
+            "Don't go on until you've done the step called for by the previous question.",
+            "You want Arthur to come with you to the Pub.",
+            "If you recall from when you were Arthur, it would mean the destruction of Arthur's house if he stood up at this point.",
+            "He won't stand up until you've safeguarded his house.",
+            "You have to talk to Prosser.",
+            "But he can't hear you from here.",
+            "So you have to APPROACH PROSSER or WALK AROUND THE BULLDOZER. Now you can talk to him,",
+            "You want him to lie down in front of the bulldozer.",
+            "Try PROSSER, LIE DOWN IN FRONT OF THE BULLDOZER.",
+            "Arthur is now willing to follow you to the Pub."
+          ],
+          "section": "The Earth, Revisited",
+          "tags": [
+            "act:earth_revisited"
+          ]
+        },
+        {
+          "question": "What should I do in the Pub?",
+          "answers": [
+            "Unless Arthur is with you, you are here prematurely.",
+            "Once again, think back to what Ford did when you were Arthur.",
+            "The first thing to do is BUY SOME BEER.",
+            "Then DRINK THE BEER. Arthur will follow your example. You need to do this twice.",
+            "You can BUY SOME PEANUTS, but it isn't necessary to do so.",
+            "When Arthur's house is destroyed, he will rush out of the Pub. It would be a good idea to stay with him."
+          ],
+          "section": "The Earth, Revisited",
+          "tags": [
+            "act:earth_revisited"
+          ]
+        },
+        {
+          "question": "What should I do about the dog?",
+          "answers": [
+            "There's not much you can do about the dog at this point.",
+            "You may find out more about the dog later."
+          ],
+          "section": "The Earth, Revisited",
+          "tags": [
+            "act:earth_revisited"
+          ]
+        },
+        {
+          "question": "What's the point of this second Earth scene?",
+          "answers": [
+            "You learn a lot about Ford's motivations, thus making for a more cohesive, internally consistent story line.",
+            "Oh, right. You're more interested in puzzle solutions. The entire point of this scene is acquiring one particular item for use on the Heart of Gold.",
+            "It's in the satchel.",
+            "It's the satchel fluff.",
+            "There's a way to transfer it to something, other than the satchel, so that it will be accessible when you get back to the Heart of Gold.",
+            "That something is Arthur Dent.",
+            "Give the fluff to Arthur.",
+            "This is a rather weird action, and Arthur won't accept the fluff until he's had enough beer.",
+            "After Arthur runs back to his house (now rubble), follow him and give him the fluff. He'll accept it at this point and put it in his pocket. Then just wait for events to run their course, and you'll soon find yourself back in Dark. When you get back to the Heart of Gold, the satchel fluff should be in the pocket of your gown."
+          ],
+          "section": "The Earth, Revisited",
+          "tags": [
+            "act:earth_revisited",
+            "meta:scoring"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "The War Chamber and Maze",
+      "questions": [
+        {
+          "question": "What's going on in the War Chamber?",
+          "answers": [
+            "Have you tried listening to the conversation?",
+            "Have you examined the approaching star system?",
+            "Do you remember the long piece of text that appeared when your careless words set off an interstellar war?",
+            "Those two warring races have now set off on a quest for vengeance against the world (Earth) that spawned the person (you) whose remark set off their war."
+          ],
+          "section": "The War Chamber and Maze",
+          "tags": [
+            "act:war_chamber_and_maze"
+          ]
+        },
+        {
+          "question": "How can I get the awl out of the War Chamber?",
+          "answers": [
+            "Just TAKE AWL!",
+            "Then solve the puzzle involving the giant dog."
+          ],
+          "section": "The War Chamber and Maze",
+          "tags": [
+            "act:war_chamber_and_maze"
+          ]
+        },
+        {
+          "question": "How can I prevent being swallowed by that giant dog?",
+          "answers": [
+            "The dog really isn't a giant dog.",
+            "It's a normal-sized dog. The spaceship you're aboard is microscopic.",
+            "Have you seen a dog anywhere else?",
+            "This is the very same dog you ran into in the Country Lane back at the beginning of the game.",
+            "The dog swallows the space fleet for one particular reason.",
+            "If you examine the dog at the beginning of the game, you'll notice that it's very hungry.",
+            "You need to feed the dog back at the beginning of the game.",
+            "If you want to avoid starting over, there's another way to feed the dog.",
+            "You must become Ford Prefect first.",
+            "During the scene where you're Ford, buy a sandwich, then give the sandwich to Arthur. When Arthur dashes out of the Pub, he'll feed the sandwich to the dog.",
+            "Once the dog has been fed, you can survive the War Chamber scene and go on to the Maze."
+          ],
+          "section": "The War Chamber and Maze",
+          "tags": [
+            "act:war_chamber_and_maze"
+          ]
+        },
+        {
+          "question": "Where is this Maze?",
+          "answers": [
+            "Synapses? Gray matter?",
+            "Remember you were just teleported over from a microscopic space fleet...",
+            "...so you must be microscopic-sized yourself.",
+            "You're inside a brain.",
+            "Ah, but whose brain?",
+            "Remember, the Vl'Hurgs and G'Gugvunts were teleporting you back to the Heart of Gold.",
+            "You are, improbably enough, inside your own brain!"
+          ],
+          "section": "The War Chamber and Maze",
+          "tags": [
+            "act:war_chamber_and_maze"
+          ]
+        },
+        {
+          "question": "Can the Maze be mapped?",
+          "answers": [
+            "The usual way of mapping a maze in this sort of a game is to drop one object in each room of the maze. That way, when you return to the room, the game will mention that \"there is a (whatever) here,\" and the rooms will no longer look exactly alike.",
+            "However, that method doesn't work in this Maze, since anything you drop just sails away and vanishes.",
+            "The Maze is totally unmappable.",
+            "In fact, the directions you can go in the Maze on any given turn are totally random, so it makes absolutely no difference which direction you try to move in.",
+            "The third time you successfully move to a new Maze room (as opposed to being blocked by a synaptic discharge), you'll run across the black particle.",
+            "If you ignore the particle, you'll run across it again 14 successful movements later, and then again after another 19."
+          ],
+          "section": "The War Chamber and Maze",
+          "tags": [
+            "act:war_chamber_and_maze"
+          ]
+        },
+        {
+          "question": "What's this black particle? What should I do about it?",
+          "answers": [
+            "Have you read the markings on the particle?",
+            "The particle is your own common sense!",
+            "You have an opportunity here to remove your own common sense.",
+            "Does that ring a bell?",
+            "See the question about no tea in the General Questions section.",
+            "Taking the particle also has the beneficial side effect of getting you out of the Maze."
+          ],
+          "section": "The War Chamber and Maze",
+          "tags": [
+            "act:war_chamber_and_maze"
+          ]
+        },
+        {
+          "question": "What's the point of the War Chamber and Maze scene?",
+          "answers": [
+            "You should be able to figure it out for yourself.",
+            "Do you know the answers to all the other questions in this section?",
+            "There are two goals for the War Chamber/Maze scene.",
+            "The first goal is to get the awl.",
+            "The second goal is to remove your particle of common sense."
+          ],
+          "section": "The War Chamber and Maze",
+          "tags": [
+            "act:war_chamber_and_maze",
+            "meta:scoring"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Inside the Whale",
+      "questions": [
+        {
+          "question": "Who am I?",
+          "answers": [
+            "You're still Arthur in this scene."
+          ],
+          "section": "Inside the Whale",
+          "tags": [
+            "act:whale"
+          ]
+        },
+        {
+          "question": "Where am I?",
+          "answers": [
+            "You're inside a sperm whale, obviously.",
+            "Note the sound of rushing air.",
+            "The Improbability Drive, in one of its nastier coincidences, has transported you inside the very same whale you created when you used the Drive to save the ship during the missile attack.",
+            "If you recall, the missiles were turned into a sperm whale, which was last seen plummeting through the atmosphere of Magrathea. This explains why, after a few turns, the whale invariably splats (and you along with it)."
+          ],
+          "section": "Inside the Whale",
+          "tags": [
+            "act:whale"
+          ]
+        },
+        {
+          "question": "Who's the old man with the wooden puppet?",
+          "answers": [
+            "The old man is Gepetto the carpenter.",
+            "The puppet is his creation, Pinocchio.",
+            "Their boat was swallowed by the whale. If you hide in the Cargo Hold, perhaps you'll be able to escape.",
+            "Don't go on until you've met the evil ice queen, the seven dwarfs, and the talking dragon.",
+            "What game are you playing?"
+          ],
+          "section": "Inside the Whale",
+          "tags": [
+            "act:whale"
+          ]
+        },
+        {
+          "question": "How can I get out of the whale?",
+          "answers": [
+            "There are no exits in any direction.",
+            "If you wait long enough, you'll splat and return to Dark.",
+            "There's one other way to get out of the whale.",
+            "It's a method you've used before.",
+            "It will also leave you in Dark.",
+            "Hitchhike using the Thumb.",
+            "The Thumb is probably broken, though. You'll have to get it fixed by an Engineer robot."
+          ],
+          "section": "Inside the Whale",
+          "tags": [
+            "act:whale",
+            "puz:whale"
+          ]
+        },
+        {
+          "question": "How can I prevent the whale from splatting?",
+          "answers": [
+            "You can't.",
+            "No matter what you do, you've only got ten moves in the whale before it splats."
+          ],
+          "section": "Inside the Whale",
+          "tags": [
+            "act:whale",
+            "puz:whale"
+          ]
+        },
+        {
+          "question": "How can I get the flowerpot out of the whale?",
+          "answers": [
+            "There are two ways to do this.",
+            "One way involves the Thumb.",
+            "The other method involves the thing your aunt gave you which you don't know what it is.",
+            "To obtain the flowerpot using the Thumb, just pick up the pot and hitchhike.",
+            "For more details, see the question on getting out of the whale.",
+            "To obtain the flowerpot using the aunt's gift: the aunt's gift has an unusual property you may not have discovered. See the question about the aunt's gift.",
+            "Just put the flowerpot inside the aunt's gift and then wait until the whale splats. Within a few turns after leaving Dark, the aunt's gift should reappear, containing the pot."
+          ],
+          "section": "Inside the Whale",
+          "tags": [
+            "act:whale",
+            "puz:whale"
+          ]
+        },
+        {
+          "question": "What's the point of this scene inside the whale?",
+          "answers": [
+            "Isn't it obvious?",
+            "There really isn't much here.",
+            "The only point of this scene is to get the flowerpot."
+          ],
+          "section": "Inside the Whale",
+          "tags": [
+            "act:whale",
+            "meta:scoring",
+            "puz:whale"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "General Questions",
+      "questions": [
+        {
+          "question": "Is there any significance to \"no tea\"?",
+          "answers": [
+            "Yes.",
+            "It's a hint that at some point, getting tea will be important.",
+            "Also, see the question about the screening door in the Corridor, Aft End in the Heart of Gold section."
+          ],
+          "section": "General Questions",
+          "tags": [
+            "act:general"
+          ]
+        },
+        {
+          "question": "What the Zark is the thing my aunt gave me which I don't know what it is?",
+          "answers": [
+            "Have you tried examining it?",
+            "Have you tried getting rid of it?",
+            "You've probably noticed that it keeps turning up.",
+            "If you leave it behind, it will pop up about a dozen moves later, sometimes on the ground where you are, sometimes in your inventory, and sometimes in your gown pocket. (The thing will only \"follow\" you when you are Arthur.)",
+            "There's something else that you probably haven't noticed about the thing your aunt gave you.",
+            "You can put things in it. In fact, you can put almost every takeable item into the thing at the same time.",
+            "This is useful for transporting more objects than you carry [sic], but it isn't ever necessary to do so.",
+            "Because of these two properties (auto-return and containment) the thing your aunt gave you provides an alternate solution of one of the puzzles in the game.",
+            "It's a puzzle toward the very end of the game.",
+            "It's the puzzle of getting the flowerpot out of the whale."
+          ],
+          "section": "General Questions",
+          "tags": [
+            "act:general"
+          ]
+        },
+        {
+          "question": "Is the Hitchhiker's Guide important?",
+          "answers": [
+            "Well, the game _is_ named after it...",
+            "The various entries in the Guide contain all sorts of useful information and hints that you'll need to solve the puzzles in the game.",
+            "The proper syntax for reading a particular Guide entry is CONSULT GUIDE ABOUT (item). For example, you could type CONSULT GUIDE ABOUT MUSHROOMS.",
+            "Once you know the solutions to all the puzzles, you could play to the end of the game without ever using the Guide.",
+            "There are 39 Guide entries in the game. A complete list of the topics appears in the Guide Entries section."
+          ],
+          "section": "General Questions",
+          "tags": [
+            "act:general",
+            "meta:guide_entries"
+          ]
+        },
+        {
+          "question": "What is the Thumb? How does it work? Is it important?",
+          "answers": [
+            "The Thumb is an electronic Sub-Etha Auto-Hitching Device. If used properly, it will allow you to hitch rides aboard passing spaceships.",
+            "You should read the Guide entry on the Thumb.",
+            "You can examine the Thumb to determine whether a spaceship is within range. (If the lights are flashing, a ship is nearby.)",
+            "If a ship is within range, you can transport yourself to the ship (via a matter transference beam) by pushing the green button.",
+            "If you press the green button when there is no ship around, you'll break the Thumb.",
+            "Also, the Thumb will break down on its own over the course of the game.",
+            "If the Thumb is broken, you will not be transported when you press the green button, even if a ship is nearby.",
+            "A broken Thumb can be mended.",
+            "To do so, push the red button to summon a repair robot. See the following question for further details on repairing the Thumb.",
+            "There are three points in the game when you can use the Thumb.",
+            "The first time is near the very beginning of the game, when you use it to get to the Vogon ship.",
+            "The second time is when you're in the Airlock of the Vogon ship. It isn't necessary to use the Thumb here, because simply waiting a few turns has the same result.",
+            "The third time is when you're Inside the Sperm Whale. Once again, there's an alternative to using the Thumb, but in this case it's not as simple as just waiting. See the section entitled \"Inside the Whale\" for more information."
+          ],
+          "section": "General Questions",
+          "tags": [
+            "act:general"
+          ]
+        },
+        {
+          "question": "Is the Engineer robot important?",
+          "answers": [
+            "Only the Engineer robot can fix the Thumb.",
+            "Once you've summoned the Engineer robot, SHOW (or GIVE) THE THUMB TO THE ENGINEER ROBOT.",
+            "If the robot claims that there's nothing wrong with the Thumb, then it wasn't broken.",
+            "If the Thumb is broken, the Engineer robot won't agree to fix it unless you also SHOW THE GUARANTEE TO THE ENGINEER ROBOT.",
+            "Actually, you can shortcut by showing the guarantee first."
+          ],
+          "section": "General Questions",
+          "tags": [
+            "act:general"
+          ]
+        },
+        {
+          "question": "What's all this nonsense about fluff?",
+          "answers": [
+            "There does seem to be a lot of it scattered throughout the game.",
+            "Have you consulted the Guide about fluff?",
+            "The ancient legend is of particular interest.",
+            "There are a total of four pieces of fluff in the game. You'll have to find and obtain all four.",
+            "Try finding them yourself. When you're stumped, return to this question.",
+            "Hint: You have four different roles over the course of the game: Arthur, Ford, Trillian, and Zaphod.",
+            "You can obtain one piece of fluff during each role.",
+            "A list of all four, and their locations, follows. You shouldn't look at this list unless you're completely stumped, because it will give away a lot.",
+            "Pocket fluff: in the pocket of your gown at the start of the game. Satchel fluff: inside Ford's satchel (see The Earth, Revisited). Jacket fluff: on Arthur's jacket (see At The Party). Seat cushion fluff: under the pilot seat of the speedboat (see On Damogran)",
+            "Now that you have all four pieces of fluff, any idea what to do with them?",
+            "Don't continue until you have the flowerpot.",
+            "You should plant each piece of fluff in the flowerpot.",
+            "Now wait.",
+            "A tiny plant will sprout around ten moves later.",
+            "For more information, see the next question."
+          ],
+          "section": "General Questions",
+          "tags": [
+            "act:general",
+            "meta:fluff"
+          ]
+        },
+        {
+          "question": "What do I do about the plant?",
+          "answers": [
+            "Left to itself, the tiny sprout will never grow any further.",
+            "You have nothing to water the plant with.",
+            "Read the Guide entry on fluff again.",
+            "Notice that this rare plant once grew on a tropical world.",
+            "Can you think of anything around that's similar to a tropical environment?",
+            "Carry the plant into the sauna.",
+            "Now examine the plant.",
+            "Now see the question about opening the hatch in the Heart of Gold section."
+          ],
+          "section": "General Questions",
+          "tags": [
+            "act:general"
+          ]
+        },
+        {
+          "question": "What are all these tools scattered throughout the game?",
+          "answers": [
+            "Have you examined them?",
+            "Many of them are rather excitingly high-tech, aren't they?",
+            "They don't really have much use...",
+            "...until the very end of the game.",
+            "See the question about opening the hatch in the Heart of Gold section.",
+            "Marvin will ask for one of ten different tools.",
+            "A list of all ten, and their locations, follows. You shouldn't look at this list unless you're completely stumped, because it will give away a lot.",
+            "Flathead screwdriver: in your Bedroom. Toothbrush: in your Bedroom. Tweezers: inside Trillian's handbag. Molecular hyperwave pincer: on the Bridge. Ionic diffusion rasp: in the Engine Room. Hypersonic pliers: in the Engine Room. Thermo-fusion chisel: in Marvin's Pantry. Laser-assisted monkey wrench: inside the toolbox on the speedboat. Ultra-plasmic vacuum awl: in the War Chamber. Number twelve asteroid paint chipper: you're holding it when you return from your adventure at the end of the Traal scene."
+          ],
+          "section": "General Questions",
+          "tags": [
+            "act:general"
+          ]
+        },
+        {
+          "question": "What is the goal of the game?",
+          "answers": [
+            "Have you tried asking some of the other characters in the story?",
+            "Have fun, be happy.",
+            "Solve all the puzzles, reach the end.",
+            "The ultimate goal of the game is to step out onto the surface of Magrathea.",
+            "Knowing this fact is of virtually no help in getting through the game."
+          ],
+          "section": "General Questions",
+          "tags": [
+            "act:general"
+          ]
+        },
+        {
+          "question": "How can I read the footnotes?",
+          "answers": [
+            "You obviously didn't read your manual very carefully. That's explained in the section entitled Important Commands."
+          ],
+          "section": "General Questions",
+          "tags": [
+            "act:general"
+          ]
+        }
+      ]
+    }
+  ]
+}

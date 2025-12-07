@@ -1,0 +1,34 @@
+# Build artifacts
+target/
+dist/
+build/
+wasm/pkg/
+
+# Generated WASM files
+apps/web/public/h2g2_wasm*
+apps/web/src/wasm/
+
+# Save files
+*.sav
+
+# Node
+node_modules/
+.env
+.env.local
+
+# Moon
+.moon/cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dependencies
+package-lock.json

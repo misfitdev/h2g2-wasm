@@ -1,0 +1,43 @@
+.debugPanel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 4px 1rem;
+  background-color: transparent;
+  font-size: 14px;
+  font-family: 'Glass TTY VT220', monospace;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
+  color: hsl(var(--terminal-green-dim));
+  display: flex;
+  justify-content: flex-end;
+  gap: 24px;
+  align-items: center;
+  z-index: 50;
+  user-select: text;
+}
+
+.debugItem {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.debugItem:nth-child(1) {
+  /* Location - accommodate longest names like "Front of House" */
+  width: 280px;
+  text-align: right;
+}
+
+.debugItem:nth-child(2) {
+  /* Git hash - "Git: 7f3a2c1a" */
+  width: 110px;
+  text-align: right;
+}
+
+.debugItem:nth-child(3) {
+  /* WASM checksum - "WASM: 3699814e" */
+  width: 120px;
+  text-align: right;
+}

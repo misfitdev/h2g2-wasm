@@ -1,0 +1,24 @@
+$schema: https://moonrepo.dev/schemas/moon.json
+
+project:
+  name: wasm
+  description: WebAssembly build of the game engine
+
+tasks:
+  build:
+    command: cargo build --target wasm32-unknown-unknown --release
+    inputs:
+      - src/**/*
+      - Cargo.toml
+    outputs:
+      - target/wasm32-unknown-unknown/release/h2g2_wasm.wasm
+
+  bindgen:
+    command: wasm-bindgen target/wasm32-unknown-unknown/release/h2g2_wasm.wasm --out-dir ../apps/web/src/wasm --target web
+    deps:
+      - wasm:build
+    inputs:
+      - target/wasm32-unknown-unknown/release/h2g2_wasm.wasm
+
+  test:
+    command: cargo test --target wasm32-unknown-unknown
