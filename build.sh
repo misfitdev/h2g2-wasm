@@ -12,6 +12,21 @@ REPO_ROOT="$(pwd)"
 echo "Repository root: $REPO_ROOT"
 echo ""
 
+echo "Setting up asdf version manager..."
+if ! command -v asdf >/dev/null 2>&1; then
+    echo "Installing asdf..."
+    git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.0
+    export PATH="$HOME/.asdf/shims:$HOME/.asdf/bin:$PATH"
+else
+    export PATH="$HOME/.asdf/shims:$HOME/.asdf/bin:$PATH"
+fi
+
+if [ -f "$REPO_ROOT/.tool-versions" ]; then
+    echo "Installing tools from .tool-versions..."
+    asdf install
+fi
+
+echo ""
 echo "Ensuring Rust toolchain is available..."
 if ! command -v rustup >/dev/null 2>&1; then
     echo "Installing Rust..."
