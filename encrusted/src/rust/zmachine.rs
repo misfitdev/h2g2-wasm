@@ -2098,7 +2098,8 @@ impl Zmachine {
 
     pub fn get_save_state(&self) -> Option<String> {
         self.current_state.as_ref().map(|(_, state)| {
-            BASE64.encode(&state)
+            let secured = SaveValidator::add_security_info(state, &self.secret_key);
+            BASE64.encode(&secured)
         })
     }
 }
