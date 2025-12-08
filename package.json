@@ -1,0 +1,9 @@
+{
+  "name": "h2g2-root",
+  "version": "1.0.0",
+  "description": "H2G2 root - actual app in apps/web/",
+  "private": true,
+  "scripts": {
+    "build": "bash ./build.sh"
+  }
+}

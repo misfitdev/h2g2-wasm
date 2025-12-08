@@ -1,6 +1,5 @@
 name = "h2g2"
+pages_build_output_dir = "apps/web/dist"
 
 [build]
 command = "bash ./build.sh"
-
-pages_build_output_dir = "apps/web/dist"
