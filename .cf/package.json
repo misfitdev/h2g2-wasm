@@ -1,0 +1,6 @@
+{
+  "name": "h2g2-cloudflare-build-root",
+  "version": "1.0.0",
+  "description": "Cloudflare Pages build root - actual app is in apps/web/",
+  "private": true
+}
