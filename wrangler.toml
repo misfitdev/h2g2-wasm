@@ -1,0 +1,7 @@
+name = "h2g2"
+
+[build]
+command = "bash ./build.sh"
+cwd = "."
+
+pages_build_output_dir = "apps/web/dist"
