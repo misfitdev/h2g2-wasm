@@ -4,7 +4,7 @@ name = "encrusted"
 version = "1.1.0"
 edition = "2021"
 description = "A z-machine (interpreter) for Infocom-era text adventure games"
-repository = "https://github.com/demille/encrusted"
+repository = "git@github.com:demille/encrusted.git"
 readme = "README.md"
 license = "MIT"
 

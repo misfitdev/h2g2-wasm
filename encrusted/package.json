@@ -4,7 +4,7 @@
   "description": "A z-machine (interpreter) for Infocom-era text adventure games",
   "author": "Sterling DeMille <sterlingdemille+npm@gmail.com>",
   "license": "MIT",
-  "repository": "https://github.com/demille/encrusted",
+  "repository": "git@github.com:demille/encrusted.git",
   "private": true,
   "scripts": {
     "bundle": "webpack --config ./webpack.prod.js --progress",

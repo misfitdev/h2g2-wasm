@@ -14,16 +14,22 @@ echo ""
 
 echo "Setting up asdf version manager..."
 if ! command -v asdf >/dev/null 2>&1; then
-    echo "Installing asdf..."
-    git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.0
+    if [ ! -d "$HOME/.asdf" ]; then
+        echo "Installing asdf..."
+        git clone git@github.com:asdf-vm/asdf.git ~/.asdf --branch v0.14.0
+    fi
     export PATH="$HOME/.asdf/shims:$HOME/.asdf/bin:$PATH"
+    # Source asdf if possible to ensure it's available in the current subshell
+    if [ -f "$HOME/.asdf/asdf.sh" ]; then
+        . "$HOME/.asdf/asdf.sh"
+    fi
 else
     export PATH="$HOME/.asdf/shims:$HOME/.asdf/bin:$PATH"
 fi
 
 echo "Adding asdf plugins..."
-asdf plugin add moonrepo https://github.com/moonrepo/asdf-moonrepo.git 2>/dev/null || true
-asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git 2>/dev/null || true
+asdf plugin add moonrepo git@github.com:moonrepo/asdf-moonrepo.git 2>/dev/null || true
+asdf plugin add nodejs git@github.com:asdf-vm/asdf-nodejs.git 2>/dev/null || true
 
 if [ -f "$REPO_ROOT/.tool-versions" ]; then
     echo "Installing tools from .tool-versions..."
