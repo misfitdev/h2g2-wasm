@@ -8,7 +8,7 @@
 - [x] Task: Validate current codebase stability (run all tests and build) to establish a baseline. 6ab32a1
 - [ ] Task: Conductor - User Manual Verification 'Assessment and Preparation' (Protocol in workflow.md)
 
-## Phase 2: Dependabot & Low-Risk Merges
+## Phase 2: Dependabot & Low-Risk Merges [checkpoint: d143c0a]
 - [x] Task: Merge simple dependency update PRs (Dependabot). 0131088
 - [x] Task: Verify build and tests after dependency updates. d112904
 - [ ] Task: Conductor - User Manual Verification 'Dependabot & Low-Risk Merges' (Protocol in workflow.md)
