@@ -6,6 +6,7 @@ import { TerminalControls } from './TerminalControls';
 import { SaveLoadDialog } from './SaveLoadDialog';
 import { HintModal } from './HintModal';
 import { DebugPanel } from './DebugPanel';
+import { CRTScreen } from './CRTScreen';
 import styles from './Terminal.module.css';
 
 export function Terminal() {
@@ -328,7 +329,7 @@ export function Terminal() {
 
   return (
     <div
-      className={`${styles.container} scanlines crt-effect boot-flicker`}
+      className={`${styles.container} scanlines crt-effect`}
       onClick={handleContainerClick}
       onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
@@ -336,6 +337,9 @@ export function Terminal() {
       role="application"
       aria-label="Hitchhiker's Guide to the Galaxy - Game Terminal"
     >
+      {/* CRT power-on sequence + ambient phosphor overlay */}
+      <CRTScreen />
+
       {/* Control bar - appears on hover */}
       <TerminalControls
         visible={showControls}
