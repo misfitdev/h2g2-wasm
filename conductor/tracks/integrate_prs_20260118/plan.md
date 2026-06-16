@@ -14,9 +14,9 @@
 - [ ] Task: Conductor - User Manual Verification 'Dependabot & Low-Risk Merges' (Protocol in workflow.md)
 
 ## Phase 3: Complex Merges & Conflict Resolution
-- [x] Task: Merge human-contributed PRs and resolve any merge conflicts. ad4dc95
-- [ ] Task: Fix any linting or style regressions introduced by merges.
-- [ ] Task: Verify build and tests after complex merges.
+- [x] Task: Merge human-contributed PRs and resolve any merge conflicts. ad4dc95 (Adopted kubla PR #12 save/load tests, superseding the stubbed agent version.)
+- [x] Task: Fix any linting or style regressions introduced by merges.
+- [x] Task: Verify build and tests after complex merges. (cargo test: 27 passed, 0 failed)
 - [ ] Task: Conductor - User Manual Verification 'Complex Merges & Conflict Resolution' (Protocol in workflow.md)
 
 ## Phase 4: Final Validation and Cleanup
