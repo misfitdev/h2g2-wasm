@@ -125,7 +125,7 @@ impl Frame {
         *self.stack.last().expect("Can't peek on an empty stack!")
     }
 
-    pub fn to_string(&self) -> String {
+    pub fn to_display_string(&self) -> String {
         let stringify = |values: &Vec<u16>| {
             let mut out = String::from("[");
 
@@ -136,7 +136,7 @@ impl Frame {
                 out.push_str(&format!("{:04x}", val));
             }
 
-            out.push_str("]");
+            out.push(']');
             out
         };
 
@@ -191,6 +191,6 @@ impl Frame {
 
 impl fmt::Display for Frame {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.to_string())
+        write!(f, "{}", self.to_display_string())
     }
 }

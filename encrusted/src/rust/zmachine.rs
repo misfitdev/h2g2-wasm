@@ -40,26 +40,26 @@ enum ZStringState {
 pub struct Object {
     number: u16,
     name: String,
-    children: Vec<Box<Object>>,
+    children: Vec<Object>,
 }
 
 impl Object {
-    fn new(number: u16, zvm: &Zmachine) -> Box<Object> {
+    fn new(number: u16, zvm: &Zmachine) -> Object {
         let mut name = if number > 0 {
             zvm.get_object_name(number)
         } else {
             String::from("(Null Object)")
         };
 
-        if name == "" {
+        if name.is_empty() {
             name += "(No Name)";
         }
 
-        Box::new(Object {
+        Object {
             number,
             name,
             children: Vec::new(),
-        })
+        }
     }
 
     fn print_tree(&self, indent: &str, mut depth: u8, is_last: bool) -> String {
@@ -84,13 +84,13 @@ impl Object {
 
         for (i, child) in self.children.iter().enumerate() {
             let is_last_child = i == self.children.len() - 1;
-            out += &(**child).print_tree(&next, depth, is_last_child);
+            out += &child.print_tree(&next, depth, is_last_child);
         }
 
         out
     }
 
-    fn to_string(&self) -> String {
+    fn to_display_string(&self) -> String {
         if !self.children.is_empty() {
             self.print_tree("", 0, false)
         } else {
@@ -101,7 +101,7 @@ impl Object {
 
 impl fmt::Display for Object {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.to_string())
+        write!(f, "{}", self.to_display_string())
     }
 }
 
@@ -223,9 +223,9 @@ impl Zmachine {
         let serial = memory.read(0x12, 6);
         let checksum = memory.read_word(0x1C);
 
-        hasher.update(&release.to_le_bytes());
+        hasher.update(release.to_le_bytes());
         hasher.update(serial);
-        hasher.update(&checksum.to_le_bytes());
+        hasher.update(checksum.to_le_bytes());
 
         let result = hasher.finalize();
         let mut key = [0u8; 32];
@@ -418,58 +418,54 @@ impl Zmachine {
         let mut index = addr;
         let mut zstring = String::new();
 
-        // this closure borrows the zstring while it steps through each zchar.
-        // (wrapped here in its own scope to force the borrow to end)
-        {
-            let mut step = |zchar: u8| {
-                state = match (zchar, &state) {
-                    // the next zchar will be an abbrev index
-                    (zch, &Alphabet(_)) if zch >= 1 && zch <= 3 => {
-                        assert!(allow_abbrevs, "Abbrev at {} contained recursive abbrev!", addr);
-                        Abbrev(zch)
-                    }
-                    // shift character for the next zchar
-                    (4, &Alphabet(_)) => Alphabet(1),
-                    (5, &Alphabet(_)) => Alphabet(2),
-                    // special 10bit case, next 2 zchars = one 10bit zscii char
-                    (6, &Alphabet(2)) => Tenbit1,
-                    (_, &Tenbit1) => Tenbit2(zchar),
-                    (_, &Tenbit2(first)) => {
-                        let letter = ((first << 5) + zchar) as char;
-                        zstring.push_str(&letter.to_string());
-                        Alphabet(0)
-                    }
-                    // get the abbrev at this addr
-                    (_, &Abbrev(num)) => {
-                        let abbrev = self.get_abbrev((num - 1) * 32 + zchar);
-                        zstring.push_str(&abbrev);
-                        Alphabet(0)
-                    }
-                    // normal case, adds letter from correct alphabet and resets to A0
-                    (_, &Alphabet(num)) => {
-                        let letter = &self.alphabet[num][zchar as usize];
-                        zstring.push_str(letter);
-                        Alphabet(0)
-                    }
-                };
-            };
-
-            // 3 zchars per each 16 bit word + a "stop" bit on top
-            // 0 10101 01010 10101
-            loop {
-                let word = self.memory.read_word(index);
-                index += 2;
-
-                step(((word >> 10) & 0b0001_1111) as u8);
-                step(((word >> 5) & 0b0001_1111) as u8);
-                step((word & 0b0001_1111) as u8);
-
-                // stop bit
-                if word & 0x8000 != 0 {
-                    break;
+        let mut step = |zchar: u8| {
+            state = match (zchar, &state) {
+                // the next zchar will be an abbrev index
+                (zch, &Alphabet(_)) if (1..=3).contains(&zch) => {
+                    assert!(allow_abbrevs, "Abbrev at {} contained recursive abbrev!", addr);
+                    Abbrev(zch)
                 }
+                // shift character for the next zchar
+                (4, &Alphabet(_)) => Alphabet(1),
+                (5, &Alphabet(_)) => Alphabet(2),
+                // special 10bit case, next 2 zchars = one 10bit zscii char
+                (6, &Alphabet(2)) => Tenbit1,
+                (_, &Tenbit1) => Tenbit2(zchar),
+                (_, &Tenbit2(first)) => {
+                    let letter = ((first << 5) + zchar) as char;
+                    zstring.push(letter);
+                    Alphabet(0)
+                }
+                // get the abbrev at this addr
+                (_, &Abbrev(num)) => {
+                    let abbrev = self.get_abbrev((num - 1) * 32 + zchar);
+                    zstring.push_str(&abbrev);
+                    Alphabet(0)
+                }
+                // normal case, adds letter from correct alphabet and resets to A0
+                (_, &Alphabet(num)) => {
+                    let letter = &self.alphabet[num][zchar as usize];
+                    zstring.push_str(letter);
+                    Alphabet(0)
+                }
+            };
+        };
+
+        // 3 zchars per each 16 bit word + a "stop" bit on top
+        // 0 10101 01010 10101
+        loop {
+            let word = self.memory.read_word(index);
+            index += 2;
+
+            step(((word >> 10) & 0b0001_1111) as u8);
+            step(((word >> 5) & 0b0001_1111) as u8);
+            step((word & 0b0001_1111) as u8);
+
+            // stop bit
+            if word & 0x8000 != 0 {
+                break;
             }
-        } // <- drop process closure, ending zstring borrow
+        }
 
         zstring
     }
@@ -748,7 +744,7 @@ impl Zmachine {
 
         // get the children of each child
         for child in &mut parent.children {
-            self.add_object_children(&mut *child);
+            self.add_object_children(child);
         }
     }
 
@@ -765,21 +761,16 @@ impl Zmachine {
 
         // recursively fetch children for each top level object
         for object in &mut root.children {
-            self.add_object_children(&mut *object);
+            self.add_object_children(object);
         }
 
-        *root
+        root
     }
 
     #[allow(dead_code)]
     fn find_object(&self, name: &str) -> Option<u16> {
-        for i in 1..self.get_total_object_count() + 1 {
-            if self.get_object_name(i).to_lowercase() == name.to_lowercase() {
-                return Some(i);
-            }
-        }
-
-        None
+        (1..self.get_total_object_count() + 1)
+            .find(|&i| self.get_object_name(i).to_lowercase() == name.to_lowercase())
     }
 
     #[allow(dead_code)]
@@ -1025,7 +1016,7 @@ impl Zmachine {
     }
 
     pub fn restore_state(&mut self, data: &[u8]) {
-        match QuetzalSave::from_bytes(&data[..], &self.original_dynamic[..]) {
+        match QuetzalSave::from_bytes(data, &self.original_dynamic) {
             Ok(save) => {
                 // verify that the save is for the right game and that the memory is ok
                 if save.chksum != self.memory.read_word(0x1C) {
@@ -1486,7 +1477,7 @@ impl Zmachine {
     // Web UI only
     #[allow(dead_code)]
     pub fn restore(&mut self, data: &str) {
-        let state = BASE64.decode(&data);
+        let state = BASE64.decode(data);
 
         if data.is_empty() || state.is_err() {
             let instr = self.paused_instr.take().unwrap();
@@ -1538,7 +1529,7 @@ impl Zmachine {
 impl Zmachine {
     // OP2_1
     fn do_je(&self, a: u16, values: &[u16]) -> u16 {
-        if values.iter().any(|x| a == *x) { 1 } else { 0 }
+        if values.contains(&a) { 1 } else { 0 }
     }
 
     // OP2_2
@@ -1928,7 +1919,7 @@ impl Zmachine {
         let parse_addr = parse_addr as usize;
 
         // versions 1-4 have to store an extra 0, so the max length is 1 less
-        let mut max_length = self.memory.read_byte(text_addr as usize);
+        let mut max_length = self.memory.read_byte(text_addr);
         if self.version <= 4 {
             max_length -= 1;
         }
@@ -2078,7 +2069,7 @@ impl Zmachine {
         let undo_count = self.undos.len();
         let total = self.undos.len() + self.redos.len() + 1;
 
-        self.ui.debug(&"History:");
+        self.ui.debug("History:");
 
         for (i, state) in self.undos.iter().enumerate() {
             let index = i + 1;
@@ -2099,7 +2090,7 @@ impl Zmachine {
     pub fn get_save_state(&self) -> Option<String> {
         self.current_state.as_ref().map(|(_, state)| {
             let secured = SaveValidator::add_security_info(state, &self.secret_key);
-            BASE64.encode(&secured)
+            BASE64.encode(secured)
         })
     }
 }

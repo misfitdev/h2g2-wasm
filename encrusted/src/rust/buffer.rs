@@ -66,6 +66,10 @@ impl Buffer {
         self.buf.len()
     }
 
+    pub fn is_empty(&self) -> bool {
+        self.buf.is_empty()
+    }
+
     pub fn read_byte(&self, location: usize) -> u8 {
         self.buf[location]
     }
@@ -92,7 +96,7 @@ impl Buffer {
 
     pub fn write(&mut self, location: usize, buf: &[u8]) {
         for (i, b) in buf.iter().enumerate() {
-            self.write_byte(location + i as usize, *b);
+            self.write_byte(location + i, *b);
         }
     }
 

@@ -70,7 +70,7 @@ impl SaveValidator {
         mac.update(payload);
         let computed_hmac = mac.finalize();
 
-        if &computed_hmac.into_bytes()[..] != stored_hmac {
+        if computed_hmac.into_bytes()[..] != stored_hmac {
             return Err("HMAC-SHA256 signature verification failed".to_string());
         }
 

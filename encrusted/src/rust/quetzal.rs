@@ -138,7 +138,7 @@ impl QuetzalSave {
 
         // chunks get padded with an empty 0 byte if they have an odd length
         let mut chunk_length = 8 + body_length;
-        if chunk_length % 2 != 0 {
+        if !chunk_length.is_multiple_of(2) {
             chunk_length += 1;
         }
 
@@ -161,7 +161,7 @@ impl QuetzalSave {
 
         // If the body length is odd, add a padding byte. This extra byte is
         // *not* included in the length marker above.
-        if body.len() % 2 != 0 {
+        if !body.len().is_multiple_of(2) {
             bytes.push(0);
         }
     }
@@ -325,7 +325,7 @@ impl QuetzalSave {
             let frame_size = 8 + (num_locals as usize * 2) + (stack_length as usize * 2);
 
             // Validate that frame doesn't exceed buffer
-            if offset.checked_add(frame_size).map_or(true, |end| end > bytes.len()) {
+            if offset.checked_add(frame_size).is_none_or(|end| end > bytes.len()) {
                 return Err(QuetzalError::InvalidStksFame);
             }
 

@@ -152,10 +152,7 @@ impl Instruction {
     pub fn does_text(opcode: Opcode) -> bool {
         use self::Opcode::*;
 
-        match opcode {
-            OP0_178 | OP0_179 => true,
-            _ => false,
-        }
+        matches!(opcode, OP0_178 | OP0_179)
     }
 
     pub fn name(opcode: Opcode, version: u8) -> String {
@@ -311,11 +308,10 @@ impl Instruction {
 
         // Some instructions never advance to the next instruction:
         // throw, ret, jump, rtrue, rfalse, print_ret, restart, and ret_popped
-        match self.opcode {
-            OP2_28 | OP1_139 | OP1_140 | OP0_176 | OP0_177 | OP0_179 | OP0_183 | OP0_184
-            | OP0_186 => false,
-            _ => true,
-        }
+        !matches!(
+            self.opcode,
+            OP2_28 | OP1_139 | OP1_140 | OP0_176 | OP0_177 | OP0_179 | OP0_183 | OP0_184 | OP0_186
+        )
     }
 
     pub fn does_call(&self, version: u8) -> bool {

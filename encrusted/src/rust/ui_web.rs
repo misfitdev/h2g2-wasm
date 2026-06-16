@@ -58,7 +58,7 @@ impl UI for WebUI {
                 self.buffer.push(Token::Text(String::from(*line)));
             }
 
-            if let Some(_) = lines.get(index + 1) {
+            if lines.get(index + 1).is_some() {
                 self.buffer.push(Token::Newline);
             }
         }
