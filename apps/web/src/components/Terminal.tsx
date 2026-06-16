@@ -41,7 +41,6 @@ export function Terminal() {
   } = useTerminal();
 
   const [input, setInput] = useState('');
-  const [showControls, setShowControls] = useState(false);
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
   const [loadDialogOpen, setLoadDialogOpen] = useState(false);
   const [hintModalOpen, setHintModalOpen] = useState(false);
@@ -65,34 +64,12 @@ export function Terminal() {
 
   const outputRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const hideControlsTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const scrollToBottom = useCallback(() => {
     if (outputRef.current) {
       outputRef.current.scrollTop = outputRef.current.scrollHeight;
     }
   }, []);
-
-  // Auto-hide controls after 2s idle
-  const scheduleHideControls = useCallback(() => {
-    if (hideControlsTimerRef.current) {
-      clearTimeout(hideControlsTimerRef.current);
-    }
-    hideControlsTimerRef.current = setTimeout(() => {
-      setShowControls(false);
-    }, 2000);
-  }, []);
-
-  const handleMouseEnter = useCallback(() => {
-    setShowControls(true);
-    if (hideControlsTimerRef.current) {
-      clearTimeout(hideControlsTimerRef.current);
-    }
-  }, []);
-
-  const handleMouseMove = useCallback(() => {
-    scheduleHideControls();
-  }, [scheduleHideControls]);
 
   useEffect(() => {
     scrollToBottom();
@@ -338,18 +315,14 @@ export function Terminal() {
     <div
       className={`${styles.container} scanlines crt-effect`}
       onClick={handleContainerClick}
-      onMouseEnter={handleMouseEnter}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={() => setShowControls(false)}
       role="application"
       aria-label="Hitchhiker's Guide to the Galaxy - Game Terminal"
     >
       {/* CRT power-on sequence + ambient phosphor overlay */}
       <CRTScreen />
 
-      {/* Control bar - appears on hover */}
+      {/* Control bar - always-visible handle reveals it on hover/focus/tap */}
       <TerminalControls
-        visible={showControls}
         onUndo={handleUndo}
         onRedo={handleRedo}
         onSave={() => setSaveDialogOpen(true)}
