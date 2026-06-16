@@ -16,7 +16,7 @@
   flex-direction: column;
   border: 2px solid hsl(var(--terminal-green));
   background-color: hsl(var(--background));
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 20px hsl(var(--terminal-green) / 0.25);
 }
 
 /* Header */
@@ -132,7 +132,7 @@
 }
 
 .questionButton:hover {
-  background-color: rgba(52, 211, 153, 0.1);
+  background-color: hsl(var(--terminal-green) / 0.12);
 }
 
 .questionButton:focus {
@@ -204,7 +204,7 @@
 .revealOverlay {
   position: absolute;
   inset: 0;
-  background: rgba(52, 211, 153, 0.5);
+  background: hsl(var(--terminal-green) / 0.5);
   backdrop-filter: blur(3px);
   pointer-events: none;
   transition: opacity 0.05s linear;
@@ -237,7 +237,7 @@
 .nextHintButton:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-  background-color: rgba(52, 211, 153, 0.15);
+  background-color: hsl(var(--terminal-green) / 0.15);
 }
 
 .nextHintButton:enabled {
