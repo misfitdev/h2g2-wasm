@@ -53,6 +53,13 @@ export function Terminal() {
     }
     return false;
   });
+  // Experimental: per-character phosphor burn-in on output. Opt-in via ?burnin=1.
+  const [burnIn] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return new URLSearchParams(window.location.search).get('burnin') === '1';
+    }
+    return false;
+  });
 
   const wasmChecksum = useWasmChecksum();
 
@@ -361,7 +368,7 @@ export function Terminal() {
         aria-atomic="false"
       >
         {lines.map((line) => (
-          <TerminalLineComponent key={line.id} line={line} />
+          <TerminalLineComponent key={line.id} line={line} burnIn={burnIn} />
         ))}
       </div>
 
@@ -432,11 +439,12 @@ export function Terminal() {
   );
 }
 
-function TerminalLineComponent({ line }: { line: TerminalLine }) {
+function TerminalLineComponent({ line, burnIn }: { line: TerminalLine; burnIn?: boolean }) {
   const hasHtmlTags = line.content && /<[^>]+>/.test(line.content);
   const lineClass = `${styles.line} ${line.isInput ? styles.lineInput : styles.lineOutput}`;
 
   if (hasHtmlTags) {
+    // HTML output (room names, ASCII art) can't be split per glyph safely.
     return (
       <div
         className={lineClass}
@@ -445,9 +453,24 @@ function TerminalLineComponent({ line }: { line: TerminalLine }) {
     );
   }
 
-  return (
-    <div className={lineClass}>
-      {line.content || '\u00A0'}
-    </div>
-  );
+  const text = line.content || '\u00A0';
+
+  // Burn-in only applies to plain game output, not the player's echoed input.
+  if (burnIn && !line.isInput && line.content) {
+    return (
+      <div className={lineClass}>
+        {Array.from(text).map((ch, i) => (
+          <span
+            key={i}
+            className={styles.burnChar}
+            style={{ animationDelay: `${i * 11}ms` }}
+          >
+            {ch}
+          </span>
+        ))}
+      </div>
+    );
+  }
+
+  return <div className={lineClass}>{text}</div>;
 }

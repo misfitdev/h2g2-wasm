@@ -133,3 +133,33 @@
     0 0 2px hsl(var(--terminal-green) / 0.8),
     0 0 4px hsl(var(--terminal-green) / 0.4);
 }
+
+/* Per-character phosphor burn-in (opt-in via ?burnin=1).
+   Each glyph flares over-bright as it "writes", then settles to the line's
+   normal green. Staggered by inline animation-delay in the component. The
+   character is visible (opacity 1) when motion is reduced or unsupported. */
+.burnChar {
+  display: inline;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .burnChar {
+    animation: charBurn 240ms ease-out backwards;
+  }
+}
+
+@keyframes charBurn {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+    color: hsl(120 100% 92%);
+    text-shadow:
+      0 0 4px hsl(var(--terminal-green-glow)),
+      0 0 10px hsl(var(--terminal-green-glow) / 0.7);
+  }
+  100% {
+    opacity: 1;
+  }
+}
