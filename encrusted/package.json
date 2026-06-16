@@ -35,7 +35,7 @@
     "wasm-ffi": "^0.3.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.3.3",
+    "@babel/core": "^7.29.6",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.5",
     "copy-webpack-plugin": "^4.6.0",
