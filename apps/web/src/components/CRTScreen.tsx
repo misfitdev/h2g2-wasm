@@ -25,6 +25,8 @@ export function CRTScreen() {
         <div className={styles.scanlines} />
         <div className={styles.beam} />
         <div className={styles.vignette} />
+        <div className={styles.aberration} />
+        <div className={styles.flicker} />
       </div>
       {booting && <div className={styles.boot} aria-hidden="true" />}
     </>

@@ -10,6 +10,11 @@
   --crt-beam-opacity: 0.045;
   --crt-beam-period: 9s;
   --crt-vignette: 0.22;
+  /* Per-channel edge fringe (RGB split toward the corners of the tube). */
+  --crt-aberration: 0.13;
+  /* Tasteful tube instability: max dim amplitude and how often it twitches. */
+  --crt-flicker-opacity: 0.05;
+  --crt-flicker-period: 7s;
 
   position: fixed;
   inset: 0;
@@ -69,6 +74,42 @@
 @keyframes crtBeam {
   from { transform: translateY(-28vh); }
   to { transform: translateY(100vh); }
+}
+
+/* Chromatic aberration: faint colored fringes hugging the edges, opposite
+   channels on opposite sides, like a real tube's convergence error. Edge-only
+   by construction (inset shadows), so it never touches center legibility. */
+.aberration {
+  position: absolute;
+  inset: 0;
+  box-shadow:
+    inset 2px 0 5px -2px hsl(0 100% 55% / var(--crt-aberration)),
+    inset -2px 0 5px -2px hsl(190 100% 55% / var(--crt-aberration)),
+    inset 0 2px 6px -3px hsl(280 100% 60% / calc(var(--crt-aberration) * 0.6)),
+    inset 0 -2px 6px -3px hsl(140 100% 55% / calc(var(--crt-aberration) * 0.6));
+}
+
+/* Idle flicker: a translucent-black wash that mostly sits invisible and twitches
+   a couple of times per cycle. Brief dims, never a constant strobe. */
+.flicker {
+  position: absolute;
+  inset: 0;
+  background: hsl(var(--terminal-black));
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .flicker {
+    animation: crtIdleFlicker var(--crt-flicker-period) linear infinite;
+  }
+}
+
+@keyframes crtIdleFlicker {
+  0%, 46%, 51%, 92%, 100% { opacity: 0; }
+  48% { opacity: var(--crt-flicker-opacity); }
+  49% { opacity: calc(var(--crt-flicker-opacity) * 0.25); }
+  50% { opacity: var(--crt-flicker-opacity); }
+  93% { opacity: calc(var(--crt-flicker-opacity) * 0.7); }
 }
 
 /* --- Power-on sequence --- */
