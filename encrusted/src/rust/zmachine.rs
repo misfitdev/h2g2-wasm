@@ -2,7 +2,6 @@
 use std::boxed::Box;
 use std::collections::HashMap;
 use std::fmt;
-use std::fmt::Write as FmtWrite;
 use std::str;
 
 use base64::{engine::general_purpose::STANDARD as BASE64, Engine};
@@ -2027,66 +2026,7 @@ impl Zmachine {
     }
 }
 
-// debug functions (kept for WASM interface)
 impl Zmachine {
-    pub fn debug_object_details(&self, obj_num: u16) -> String {
-        if obj_num == 0 {
-            return String::new();
-        }
-
-        let mut out = String::from("Properties:\n");
-
-        let addr = self.get_object_prop_table_addr(obj_num);
-        let str_length = self.memory.read_byte(addr) as usize * 2; // words in name
-        let first_addr = addr + str_length + 1;
-
-        let mut prop = self.read_object_prop(first_addr);
-        let mut slice = self.memory.read(prop.addr, prop.len as usize);
-
-        writeln!(out, "{:2} {:?}", prop.num, slice).unwrap();
-
-        while prop.num != 0 {
-            prop = self.read_object_prop(prop.next);
-            slice = self.memory.read(prop.addr, prop.len as usize);
-
-            writeln!(out, "{:2} {:?}", prop.num, slice).unwrap();
-        }
-
-        let mut attributes = Vec::new();
-
-        for i in 0..(self.attr_width * 8) as u16 {
-            if self.test_attr(obj_num, i) == 1 {
-                attributes.push(i);
-            }
-        }
-
-        write!(out, "\nAttributes:\n{:?}", attributes).unwrap();
-
-        out
-    }
-
-    pub fn debug_history(&mut self) {
-        let undo_count = self.undos.len();
-        let total = self.undos.len() + self.redos.len() + 1;
-
-        self.ui.debug("History:");
-
-        for (i, state) in self.undos.iter().enumerate() {
-            let index = i + 1;
-            self.ui.debug(&format!("    ({}/{}) @ {}", index, total, state.0));
-        }
-
-        if let Some(ref current) = self.current_state {
-            let index = undo_count + 1;
-            self.ui.debug(&format!(" -> ({}/{}) @ {}", index, total, current.0));
-        }
-
-        for (i, state) in self.redos.iter().rev().enumerate() {
-            let index = undo_count + i + 2;
-            self.ui.debug(&format!("    ({}/{}) @ {}", index, total, state.0));
-        }
-    }
-
     pub fn get_save_state(&self) -> Option<String> {
         self.current_state.as_ref().map(|(_, state)| {
             let secured = SaveValidator::add_security_info(state, &self.secret_key);
