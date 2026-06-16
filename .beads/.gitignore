@@ -27,3 +27,9 @@ beads.right.meta.json
 !issues.jsonl
 !metadata.json
 !config.json
+
+# v1.0.4 embedded Dolt store and local runtime state (not source of truth)
+embeddeddolt/
+backup/
+daemon-error
+export-state.json
