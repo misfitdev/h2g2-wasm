@@ -33,3 +33,4 @@ embeddeddolt/
 backup/
 daemon-error
 export-state.json
+last-touched

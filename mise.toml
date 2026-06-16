@@ -1,0 +1,13 @@
+# Toolchain + environment for h2g2.
+# Replaces asdf (.asdf/tool-versions), direnv (.envrc), and moon/proto.
+# Tasks live in the justfile; run `just` to list them.
+
+[tools]
+node = "25.2.1"
+rust = { version = "stable", components = "rustfmt,clippy", targets = "wasm32-unknown-unknown" }
+"cargo:wasm-bindgen-cli" = "0.2.106"
+
+[env]
+# Local, gitignored overrides and secrets.
+# Replaces direnv's `dotenv_if_exists .env.local` (mise skips it if absent).
+_.file = ".env.local"

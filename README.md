@@ -11,46 +11,52 @@ h2g2/
 ├── apps/web/              # React + Vite web application (terminal UI)
 ├── encrusted/            # Rust library (core game engine)
 ├── wasm/                 # WebAssembly build of the Rust library
-├── build.sh              # Build script for Cloudflare Pages
+├── build.sh              # Build entrypoint for Cloudflare Pages (delegates to `just build`)
 ├── wrangler.toml         # Cloudflare Pages configuration
-├── .tool-versions        # asdf version management
-└── moon.yml              # Moon monorepo configuration
+├── mise.toml             # Toolchain + environment (Node, Rust, wasm-bindgen)
+└── justfile              # Task runner (run `just` to list recipes)
 ```
 
 ## Prerequisites
 
-- **Node.js** 22.16.0+ (managed by asdf via `.tool-versions`)
-- **Rust** 1.70+ (installed automatically if needed)
-- **asdf** (version manager, installed by build script if missing)
-- **wasm-bindgen-cli** 0.2.106 (installed automatically during build)
+Tools are pinned and provisioned by [mise](https://mise.jdx.dev). Install mise and
+[just](https://github.com/casey/just), then run `just setup` to provision everything:
+
+- **Node.js** 25.2.1 (pinned in `mise.toml`)
+- **Rust** stable + `wasm32-unknown-unknown` target (pinned in `mise.toml`)
+- **wasm-bindgen-cli** 0.2.106 (pinned in `mise.toml`)
 
 ## Setup & Development
 
 ### Quick Start
 
 ```bash
-# Install dependencies
-cd apps/web
-npm install
+# Provision the toolchain (Node, Rust, wasm32 target, wasm-bindgen) and install web deps
+just setup
 
-# Start dev server
-npm run dev
+# Start dev server (http://localhost:5173)
+just dev
 ```
-
-Development server runs at `http://localhost:5173`
 
 ### Full Build (all components)
 
 ```bash
-# Automatic - installs Rust, asdf, wasm-bindgen, builds everything
-bash ./build.sh
-
-# Manual - if you prefer
-cd wasm && cargo build --target wasm32-unknown-unknown --release
-cd ../apps/web && npm run build
+# Build wasm crate -> bindings -> web UI, output to apps/web/dist
+just build
 ```
 
 ## Available Commands
+
+Run `just` with no arguments to list every recipe. Common ones:
+
+- `just setup` - Provision tools (via mise) and install web deps
+- `just dev` - Start the web dev server
+- `just build` - Full production build (wasm + bindings + web UI)
+- `just test` - Run all tests (Rust + web)
+- `just lint` - Lint the web app
+- `just clean` - Remove build artifacts, caches, and dependencies
+
+The recipes wrap the underlying tools below.
 
 ### Web Application (apps/web)
 - `npm run dev` - Start development server with hot reload
@@ -86,9 +92,9 @@ cd ../apps/web && npm run build
 - **wasm-bindgen** - JS ↔ WASM interop
 
 ### Tools & Infrastructure
-- **asdf** - Version manager (Node.js, Rust via rustup)
+- **mise** - Toolchain and environment manager (Node.js, Rust, wasm-bindgen)
+- **just** - Task runner (see `justfile`)
 - **Cloudflare Pages** - Deployment platform
-- **Moon** - Monorepo task orchestration (optional)
 
 ## Key Features
 
@@ -145,13 +151,13 @@ Tests cover:
 The project is configured to deploy to Cloudflare Pages automatically on git push.
 
 **Configuration:**
-- Build command: `bash ./build.sh`
+- Build command: `bash ./build.sh` (provisions tools via mise, then runs `just build`)
 - Build output: `apps/web/dist/`
-- Node.js version: 22.16.0 (via `.tool-versions`)
+- Tool versions: pinned in `mise.toml`
 
 **Build process:**
-1. `build.sh` installs asdf and Node.js (if needed)
-2. Builds Rust → WebAssembly
+1. `build.sh` provisions the toolchain via mise (if needed)
+2. `just build` builds Rust → WebAssembly
 3. Fixes WASM JS bindings for browser (sed post-processing)
 4. Runs `npm install && npm run build` for web app
 5. Output deployed to `apps/web/dist/`
@@ -159,7 +165,7 @@ The project is configured to deploy to Cloudflare Pages automatically on git pus
 **Files:**
 - `wrangler.toml` - Cloudflare Pages config
 - `package.json` - Root stub (satisfies pre-build dependency detection)
-- `.tool-versions` - Node.js version constraint
+- `mise.toml` - Toolchain version pins
 
 ### Local Deployment Testing
 
@@ -168,8 +174,7 @@ The project is configured to deploy to Cloudflare Pages automatically on git pus
 bash ./build.sh
 
 # Serve the dist folder
-cd apps/web
-npm run preview
+just preview
 ```
 
 ## Development Workflow
@@ -177,24 +182,22 @@ npm run preview
 ### Making Changes
 
 1. **Feature/fix**: Edit code in `apps/web/src/` or `encrusted/src/`
-2. **Test locally**: `npm run dev` (web) or `cargo test` (Rust)
-3. **Build**: `npm run build` or `bash ./build.sh`
+2. **Test locally**: `just dev` (web) or `just test-rust` (Rust)
+3. **Build**: `just build`
 4. **Commit**: `git add . && git commit -m "..."`
 5. **Deploy**: Push to GitHub → Cloudflare Pages auto-deploys
 
 ### WASM Changes
 
-If you modify Rust code:
+If you modify Rust code, rebuild the bindings and web app:
 ```bash
-# Rebuild WASM and web app
-bash ./build.sh
+just build
 
-# Or just the WASM piece
-cd wasm && cargo build --target wasm32-unknown-unknown --release
-cd ../apps/web && npm run build
+# Or just regenerate the wasm bindings
+just bindgen
 ```
 
-The build script automatically:
+The `bindgen` recipe automatically:
 - Runs `wasm-bindgen` to generate JS bindings
 - Fixes the generated bindings for browser (replaces `'env'` import with `'../env-shim.js'`)
 - Copies WASM binary to web public folder
