@@ -65,6 +65,10 @@ export function Terminal() {
   const outputRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const syncLocation = useCallback(() => {
+    setCurrentLocation(getLocation());
+  }, [getLocation]);
+
   const scrollToBottom = useCallback(() => {
     if (outputRef.current) {
       outputRef.current.scrollTop = outputRef.current.scrollHeight;
@@ -164,11 +168,12 @@ export function Terminal() {
       addLine('Press Ctrl+L to clear screen. Hover top of screen for controls.');
       addLine('');
       processUpdates();
-      // Fetch initial location from game state
-      const location = getLocation();
-      setCurrentLocation(location);
+      // The Z-machine is an external system: its opening turn must run before
+      // the starting room can be read back, so this cannot be derived in render.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      syncLocation();
     }
-  }, [isInitialized, addLine, processUpdates, getLocation]);
+  }, [isInitialized, addLine, processUpdates, syncLocation]);
 
   // Display loading/error states
   useEffect(() => {
@@ -202,8 +207,7 @@ export function Terminal() {
         // Feed the command to keep game state consistent, then get location for hint modal
         feed(trimmedInput);
         processUpdates();
-        const location = getLocation();
-        setCurrentLocation(location);
+        syncLocation();
         setHintModalOpen(true);
         // Keep focus on input despite hint modal opening
         setTimeout(() => inputRef.current?.focus(), 0);
@@ -220,10 +224,9 @@ export function Terminal() {
       feed(input.trim());
       processUpdates();
       // Update current location after each command
-      const location = getLocation();
-      setCurrentLocation(location);
+      syncLocation();
     }
-  }, [input, isInitialized, addLine, addToHistory, feed, processUpdates, getLocation]);
+  }, [input, isInitialized, addLine, addToHistory, feed, processUpdates, syncLocation]);
 
   // Handle keyboard events
   const handleKeyDown = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
@@ -256,23 +259,21 @@ export function Terminal() {
     if (undo()) {
       addLine('[UNDO]');
       processUpdates();
-      const location = getLocation();
-      setCurrentLocation(location);
+      syncLocation();
     } else {
       addLine('[Nothing to undo]');
     }
-  }, [undo, addLine, processUpdates, getLocation]);
+  }, [undo, addLine, processUpdates, syncLocation]);
 
   const handleRedo = useCallback(() => {
     if (redo()) {
       addLine('[REDO]');
       processUpdates();
-      const location = getLocation();
-      setCurrentLocation(location);
+      syncLocation();
     } else {
       addLine('[Nothing to redo]');
     }
-  }, [redo, addLine, processUpdates, getLocation]);
+  }, [redo, addLine, processUpdates, syncLocation]);
 
   const handleSave = useCallback((slotName: string) => {
     const saveData = save();
@@ -297,13 +298,12 @@ export function Terminal() {
         processUpdates();
       }
       // Update location after load
-      const location = getLocation();
-      setCurrentLocation(location);
+      syncLocation();
     } else {
       addLine('[Load failed]');
     }
     setLoadDialogOpen(false);
-  }, [loadFromSlot, restore, addLine, processUpdates, feed, getLastCommand, getLocation]);
+  }, [loadFromSlot, restore, addLine, processUpdates, feed, getLastCommand, syncLocation]);
 
   const handleDelete = useCallback((slotName: string) => {
     if (deleteSlot(slotName)) {
