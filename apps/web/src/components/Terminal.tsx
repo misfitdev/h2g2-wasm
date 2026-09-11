@@ -6,6 +6,7 @@ import { TerminalControls } from './TerminalControls';
 import { SaveLoadDialog } from './SaveLoadDialog';
 import { HintModal } from './HintModal';
 import { DebugPanel } from './DebugPanel';
+import { CRTScreen } from './CRTScreen';
 import styles from './Terminal.module.css';
 
 export function Terminal() {
@@ -40,7 +41,6 @@ export function Terminal() {
   } = useTerminal();
 
   const [input, setInput] = useState('');
-  const [showControls, setShowControls] = useState(false);
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
   const [loadDialogOpen, setLoadDialogOpen] = useState(false);
   const [hintModalOpen, setHintModalOpen] = useState(false);
@@ -52,39 +52,24 @@ export function Terminal() {
     }
     return false;
   });
+  // Experimental: per-character phosphor burn-in on output. Opt-in via ?burnin=1.
+  const [burnIn] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return new URLSearchParams(window.location.search).get('burnin') === '1';
+    }
+    return false;
+  });
 
   const wasmChecksum = useWasmChecksum();
 
   const outputRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const hideControlsTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const scrollToBottom = useCallback(() => {
     if (outputRef.current) {
       outputRef.current.scrollTop = outputRef.current.scrollHeight;
     }
   }, []);
-
-  // Auto-hide controls after 2s idle
-  const scheduleHideControls = useCallback(() => {
-    if (hideControlsTimerRef.current) {
-      clearTimeout(hideControlsTimerRef.current);
-    }
-    hideControlsTimerRef.current = setTimeout(() => {
-      setShowControls(false);
-    }, 2000);
-  }, []);
-
-  const handleMouseEnter = useCallback(() => {
-    setShowControls(true);
-    if (hideControlsTimerRef.current) {
-      clearTimeout(hideControlsTimerRef.current);
-    }
-  }, []);
-
-  const handleMouseMove = useCallback(() => {
-    scheduleHideControls();
-  }, [scheduleHideControls]);
 
   useEffect(() => {
     scrollToBottom();
@@ -328,17 +313,16 @@ export function Terminal() {
 
   return (
     <div
-      className={`${styles.container} scanlines crt-effect boot-flicker`}
+      className={`${styles.container} scanlines crt-effect`}
       onClick={handleContainerClick}
-      onMouseEnter={handleMouseEnter}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={() => setShowControls(false)}
       role="application"
       aria-label="Hitchhiker's Guide to the Galaxy - Game Terminal"
     >
-      {/* Control bar - appears on hover */}
+      {/* CRT power-on sequence + ambient phosphor overlay */}
+      <CRTScreen />
+
+      {/* Control bar - always-visible handle reveals it on hover/focus/tap */}
       <TerminalControls
-        visible={showControls}
         onUndo={handleUndo}
         onRedo={handleRedo}
         onSave={() => setSaveDialogOpen(true)}
@@ -357,7 +341,7 @@ export function Terminal() {
         aria-atomic="false"
       >
         {lines.map((line) => (
-          <TerminalLineComponent key={line.id} line={line} />
+          <TerminalLineComponent key={line.id} line={line} burnIn={burnIn} />
         ))}
       </div>
 
@@ -428,11 +412,12 @@ export function Terminal() {
   );
 }
 
-function TerminalLineComponent({ line }: { line: TerminalLine }) {
+function TerminalLineComponent({ line, burnIn }: { line: TerminalLine; burnIn?: boolean }) {
   const hasHtmlTags = line.content && /<[^>]+>/.test(line.content);
   const lineClass = `${styles.line} ${line.isInput ? styles.lineInput : styles.lineOutput}`;
 
   if (hasHtmlTags) {
+    // HTML output (room names, ASCII art) can't be split per glyph safely.
     return (
       <div
         className={lineClass}
@@ -441,9 +426,24 @@ function TerminalLineComponent({ line }: { line: TerminalLine }) {
     );
   }
 
-  return (
-    <div className={lineClass}>
-      {line.content || '\u00A0'}
-    </div>
-  );
+  const text = line.content || '\u00A0';
+
+  // Burn-in only applies to plain game output, not the player's echoed input.
+  if (burnIn && !line.isInput && line.content) {
+    return (
+      <div className={lineClass}>
+        {Array.from(text).map((ch, i) => (
+          <span
+            key={i}
+            className={styles.burnChar}
+            style={{ animationDelay: `${i * 11}ms` }}
+          >
+            {ch}
+          </span>
+        ))}
+      </div>
+    );
+  }
+
+  return <div className={lineClass}>{text}</div>;
 }

@@ -160,6 +160,14 @@
     animation: blink 1s step-end infinite;
   }
 
+  /* Ambient CRT motion is decorative; hold it still when the user opts out. */
+  @media (prefers-reduced-motion: reduce) {
+    .cursor-blink,
+    .boot-flicker {
+      animation: none;
+    }
+  }
+
 
   /* Boot animation */
   @keyframes flicker {
@@ -539,7 +547,7 @@
   }
 
   .break-words {
-    word-break: break-words;
+    overflow-wrap: break-word;
   }
 
   .leading-relaxed {

@@ -1,73 +1,125 @@
-/* Toolbar Container */
-.toolbar {
+/* Game control bar.
+   One color source: the button's `color`, which the lucide icons and the
+   label inherit via currentColor. The phosphor glow is defined once as
+   variables (--glow-dim / --glow-bright) instead of being repeated inline.
+   An always-visible handle keeps the controls discoverable; the toolbar
+   reveals on hover, keyboard focus, or tap (so touch works too). */
+
+.wrapper {
   position: absolute;
   top: 0;
-  left: 0;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  --glow-dim: 0 0 1px hsl(var(--terminal-green-dim) / 0.5);
+  --glow-bright:
+    0 0 1px hsl(var(--terminal-green)),
+    0 0 2px hsl(var(--terminal-green) / 0.8),
+    0 0 4px hsl(var(--terminal-green) / 0.4);
+}
+
+/* Always-visible affordance, so controls are findable (including on touch). */
+.handle {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 2.75rem;
+  height: 1.25rem;
+  background-color: hsl(var(--terminal-black) / 0.85);
+  border: 1px solid hsl(var(--border));
+  border-top: none;
+  color: hsl(var(--terminal-green-dim));
+  text-shadow: var(--glow-dim);
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.wrapper:hover .handle,
+.wrapper:focus-within .handle {
+  color: hsl(var(--terminal-green));
+  text-shadow: var(--glow-bright);
+}
+
+.handle:focus-visible {
+  outline: 2px solid hsl(var(--terminal-green));
+  outline-offset: 2px;
+}
+
+.handleIcon {
+  width: 1rem;
+  height: 1rem;
+  transition: transform 0.18s ease;
+}
+
+.handleIconOpen {
+  transform: rotate(180deg);
+}
+
+/* Toolbar drops down just below the handle when revealed. */
+.toolbar {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
   gap: 0.25rem;
-  padding: 0.5rem;
-  background-color: hsl(var(--terminal-black)) / 0.4;
-  backdrop-filter: blur(4px);
-  border-bottom: 1px solid hsl(var(--border));
-  transition: all 0.2s;
+  padding: 0.375rem 0.5rem;
+  background-color: hsl(var(--terminal-black) / 0.85);
+  backdrop-filter: blur(6px);
+  border: 1px solid hsl(var(--border));
+  transition: opacity 0.18s ease, transform 0.18s ease;
 }
 
 .toolbar.hidden {
   opacity: 0;
-  transform: translateY(-100%);
+  transform: translateX(-50%) translateY(-0.375rem);
   pointer-events: none;
 }
 
-.toolbar.visible {
+.toolbar.visible,
+.wrapper:hover .toolbar,
+.wrapper:focus-within .toolbar {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
 }
 
-/* Divider */
 .divider {
   width: 1px;
   height: 1.5rem;
   background-color: hsl(var(--border));
-  margin: 0 0.5rem;
+  margin: 0 0.25rem;
 }
 
-/* Control Button */
 .button {
   display: flex;
   align-items: center;
   gap: 0.25rem;
   padding: 0.375rem 0.75rem;
-  background-color: hsl(var(--terminal-black)) / 0.4;
-  color: hsl(var(--terminal-green-dim));
-  text-shadow:
-    0 0 1px hsl(var(--terminal-green-dim) / 0.5);
+  background: transparent;
   border: none;
-  border-radius: 0;
+  color: hsl(var(--terminal-green-dim));
+  text-shadow: var(--glow-dim);
   cursor: pointer;
-  transition: all 0.15s;
   font-family: 'Glass TTY VT220', 'Monaco', 'Consolas', 'Courier New', monospace;
   font-size: 0.875rem;
-  font-weight: normal;
+  transition: color 0.15s, background-color 0.15s;
 }
 
 .button:hover:not(:disabled) {
   color: hsl(var(--terminal-green));
-  text-shadow:
-    0 0 1px hsl(var(--terminal-green)),
-    0 0 2px hsl(var(--terminal-green) / 0.8),
-    0 0 4px hsl(var(--terminal-green) / 0.4);
-  background-color: hsl(var(--terminal-black)) / 0.6;
-  border-color: hsl(var(--terminal-green-dim));
+  text-shadow: var(--glow-bright);
+  background-color: hsl(var(--terminal-green) / 0.12);
 }
 
-.button:focus {
-  outline: none;
-  ring: 2px hsl(var(--terminal-green));
-  ring-offset: 2px;
+.button:focus-visible {
+  outline: 2px solid hsl(var(--terminal-green));
+  outline-offset: 2px;
 }
 
 .button:disabled {
@@ -75,15 +127,11 @@
   cursor: not-allowed;
 }
 
-.button:enabled {
-  opacity: 1;
-}
-
-.button.disabled {
-  opacity: 0.3;
-}
-
 .icon {
   width: 1rem;
   height: 1rem;
+}
+
+.label {
+  font-size: 0.75rem;
 }

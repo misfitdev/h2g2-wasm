@@ -1,0 +1,184 @@
+/* CRT power-on sequence + ambient phosphor overlay.
+   Purely additive: every element is pointer-events:none and sits above the
+   terminal but below modals. All motion is gated on prefers-reduced-motion,
+   and intensities are exposed as --crt-* variables so they can be tuned by eye. */
+
+.layer {
+  /* Tunables. Dial these at runtime; they intentionally stay subtle so the
+     moving parts never fight the text you are trying to read. */
+  --crt-scanline-boost: 0.018;
+  --crt-beam-opacity: 0.045;
+  --crt-beam-period: 9s;
+  --crt-vignette: 0.22;
+  /* Per-channel edge fringe (RGB split toward the corners of the tube). */
+  --crt-aberration: 0.13;
+  /* Tasteful tube instability: max dim amplitude and how often it twitches. */
+  --crt-flicker-opacity: 0.05;
+  --crt-flicker-period: 7s;
+
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 98;
+}
+
+/* Reinforced scanlines, layered over the global ones for more tube texture. */
+.scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0,
+    transparent 2px,
+    hsl(0 0% 0% / var(--crt-scanline-boost)) 3px,
+    transparent 4px
+  );
+}
+
+/* Soft corner falloff, reinforcing the existing curvature vignette. */
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 120% 120% at center,
+    transparent 55%,
+    hsl(0 0% 0% / var(--crt-vignette)) 100%
+  );
+}
+
+/* The slow refresh "beam": a faint bright band drifting down the screen,
+   the way a real tube's vertical retrace reads at low shutter speeds. */
+.beam {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 28vh;
+  top: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    hsl(var(--terminal-green) / var(--crt-beam-opacity)),
+    transparent
+  );
+  mix-blend-mode: screen;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .beam {
+    opacity: 1;
+    animation: crtBeam var(--crt-beam-period) linear infinite;
+  }
+}
+
+@keyframes crtBeam {
+  from { transform: translateY(-28vh); }
+  to { transform: translateY(100vh); }
+}
+
+/* Chromatic aberration: faint colored fringes hugging the edges, opposite
+   channels on opposite sides, like a real tube's convergence error. Edge-only
+   by construction (inset shadows), so it never touches center legibility. */
+.aberration {
+  position: absolute;
+  inset: 0;
+  box-shadow:
+    inset 2px 0 5px -2px hsl(0 100% 55% / var(--crt-aberration)),
+    inset -2px 0 5px -2px hsl(190 100% 55% / var(--crt-aberration)),
+    inset 0 2px 6px -3px hsl(280 100% 60% / calc(var(--crt-aberration) * 0.6)),
+    inset 0 -2px 6px -3px hsl(140 100% 55% / calc(var(--crt-aberration) * 0.6));
+}
+
+/* Idle flicker: a translucent-black wash that mostly sits invisible and twitches
+   a couple of times per cycle. Brief dims, never a constant strobe. */
+.flicker {
+  position: absolute;
+  inset: 0;
+  background: hsl(var(--terminal-black));
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .flicker {
+    animation: crtIdleFlicker var(--crt-flicker-period) linear infinite;
+  }
+}
+
+@keyframes crtIdleFlicker {
+  0%, 46%, 51%, 92%, 100% { opacity: 0; }
+  48% { opacity: var(--crt-flicker-opacity); }
+  49% { opacity: calc(var(--crt-flicker-opacity) * 0.25); }
+  50% { opacity: var(--crt-flicker-opacity); }
+  93% { opacity: calc(var(--crt-flicker-opacity) * 0.7); }
+}
+
+/* --- Power-on sequence --- */
+
+/* Black backer that hides the terminal, then reveals it as the tube "warms up". */
+.boot {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  pointer-events: none;
+  background: hsl(var(--terminal-black));
+  opacity: 1;
+}
+
+/* The overbright center line that unfolds vertically into the full screen. */
+.boot::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 100%;
+  transform: translateY(-50%) scaleY(0.004);
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    hsl(var(--terminal-green-light) / 0.85) 46%,
+    hsl(120 100% 92%) 50%,
+    hsl(var(--terminal-green-light) / 0.85) 54%,
+    transparent 100%
+  );
+  filter: blur(0.6px);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .boot {
+    animation: crtReveal 1.15s ease-out forwards;
+  }
+  .boot::before {
+    animation: crtUnfold 1.15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+}
+
+/* Reduced motion: no unfold, no flash. A short calm fade from black, no line. */
+@media (prefers-reduced-motion: reduce) {
+  .boot {
+    animation: crtRevealCalm 0.45s ease-out forwards;
+  }
+  .boot::before {
+    display: none;
+  }
+}
+
+@keyframes crtReveal {
+  0% { opacity: 1; }
+  40% { opacity: 1; }
+  62% { opacity: 0.18; }
+  68% { opacity: 0.42; } /* one quick warm-up flicker */
+  100% { opacity: 0; }
+}
+
+@keyframes crtRevealCalm {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes crtUnfold {
+  0% { transform: translateY(-50%) scaleY(0.004); opacity: 1; }
+  38% { transform: translateY(-50%) scaleY(0.02); opacity: 1; }
+  60% { transform: translateY(-50%) scaleY(1); opacity: 1; }
+  100% { transform: translateY(-50%) scaleY(1); opacity: 0; }
+}

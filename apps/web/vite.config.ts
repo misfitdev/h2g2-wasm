@@ -21,8 +21,8 @@ export default defineConfig(({ mode }) => ({
   plugins: [react()],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
-      "env": path.resolve(__dirname, "./src/env-shim.js"),
+      "@": path.resolve(import.meta.dirname, "./src"),
+      "env": path.resolve(import.meta.dirname, "./src/env-shim.js"),
     },
   },
   define: {

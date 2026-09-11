@@ -1,78 +1,61 @@
-<img src="https://demille.github.io/encrusted/src/img/name.svg" alt="encrusted" width="200px" height="78px" align="left" />
+# encrusted (h2g2 fork)
 
-<p align="right">
-  <img src="https://img.shields.io/crates/v/encrusted.svg" alt="Crates.io" align="right" />
-  <br/>
-  <a href="https://travis-ci.org/DeMille/encrusted">
-    <img src="https://travis-ci.org/DeMille/encrusted.svg?branch=master" alt="Built Status" align="right" />
-  </a>
-</p>
-<br/>
+> **Fork notice.** This is a vendored, modified copy of [DeMille/encrusted](https://github.com/demille/encrusted)
+> (a z-machine interpreter for Infocom-era games; upstream frozen at 2019-02-24).
+> In this repo it is used **only as a Rust library** by the workspace `wasm/`
+> crate, which compiles it to WebAssembly for the `apps/web` terminal UI. It has
+> diverged substantially from upstream for our needs; see the summary below.
 
----
+## Our changes vs upstream
 
-#### A z-machine (interpreter) for Infocom-era text adventure games like Zork
+- **Library only, no terminal binary.** Removed the terminal entrypoints
+  (`main.terminal.rs`, `main.web.rs`), the terminal UI (`ui_terminal.rs`), the
+  interactive `run` loop, and the entire interactive debugger/cheat command
+  family (`debug_*`, `handle_debug_command`, `is_debug_command`,
+  `print_command_help`). The crate now exposes `[lib]` only.
+- **WASM bridge via wasm-bindgen.** The engine is consumed by the workspace
+  `wasm/` crate through `wasm-bindgen` (upstream used `wasm-ffi`). `ui_web.rs`
+  was adapted to emit tokens/HTML for the React terminal (`js_message`,
+  ASCII-art output path).
+- **Embedded game.** `game.rs` embeds the Hitchhiker's Guide story file
+  (`h2g2.z3`) via `include_bytes!`; the engine is built around that one game
+  rather than loading an arbitrary file.
+- **Invisiclues hint system.** `hints.rs` + `data/invisiclues.json` add the
+  original ~1,800-hint progressive Invisiclues, surfaced through the UI.
+- **ASCII art.** `ascii_art.rs` + a `print_ascii_art` UI path render per-room
+  ASCII art.
+- **Save-state security.** `save_security.rs` (`get_save_state`,
+  `derive_secret_key`) wraps Quetzal base64 saves with an integrity header so
+  tampered/foreign save blobs are rejected.
+- **Modernized engine.** Clippy/idiom fixes across the shared files
+  (e.g. dropped `Box<Object>` indirection, `to_string` renamed to
+  `to_display_string`).
+- **Removed upstream's bundled web playground** (its React 16 / d3 / redux app
+  and npm package); the real frontend lives in `apps/web`.
 
-Runs in a web interface or directly in a terminal.
-Built with Rust and WebAssembly (`wasm32-unknown-unknown`).
+## About
 
-🎮 &nbsp;[Launch the web player][web]
+A z-machine interpreter for Infocom-era text adventure games, written in Rust
+and compiled to WebAssembly (`wasm32-unknown-unknown`).
 
-<br/>
+## Build & test
 
-**Features**
-- [x] Live mapping to keep track of where you are
-- [x] Undo / Redo support
-- [x] Narration / Dictation using the [web speech APIs][APIs]
-- [x] Object tree inspector
-
-[web]: https://sterlingdemille.com/encrusted
-[APIs]: https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API
-
-
-### Install
-Terminal version:
-
-```sh
-cargo install encrusted --bin encrusted
-```
-
-Run a file with `encrusted <FILE>`.
-Use `$undo` and `$redo` to step through your move history.
-Use `save` and `restore` to save your progress.
-
-
-### Build
-WebAssembly/React web version (requires node & rust nightly):
+This crate is part of the h2g2 workspace and is not built standalone. From the
+repo root (tooling is provisioned by `mise`):
 
 ```sh
-# If you haven't added nightly or the wasm32 target:
-rustup toolchain install nightly
-rustup target add wasm32-unknown-unknown --toolchain nightly
-
-# Runs webpack dev server on port 8000
-npm run dev
-
-# Build .wasm module with rust nightly, debug mode
-npm run build:debug
-
-# Or build all in release mode & bundle JS into the ./build directory
-npm run release
+just build      # builds the wasm/ crate (which depends on this) and the web app
+just test-rust  # runs this crate's tests
 ```
 
+Or directly: `cargo test` in this directory.
 
-### Tests
+## Notes
 
-Run z-machine tests ([czech](https://inform-fiction.org/zmachine/standards/z1point1/appc.html) & [praxix](https://inform-fiction.org/zmachine/standards/z1point1/appc.html)) through [regtest](https://eblong.com/zarf/plotex/regtest.html):
-```
-npm run test
-```
+- Only supports v3 zcode files.
+- Saves in the Quetzal format (wrapped with our integrity header; see
+  `save_security.rs`).
 
+## License
 
-### Notes
-- Currently only supports v3 zcode files
-- Saves games in the Quetzal format
-
-
-### License
-MIT
+MIT, per upstream [DeMille/encrusted](https://github.com/demille/encrusted).

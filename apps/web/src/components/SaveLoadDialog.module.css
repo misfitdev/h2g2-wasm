@@ -6,7 +6,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: hsl(var(--terminal-black)) / 0.9;
+  background-color: hsl(var(--terminal-black) / 0.9);
 }
 
 /* Modal Container */
@@ -60,9 +60,8 @@
 }
 
 .closeButton:focus {
-  outline: none;
-  ring: 2px hsl(var(--terminal-green));
-  ring-offset: 2px;
+  outline: 2px solid hsl(var(--terminal-green));
+  outline-offset: 2px;
 }
 
 /* Slots Container */
@@ -115,9 +114,8 @@
 }
 
 .slotButton:focus {
-  outline: none;
-  ring: 2px hsl(var(--terminal-green));
-  ring-offset: 2px;
+  outline: 2px solid hsl(var(--terminal-green));
+  outline-offset: 2px;
 }
 
 .deleteButton {
@@ -140,9 +138,8 @@
 }
 
 .deleteButton:focus {
-  outline: none;
-  ring: 2px hsl(var(--terminal-green));
-  ring-offset: 2px;
+  outline: 2px solid hsl(var(--terminal-green));
+  outline-offset: 2px;
 }
 
 /* Save Input Section */
@@ -184,8 +181,8 @@
 
 .input:focus {
   border-color: hsl(var(--terminal-green));
-  ring: 2px hsl(var(--terminal-green));
-  ring-offset: 2px;
+  outline: 2px solid hsl(var(--terminal-green));
+  outline-offset: 2px;
 }
 
 .input::placeholder {
@@ -214,9 +211,8 @@
 }
 
 .saveButton:focus {
-  outline: none;
-  ring: 2px hsl(var(--terminal-green));
-  ring-offset: 2px;
+  outline: 2px solid hsl(var(--terminal-green));
+  outline-offset: 2px;
 }
 
 /* Cancel Button */
@@ -250,7 +246,6 @@
 }
 
 .cancelButton:focus {
-  outline: none;
-  ring: 2px hsl(var(--terminal-green));
-  ring-offset: 2px;
+  outline: 2px solid hsl(var(--terminal-green));
+  outline-offset: 2px;
 }
