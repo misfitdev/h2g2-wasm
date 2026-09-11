@@ -45,7 +45,9 @@ export function useTerminal() {
     // Save the last command for context on load
     try {
       localStorage.setItem('h2g2_last_command', command);
-    } catch {}
+    } catch {
+      // localStorage throws when quota is exhausted or storage is blocked.
+    }
   }, []);
 
   const navigateHistory = useCallback((direction: 'up' | 'down'): string | null => {
