@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import { useWasm } from '@/hooks/useWasm';
 import styles from './HintModal.module.css';
 
@@ -21,7 +21,6 @@ const BASE_TIMER_DURATION = 5000; // 5 seconds for first hint
 
 export function HintModal({ isOpen, onClose, location, totalHintsShown, onHintShown }: HintModalProps) {
   const { isInitialized, getHintsForLocation, getHintAnswer } = useWasm();
-  const [questions, setQuestions] = useState<Array<[number, HintQuestion]>>([]);
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   const [currentLevel, setCurrentLevel] = useState(0);
   const [currentAnswer, setCurrentAnswer] = useState('');
@@ -36,24 +35,29 @@ export function HintModal({ isOpen, onClose, location, totalHintsShown, onHintSh
     return BASE_TIMER_DURATION * Math.pow(2, totalHintsShown); // Based on total hints shown globally
   }, [totalHintsShown]);
 
-  useEffect(() => {
-    if (!isOpen || !isInitialized) return;
+  const hintLocation = generalMode ? 'GENERAL' : location;
+
+  const questions = useMemo<Array<[number, HintQuestion]>>(() => {
+    if (!isOpen || !isInitialized) return [];
 
     try {
-      const hintLocation = generalMode ? 'GENERAL' : location;
-      const questionsJson = getHintsForLocation(hintLocation);
-      const parsed = JSON.parse(questionsJson);
-      setQuestions(parsed || []);
-      setSelectedIdx(null);
-      setCurrentLevel(0);
-      setCurrentAnswer('');
-      setTimerProgress(100);
-      setCanShowNext(false);
+      return JSON.parse(getHintsForLocation(hintLocation)) || [];
     } catch (e) {
       console.error('Failed to load hints:', e);
-      setQuestions([]);
+      return [];
     }
-  }, [isOpen, location, isInitialized, getHintsForLocation, generalMode]);
+  }, [isOpen, isInitialized, hintLocation, getHintsForLocation]);
+
+  // Reset the drill-down whenever the question set changes.
+  const [renderedFor, setRenderedFor] = useState(questions);
+  if (renderedFor !== questions) {
+    setRenderedFor(questions);
+    setSelectedIdx(null);
+    setCurrentLevel(0);
+    setCurrentAnswer('');
+    setTimerProgress(100);
+    setCanShowNext(false);
+  }
 
   const startTimer = useCallback((hintId: string) => {
     setCanShowNext(false);
