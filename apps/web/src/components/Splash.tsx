@@ -39,15 +39,25 @@ export function Splash({ onStart }: SplashProps) {
     startRef.current?.focus();
   }, []);
 
+  // Listen on the document: clicking the art moves focus to <body>, and a
+  // handler bound to this element would never see the key.
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === 'Escape') {
+        e.preventDefault();
+        onStart();
+      }
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [onStart]);
+
   return (
     <div
       className={styles.splash}
       role="dialog"
       aria-modal="true"
       aria-label="The Hitchhiker's Guide to the Galaxy"
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === 'Escape') onStart();
-      }}
     >
       <canvas
         ref={canvasRef}

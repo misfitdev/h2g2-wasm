@@ -47,19 +47,28 @@ describe('Splash', () => {
     expect(onStart).toHaveBeenCalledOnce();
   });
 
-  it('starts on Enter and on Escape', () => {
+  it('starts on Enter and on Escape from anywhere', () => {
     const onStart = vi.fn();
     render(<Splash onStart={onStart} />);
-    const dialog = screen.getByRole('dialog');
-    fireEvent.keyDown(dialog, { key: 'Enter' });
-    fireEvent.keyDown(dialog, { key: 'Escape' });
+    // Bound to the document: clicking the art moves focus to <body>, so a
+    // handler on the element itself would never fire.
+    fireEvent.keyDown(document, { key: 'Enter' });
+    fireEvent.keyDown(document, { key: 'Escape' });
     expect(onStart).toHaveBeenCalledTimes(2);
   });
 
   it('ignores other keys', () => {
     const onStart = vi.fn();
     render(<Splash onStart={onStart} />);
-    fireEvent.keyDown(screen.getByRole('dialog'), { key: 'a' });
+    fireEvent.keyDown(document, { key: 'a' });
+    expect(onStart).not.toHaveBeenCalled();
+  });
+
+  it('stops listening once dismissed', () => {
+    const onStart = vi.fn();
+    const { unmount } = render(<Splash onStart={onStart} />);
+    unmount();
+    fireEvent.keyDown(document, { key: 'Enter' });
     expect(onStart).not.toHaveBeenCalled();
   });
 

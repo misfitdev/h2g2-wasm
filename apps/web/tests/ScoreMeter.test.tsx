@@ -36,3 +36,23 @@ describe('ScoreMeter', () => {
     expect(screen.getByRole('status')).toBeInTheDocument();
   });
 });
+
+describe('ScoreMeter without a score', () => {
+  it('hides the meter when the engine reports no score', () => {
+    render(<ScoreMeter location="Bedroom" score={null} turns={null} />);
+    expect(screen.getByText('Bedroom')).toBeInTheDocument();
+    expect(screen.queryByText('BUREAUCRACY')).not.toBeInTheDocument();
+    expect(screen.queryByText(/\/400/)).not.toBeInTheDocument();
+  });
+
+  it('still announces the location', () => {
+    render(<ScoreMeter location="Bedroom" score={null} turns={null} />);
+    expect(screen.getByRole('status')).toBeInTheDocument();
+  });
+
+  it('shows the meter again once a score arrives', () => {
+    const { rerender } = render(<ScoreMeter location="Bedroom" score={null} turns={null} />);
+    rerender(<ScoreMeter location="Bedroom" score={40} turns={3} />);
+    expect(screen.getByText('40/400')).toBeInTheDocument();
+  });
+});

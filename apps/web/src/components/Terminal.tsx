@@ -71,7 +71,7 @@ export function Terminal() {
   const [timeline, setTimeline] = useState<Timeline>(createTimeline);
   const [flashing, setFlashing] = useState(false);
   const [splashDone, setSplashDone] = useState(false);
-  const [status, setStatus] = useState({ score: 0, turns: 0 });
+  const [status, setStatus] = useState<{ score: number; turns: number } | null>(null);
   const scoreRef = useRef(0);
   const [driveOpen, setDriveOpen] = useState(() => {
     try {
@@ -119,8 +119,11 @@ export function Terminal() {
    *  where a score change is a rewind rather than an achievement. */
   const syncStatus = useCallback((announce = true) => {
     const next = getScore();
-    if (!next) return;
+    // Clear rather than keep stale figures when the engine reports no score:
+    // before the VM is ready, or for a time-based game where globals 1 and 2
+    // hold the clock instead.
     setStatus(next);
+    if (!next) return;
 
     const remarks = announce ? milestonesCrossed(scoreRef.current, next.score) : [];
     scoreRef.current = next.score;
@@ -192,8 +195,8 @@ export function Terminal() {
       }
       return next;
     });
-    inputRef.current?.focus();
-  }, []);
+    focusTerminalInput();
+  }, [focusTerminalInput]);
 
   const dismissSplash = useCallback(() => {
     setSplashDone(true);
@@ -327,12 +330,13 @@ export function Terminal() {
     }
   }, [isLoading, error, addLine]);
 
-  // Keep focus on input field at all times
+  // Keep focus on input field at all times, once the title screen is done
+  // with it.
   useEffect(() => {
-    if (isInitialized) {
+    if (isInitialized && splashDone) {
       inputRef.current?.focus();
     }
-  }, [isInitialized, hintModalOpen]);
+  }, [isInitialized, splashDone, hintModalOpen]);
 
   // Handle command submission
   const handleSubmit = useCallback(() => {
@@ -372,7 +376,7 @@ export function Terminal() {
       syncStatus();
       recordTurn(input.trim(), [echoed, ...produced]);
     }
-  }, [input, isInitialized, addLine, addToHistory, feed, processUpdates, syncLocation, syncStatus, recordTurn]);
+  }, [input, isInitialized, addLine, addToHistory, feed, processUpdates, syncLocation, syncStatus, recordTurn, focusTerminalInput]);
 
   // Handle keyboard events
   const handleKeyDown = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
@@ -496,7 +500,11 @@ export function Terminal() {
         disabled={!isInitialized}
       />
 
-      <ScoreMeter location={currentLocation} score={status.score} turns={status.turns} />
+      <ScoreMeter
+        location={currentLocation}
+        score={status?.score ?? null}
+        turns={status?.turns ?? null}
+      />
 
       {/* Output area */}
       <div
