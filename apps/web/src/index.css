@@ -70,6 +70,10 @@
 
     --radius: 0;
 
+    /* Height of the status strip; the transcript and the controls handle
+       both sit below it. */
+    --status-strip-height: 1.6rem;
+
     /* Custom terminal effects */
     --glow-intensity: 0 0 10px;
     --scanline-opacity: 0.03;

@@ -7,7 +7,8 @@
 
 .wrapper {
   position: absolute;
-  top: 0;
+  /* Clear the status strip, which also owns the top edge. */
+  top: var(--status-strip-height);
   left: 50%;
   transform: translateX(-50%);
   z-index: 50;

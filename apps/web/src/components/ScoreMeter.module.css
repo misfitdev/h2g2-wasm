@@ -8,7 +8,9 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.2rem 1rem;
+  height: var(--status-strip-height);
+  box-sizing: border-box;
+  padding: 0 1rem;
   font-size: 0.8em;
   color: hsl(var(--terminal-black));
   background-color: hsl(var(--terminal-green-dim));

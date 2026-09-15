@@ -52,7 +52,7 @@
   left: 0;
   right: 0;
   bottom: 80px; /* Space for fixed input area (approximately) */
-  padding-top: 1.6rem; /* Clear the status strip */
+  padding-top: calc(var(--status-strip-height) + 0.3rem);
   overflow-y: auto;
   overflow-x: auto;
   padding: 1rem;
