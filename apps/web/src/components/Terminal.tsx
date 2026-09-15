@@ -10,6 +10,7 @@ import { CRTScreen } from './CRTScreen';
 import { GuidePane } from './GuidePane';
 import { ImprobabilityDrive } from './ImprobabilityDrive';
 import { ScoreMeter } from './ScoreMeter';
+import { Splash } from './Splash';
 import { milestonesCrossed } from '@/lib/scoreMilestones';
 import {
   createTimeline,
@@ -68,6 +69,10 @@ export function Terminal() {
   const [totalHintsShown, setTotalHintsShown] = useState(0);
   const [timeline, setTimeline] = useState<Timeline>(createTimeline);
   const [flashing, setFlashing] = useState(false);
+  // Held until the CRT power-on has finished, so the title does not appear
+  // mid-flicker. Matches the boot sequence in CRTScreen.
+  const [splashReady, setSplashReady] = useState(false);
+  const [splashDone, setSplashDone] = useState(false);
   const [status, setStatus] = useState({ score: 0, turns: 0 });
   const scoreRef = useRef(0);
   const [driveOpen, setDriveOpen] = useState(() => {
@@ -182,6 +187,16 @@ export function Terminal() {
       }
       return next;
     });
+    inputRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setSplashReady(true), 1300);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const dismissSplash = useCallback(() => {
+    setSplashDone(true);
     inputRef.current?.focus();
   }, []);
 
@@ -547,6 +562,8 @@ export function Terminal() {
       />
 
       {flashing && <div className={styles.flash} aria-hidden="true" />}
+
+      {splashReady && !splashDone && <Splash onStart={dismissSplash} />}
 
 
       {/* Debug Panel */}
