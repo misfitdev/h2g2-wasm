@@ -286,7 +286,7 @@ export function Terminal() {
         '',
         'WASM module loaded successfully.',
         'Type commands and press ENTER to interact with the game.',
-        'Press Ctrl+L to clear screen. Hover top of screen for controls.',
+        'Press Ctrl+L to clear screen. Controls hide behind the tab up top.',
         '',
       ];
       banner.forEach((line) => addLine(line));
@@ -470,7 +470,7 @@ export function Terminal() {
       {/* Output area */}
       <div
         ref={outputRef}
-        className={`${styles.output} ${guideOpen ? styles.outputWithGuide : ''} ${driveOpen ? styles.outputWithDrive : ''}`}
+        className={styles.output}
         role="log"
         aria-label="Game output"
         aria-live="polite"
@@ -482,7 +482,7 @@ export function Terminal() {
       </div>
 
       {/* Input area */}
-      <div className={`${styles.inputArea} ${driveOpen ? styles.inputAreaWithDrive : ''}`}>
+      <div className={styles.inputArea}>
         <label htmlFor="game-input" className="sr-only">
           Game command input
         </label>
