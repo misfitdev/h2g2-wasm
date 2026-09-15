@@ -147,3 +147,70 @@ describe('GuidePane flicker', () => {
     expect(findScreen()?.className).not.toBe(during);
   });
 });
+
+describe('GuidePane cross-references', () => {
+  const noop = () => {};
+
+  it('follows a cross-reference to its entry', () => {
+    render(<GuidePane location="Bedroom" open={true} onToggle={noop} />);
+    fireEvent.click(screen.getByRole('button', { name: 'BYPASSES' }));
+    expect(screen.getByRole('heading', { name: 'BYPASSES' })).toBeInTheDocument();
+  });
+
+  it('shows a placeholder for a headword nobody has written', () => {
+    render(<GuidePane location="Bedroom" open={true} onToggle={noop} />);
+    fireEvent.click(screen.getByRole('button', { name: 'GRAVITY, LOCAL' }));
+    expect(screen.getByRole('heading', { name: 'GRAVITY LOCAL' })).toBeInTheDocument();
+    expect(screen.getByText('Not yet filed.')).toBeInTheDocument();
+  });
+
+  it('resolves a cross-reference via an alternate headword', () => {
+    render(<GuidePane location="Bedroom" open={true} onToggle={noop} />);
+    fireEvent.click(screen.getByRole('button', { name: 'BYPASSES' }));
+    fireEvent.click(screen.getByRole('button', { name: 'LEOPARDS' }));
+    fireEvent.click(screen.getByRole('button', { name: 'TOWELS' }));
+    fireEvent.click(screen.getByRole('button', { name: 'TRAAL' }));
+    expect(
+      screen.getByRole('heading', { name: 'RAVENOUS BUGBLATTER BEAST OF TRAAL' })
+    ).toBeInTheDocument();
+  });
+
+  it('walks back one step at a time', () => {
+    render(<GuidePane location="Bedroom" open={true} onToggle={noop} />);
+    fireEvent.click(screen.getByRole('button', { name: 'BYPASSES' }));
+    fireEvent.click(screen.getByRole('button', { name: 'LEOPARDS' }));
+    fireEvent.click(screen.getByRole('button', { name: /BACK/ }));
+    expect(screen.getByRole('heading', { name: 'BYPASSES' })).toBeInTheDocument();
+  });
+
+  it('returns to the sensed room from anywhere in the trail', () => {
+    render(<GuidePane location="Bedroom" open={true} onToggle={noop} />);
+    fireEvent.click(screen.getByRole('button', { name: 'BYPASSES' }));
+    fireEvent.click(screen.getByRole('button', { name: 'LEOPARDS' }));
+    fireEvent.click(screen.getByRole('button', { name: /Bedroom/ }));
+    expect(screen.getByRole('heading', { name: 'BEDS' })).toBeInTheDocument();
+    expect(screen.getByText(/SENSING/)).toBeInTheDocument();
+  });
+
+  it('hides the sensing line while browsing', () => {
+    render(<GuidePane location="Bedroom" open={true} onToggle={noop} />);
+    expect(screen.getByText(/SENSING/)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'BYPASSES' }));
+    expect(screen.queryByText(/SENSING/)).not.toBeInTheDocument();
+  });
+});
+
+describe('guide entry data', () => {
+  it('keeps topic entries out of room matching', async () => {
+    const { getGuideEntry, FALLBACK_ENTRY } = await import('@/lib/guideEntries');
+    // 'towels' is a topic entry; no room should ever resolve to it.
+    expect(getGuideEntry('towels')).toBe(FALLBACK_ENTRY);
+  });
+
+  it('matches headwords ignoring case and punctuation', async () => {
+    const { getGuideEntryByTitle } = await import('@/lib/guideEntries');
+    expect(getGuideEntryByTitle('bypasses')?.id).toBe('bypasses');
+    expect(getGuideEntryByTitle('Sirius  Cybernetics, Corporation')?.id).toBe('sirius-cybernetics');
+    expect(getGuideEntryByTitle('')).toBeNull();
+  });
+});

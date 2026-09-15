@@ -149,13 +149,55 @@
 }
 
 .crossRef {
+  display: block;
+  width: 100%;
+  padding: 0;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  text-align: left;
+  cursor: pointer;
   color: hsl(var(--terminal-amber-light));
   line-height: 1.5;
+}
+
+.crossRef:hover,
+.crossRef:focus-visible {
+  outline: none;
+  text-decoration: underline;
+  text-shadow: 0 0 6px hsl(var(--terminal-amber));
 }
 
 .crossRef::before {
   content: '> ';
   color: hsl(var(--terminal-amber));
+}
+
+/* Trail controls, shown in place of the sensing line while browsing. */
+.nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.navButton {
+  padding: 0;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  color: hsl(var(--terminal-amber));
+}
+
+.navButton:hover,
+.navButton:focus-visible {
+  outline: none;
+  color: hsl(var(--terminal-amber-light));
+  text-shadow: 0 0 6px hsl(var(--terminal-amber));
 }
 
 /* Footer */

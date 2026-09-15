@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 import { BookOpen, X } from 'lucide-react';
-import { getGuideEntry } from '@/lib/guideEntries';
+import {
+  getGuideEntry,
+  getGuideEntryByTitle,
+  unwrittenEntry,
+} from '@/lib/guideEntries';
 import styles from './GuidePane.module.css';
 
 /** Kept in sync with the guideFlicker keyframes duration. */
@@ -13,7 +17,15 @@ interface GuidePaneProps {
 }
 
 export function GuidePane({ location, open, onToggle }: GuidePaneProps) {
-  const entry = getGuideEntry(location);
+  // Headwords followed from SEE ALSO. Empty means we are showing the room the
+  // Sens-O-Matic has actually detected.
+  const [trail, setTrail] = useState<string[]>([]);
+  const browsing = trail.length > 0;
+  const followed = trail[trail.length - 1];
+
+  const entry = browsing
+    ? getGuideEntryByTitle(followed) ?? unwrittenEntry(followed)
+    : getGuideEntry(location);
   const [flickerFor, setFlickerFor] = useState<string | null>(null);
   const [renderedEntryId, setRenderedEntryId] = useState(entry.id);
 
@@ -76,9 +88,30 @@ export function GuidePane({ location, open, onToggle }: GuidePaneProps) {
           aria-live="polite"
           aria-atomic="true"
         >
-          <p className={styles.sensing}>
-            SENSING: <span className={styles.sensingValue}>{location || 'no fix'}</span>
-          </p>
+          {browsing ? (
+            <div className={styles.nav}>
+              <button
+                type="button"
+                className={styles.navButton}
+                onClick={() => setTrail((t) => t.slice(0, -1))}
+                tabIndex={open ? 0 : -1}
+              >
+                &lt; BACK
+              </button>
+              <button
+                type="button"
+                className={styles.navButton}
+                onClick={() => setTrail([])}
+                tabIndex={open ? 0 : -1}
+              >
+                {location || 'no fix'} &gt;
+              </button>
+            </div>
+          ) : (
+            <p className={styles.sensing}>
+              SENSING: <span className={styles.sensingValue}>{location || 'no fix'}</span>
+            </p>
+          )}
 
           <h2 className={styles.title}>{entry.title}</h2>
           <p className={styles.verdict}>{entry.verdict}</p>
@@ -96,8 +129,15 @@ export function GuidePane({ location, open, onToggle }: GuidePaneProps) {
               <p className={styles.crossRefsLabel}>SEE ALSO</p>
               <ul className={styles.crossRefsList}>
                 {entry.crossRefs.map((ref) => (
-                  <li key={ref} className={styles.crossRef}>
-                    {ref}
+                  <li key={ref}>
+                    <button
+                      type="button"
+                      className={styles.crossRef}
+                      onClick={() => setTrail((t) => [...t, ref])}
+                      tabIndex={open ? 0 : -1}
+                    >
+                      {ref}
+                    </button>
                   </li>
                 ))}
               </ul>

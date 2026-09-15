@@ -17,6 +17,13 @@ export interface GuideEntry {
   crossRefs?: string[];
   /** Normalised room-name fragments that select this entry. */
   aliases: string[];
+  /** Extra headwords a cross-reference may arrive by. */
+  headwords?: string[];
+}
+
+/** Uppercases and strips punctuation so 'GRAVITY, LOCAL' matches 'gravity local'. */
+export function normalizeHeadword(headword: string): string {
+  return headword.toUpperCase().replace(/[^A-Z0-9]+/g, ' ').trim();
 }
 
 /**
@@ -167,8 +174,9 @@ export const GUIDE_ENTRIES: GuideEntry[] = [
       'The standard defence is a towel wrapped around the head. The beast, unable to see you, assumes you cannot see it, and concludes on that basis that you are not there. It is a defence of stunning elegance and no mechanical complexity whatsoever.',
       'The towel remains the most massively useful thing any interstellar hitchhiker can carry. The Guide is not being whimsical about this and would like that noted.',
     ],
-    crossRefs: ['TOWELS', 'TRAAL', 'LOGIC, ABSENCE OF'],
+    crossRefs: ['TOWELS', 'LOGIC, ABSENCE OF'],
     aliases: ['traal', 'bugblatter', 'beast'],
+    headwords: ['TRAAL', 'BUGBLATTER', 'RAVENOUS BUGBLATTER BEAST'],
   },
   {
     id: 'whale',
@@ -220,6 +228,87 @@ export const GUIDE_ENTRIES: GuideEntry[] = [
   },
 ];
 
+
+/**
+ * Topic entries, reached only by following a cross-reference. They carry no
+ * aliases, so the room matcher can never select them.
+ */
+const TOPIC_ENTRIES: GuideEntry[] = [
+  {
+    id: 'towels',
+    title: 'TOWELS',
+    verdict: 'The most massively useful thing an interstellar hitchhiker can carry.',
+    body: [
+      'You can wrap it round you for warmth on the cold moons of Jaglan Beta; lie on it on the brilliant marble sands of Santraginus V; sleep under it beneath the stars of the Kakrafoon desert; use it to sail a miniraft down the slow heavy River Moth; wet it for hand-to-hand combat; wind it round your head to ward off noxious fumes or the gaze of the Ravenous Bugblatter Beast of Traal.',
+      'More importantly, a towel has immense psychological value. Any strag who finds that a hitchhiker still has his towel will automatically assume he is also in possession of a toothbrush, flannel, soap, tin of biscuits, flask, compass, map, ball of string, gnat spray, wet-weather gear and space suit. The strag will then happily lend the hitchhiker any of these items the hitchhiker has actually lost.',
+    ],
+    crossRefs: ['TRAAL', 'STRAGS'],
+    aliases: [],
+  },
+  {
+    id: 'sirius-cybernetics',
+    title: 'SIRIUS CYBERNETICS CORPORATION',
+    verdict: "A bunch of mindless jerks who'll be the first against the wall when the revolution comes.",
+    body: [
+      'Manufacturers of doors that sigh with satisfaction when they close, lifts capable of seeing dimly into the immediate future, and robots fitted with Genuine People Personalities, a technology whose chief achievement has been to make machinery depressed.',
+      'The fundamental design flaw in every Sirius Cybernetics product is entirely compensated for by the fundamental design flaw in their marketing division, which is that nobody there has ever used one. Their complaints department now occupies the major landmasses of three medium-sized planets and is recruiting.',
+      'The Corporation\'s own brochure quotes the Guide\'s verdict above, describing it as "a lot of fun". This is the single most persuasive argument the Guide has ever made.',
+    ],
+    crossRefs: ['DOORS, HAPPY', 'IMPROBABILITY DRIVE, INFINITE'],
+    aliases: [],
+  },
+  {
+    id: 'bypasses',
+    title: 'BYPASSES',
+    verdict: 'Devices for getting from point A to point B very quickly, while points in between get demolished.',
+    body: [
+      'Nobody who lives at point A has the slightest interest in going to point B. Nobody at point B wishes to go to A. The people at the points in between are not consulted, on the grounds that they are, by definition, in the way.',
+      'The plans are always on display. Where they are on display, for how long, and behind how many locked doors is considered an implementation detail.',
+    ],
+    crossRefs: ['LEOPARDS', 'PLANNING PERMISSION', 'MUD'],
+    aliases: [],
+  },
+  {
+    id: 'leopards',
+    title: 'LEOPARDS',
+    verdict: 'Load-bearing, administratively.',
+    body: [
+      'The leopard\'s principal function in galactic civilisation is to appear on a sign, on a door, in a disused lavatory, in a basement with no stairs.',
+      'No leopard has ever been found behind such a door. This has never been held to weaken the notice, and several planning authorities now regard the leopard as the single most efficient piece of public consultation ever devised.',
+      'Should you meet an actual leopard, the towel advice does not apply.',
+    ],
+    crossRefs: ['BYPASSES', 'TOWELS'],
+    aliases: [],
+  },
+  {
+    id: 'mud',
+    title: 'MUD',
+    verdict: "Earth's principal contribution to galactic diplomacy.",
+    body: ['Best deployed while lying in it, in front of something large and yellow.'],
+    crossRefs: ['BYPASSES'],
+    aliases: [],
+  },
+  {
+    id: 'peanuts',
+    title: 'PEANUTS',
+    verdict: 'Restores the salt and protein consumed by matter transference.',
+    body: ['The only part of the procedure anyone looks forward to.'],
+    crossRefs: ['MATTER TRANSFERENCE BEAMS'],
+    aliases: [],
+  },
+  {
+    id: 'hangovers',
+    title: 'HANGOVERS',
+    verdict: 'The body filing a formal complaint.',
+    body: ['It will not be read, but it must be received.'],
+    crossRefs: ['PUBS'],
+    aliases: [],
+  },
+];
+
+/** Everything reachable by headword: room entries plus topic entries. */
+const ALL_ENTRIES: GuideEntry[] = [...GUIDE_ENTRIES, ...TOPIC_ENTRIES];
+
 /**
  * Selects the Guide entry for a room. Exact alias matches win over substring
  * matches so that "Dark" cannot be shadowed by a longer entry that merely
@@ -238,4 +327,32 @@ export function getGuideEntry(location: string): GuideEntry {
     entry.aliases.some((alias) => normalized.includes(alias))
   );
   return partial ?? FALLBACK_ENTRY;
+}
+
+/** A cross-reference the Guide has not got round to filing. */
+export function unwrittenEntry(headword: string): GuideEntry {
+  return {
+    id: `unwritten:${normalizeHeadword(headword)}`,
+    title: normalizeHeadword(headword),
+    verdict: 'Not yet filed.',
+    body: [
+      'The researcher assigned to this entry submitted an expenses claim, a change-of-address form, and no copy whatsoever.',
+      'The Guide records the headword in the confident expectation that somebody, eventually, will be made to deal with it.',
+    ],
+    aliases: [],
+  };
+}
+
+/** Finds an entry by headword, for following a cross-reference. */
+export function getGuideEntryByTitle(headword: string): GuideEntry | null {
+  const target = normalizeHeadword(headword);
+  if (!target) return null;
+
+  return (
+    ALL_ENTRIES.find(
+      (entry) =>
+        normalizeHeadword(entry.title) === target ||
+        entry.headwords?.some((h) => normalizeHeadword(h) === target)
+    ) ?? null
+  );
 }
