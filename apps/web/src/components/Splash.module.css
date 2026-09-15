@@ -8,40 +8,51 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 1.5rem;
-  padding: 2rem;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding-bottom: 3rem;
+  overflow: hidden;
   background-color: hsl(var(--terminal-black));
-  animation: splashIn 700ms ease-out both;
 }
 
-@keyframes splashIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .splash {
-    animation: none;
-  }
-}
-
+/* Full bleed. Native size is 128x76; cover crops rather than letterboxes,
+   and pixelated keeps the blocks hard-edged at any scale. */
 .art {
-  /* Native size is 128x76; scale up without smoothing so it stays blocky.
-     The last term caps by height via the aspect ratio, so the art grows to
-     fill the width available without ever pushing START off screen. */
-  width: min(92vw, 1100px, calc(66vh * 128 / 76));
-  height: auto;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   image-rendering: pixelated;
-  filter: drop-shadow(0 0 24px hsl(var(--terminal-green) / 0.25));
+}
+
+/* Darkens the lower edge so the controls stay legible over the art. */
+.splash::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 55%;
+  background-image: linear-gradient(
+    to bottom,
+    transparent,
+    hsl(0 0% 0% / 0.55) 45%,
+    hsl(0 0% 0% / 0.92)
+  );
+  pointer-events: none;
 }
 
 .start {
-  padding: 0.5rem 2.5rem;
+  /* Above .splash::after: a pseudo-element paints after its siblings, so
+     without this the scrim is drawn over the controls. */
+  position: relative;
+  z-index: 1;
+  padding: 0.6rem 2.75rem;
+  background-color: hsl(0 0% 0% / 0.82);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   cursor: pointer;
-  background-color: hsl(var(--terminal-green) / 0.1);
-  border: 1px solid hsl(var(--terminal-green) / 0.6);
-  color: hsl(var(--terminal-green-light));
+  border: 1px solid hsl(var(--terminal-green));
+  color: hsl(120 100% 75%);
   font-family: inherit;
   font-size: 1.4em;
   letter-spacing: 0.4em;
@@ -60,8 +71,11 @@
 }
 
 .hint {
+  position: relative;
+  z-index: 1;
   margin: 0;
-  color: hsl(var(--terminal-green-dim));
+  color: hsl(var(--terminal-green));
   letter-spacing: 0.2em;
   font-size: 0.8em;
+  text-shadow: 0 0 6px hsl(0 0% 0%), 0 0 3px hsl(0 0% 0%);
 }
