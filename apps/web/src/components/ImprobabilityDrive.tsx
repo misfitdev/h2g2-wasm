@@ -1,4 +1,4 @@
-import { GitBranch, X } from 'lucide-react';
+import { GitBranch, X, Zap } from 'lucide-react';
 import { timelineRows, type Timeline } from '@/lib/timeline';
 import styles from './ImprobabilityDrive.module.css';
 
@@ -7,10 +7,18 @@ interface ImprobabilityDriveProps {
   open: boolean;
   onToggle: () => void;
   onJump: (id: number) => void;
+  onEngage: () => void;
 }
 
-export function ImprobabilityDrive({ timeline, open, onToggle, onJump }: ImprobabilityDriveProps) {
+export function ImprobabilityDrive({
+  timeline,
+  open,
+  onToggle,
+  onJump,
+  onEngage,
+}: ImprobabilityDriveProps) {
   const rows = timelineRows(timeline);
+  const canEngage = rows.length > 1;
 
   return (
     <>
@@ -49,6 +57,25 @@ export function ImprobabilityDrive({ timeline, open, onToggle, onJump }: Improba
             <X className={styles.closeIcon} aria-hidden="true" />
           </button>
         </div>
+
+        <button
+          type="button"
+          className={styles.engage}
+          onClick={onEngage}
+          disabled={!canEngage}
+          tabIndex={open ? 0 : -1}
+          title="Engage the Infinite Improbability Drive"
+        >
+          <Zap className={styles.engageIcon} aria-hidden="true" />
+          ENGAGE
+        </button>
+        <p className={styles.engageNote}>
+          {canEngage
+            ? 'Destination not selectable. That is rather the point.'
+            : 'Insufficient history. Go and do something first.'}
+        </p>
+
+        <p className={styles.listLabel}>MANUAL OVERRIDE</p>
 
         <div className={styles.list}>
           {rows.length === 0 ? (

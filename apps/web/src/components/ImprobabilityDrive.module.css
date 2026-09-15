@@ -178,3 +178,54 @@
 .handleLabel {
   writing-mode: vertical-rl;
 }
+
+/* Engage control. The drive is the feature; the list below is the override. */
+.engage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0.75rem;
+  padding: 0.6rem;
+  cursor: pointer;
+  background-color: hsl(var(--terminal-green) / 0.1);
+  border: 1px solid hsl(var(--terminal-green) / 0.6);
+  color: hsl(var(--terminal-green-light));
+  font-family: inherit;
+  font-size: 1.1em;
+  letter-spacing: 0.25em;
+  text-shadow: 0 0 4px hsl(var(--terminal-green)), 0 0 12px hsl(var(--terminal-green) / 0.6);
+}
+
+.engage:hover:not(:disabled),
+.engage:focus-visible:not(:disabled) {
+  outline: none;
+  background-color: hsl(var(--terminal-green) / 0.22);
+}
+
+.engage:disabled {
+  cursor: not-allowed;
+  color: hsl(var(--terminal-green-dim));
+  border-color: hsl(var(--terminal-green) / 0.25);
+  text-shadow: none;
+}
+
+.engageIcon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.engageNote {
+  margin: 0 0.75rem 0.75rem;
+  color: hsl(var(--terminal-green-dim));
+  font-size: 0.9em;
+  line-height: 1.4;
+}
+
+.listLabel {
+  margin: 0;
+  padding: 0.4rem 0.75rem;
+  border-top: 1px solid hsl(var(--terminal-green) / 0.25);
+  color: hsl(var(--terminal-green-dim));
+  letter-spacing: 0.15em;
+}

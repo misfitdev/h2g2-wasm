@@ -212,3 +212,37 @@
     opacity: 1;
   }
 }
+
+/* Improbability Drive flash. Decorative only; a reduced-motion user gets a
+   brief dim wash instead of a strobe. */
+.flash {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  background-color: hsl(120 100% 92%);
+  animation: driveFlash 500ms ease-out forwards;
+}
+
+@keyframes driveFlash {
+  0% { opacity: 0; }
+  6% { opacity: 0.85; }
+  14% { opacity: 0.1; }
+  22% { opacity: 0.7; }
+  34% { opacity: 0.05; }
+  46% { opacity: 0.35; }
+  100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flash {
+    background-color: hsl(var(--terminal-green) / 0.5);
+    animation: driveFade 500ms ease-out forwards;
+  }
+
+  @keyframes driveFade {
+    0% { opacity: 0; }
+    30% { opacity: 0.25; }
+    100% { opacity: 0; }
+  }
+}

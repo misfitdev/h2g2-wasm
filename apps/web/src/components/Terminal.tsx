@@ -14,12 +14,17 @@ import {
   appendTurn,
   setCurrent,
   transcriptFor,
+  recordVisit,
+  pickImprobableNode,
+  improbabilityAgainst,
   type Timeline,
 } from '@/lib/timeline';
 import styles from './Terminal.module.css';
 
 const GUIDE_STORAGE_KEY = 'h2g2_guide_open';
 const DRIVE_STORAGE_KEY = 'h2g2_drive_open';
+/** Kept in sync with the driveFlash keyframes. */
+const FLASH_DURATION = 500;
 
 export function Terminal() {
   const {
@@ -59,6 +64,7 @@ export function Terminal() {
   const [currentLocation, setCurrentLocation] = useState('');
   const [totalHintsShown, setTotalHintsShown] = useState(0);
   const [timeline, setTimeline] = useState<Timeline>(createTimeline);
+  const [flashing, setFlashing] = useState(false);
   const [driveOpen, setDriveOpen] = useState(() => {
     try {
       return localStorage.getItem(DRIVE_STORAGE_KEY) === '1';
@@ -115,10 +121,25 @@ export function Terminal() {
 
     clearScreen();
     addLines(transcriptFor(timeline, id));
-    setTimeline((prev) => setCurrent(prev, id));
+    setTimeline((prev) => recordVisit(setCurrent(prev, id), id));
     syncLocation();
     inputRef.current?.focus();
   }, [timeline, restore, clearScreen, addLines, syncLocation, addLine]);
+
+  const engageDrive = useCallback(() => {
+    const destination = pickImprobableNode(timeline, Math.random);
+    if (destination === null) {
+      addLine('[The drive hums, considers the one timeline available, and declines.]');
+      return;
+    }
+
+    const odds = improbabilityAgainst(timeline, destination).toLocaleString('en-US');
+    setFlashing(true);
+    window.setTimeout(() => setFlashing(false), FLASH_DURATION);
+
+    jumpTo(destination);
+    addLine(`[Improbability factor: ${odds} to 1 against. Arriving anyway.]`);
+  }, [timeline, jumpTo, addLine]);
 
   const toggleGuide = useCallback(() => {
     setGuideOpen((prev) => {
@@ -500,7 +521,10 @@ export function Terminal() {
         open={driveOpen}
         onToggle={toggleDrive}
         onJump={jumpTo}
+        onEngage={engageDrive}
       />
+
+      {flashing && <div className={styles.flash} aria-hidden="true" />}
 
 
       {/* Debug Panel */}

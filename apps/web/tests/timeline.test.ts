@@ -7,6 +7,10 @@ import {
   transcriptFor,
   isBranchPoint,
   timelineRows,
+  pickImprobableNode,
+  improbabilityAgainst,
+  recordVisit,
+  treeDistance,
   type Timeline,
 } from '@/lib/timeline';
 
@@ -120,5 +124,66 @@ describe('timeline', () => {
     const ids = timelineRows(t).map((r) => r.node.id);
     expect(new Set(ids).size).toBe(ids.length);
     expect(ids).toHaveLength(Object.keys(t.nodes).length);
+  });
+});
+
+describe('improbability', () => {
+  it('never picks the node you are already on', () => {
+    const t = forked();
+    for (const r of [0, 0.25, 0.5, 0.75, 0.999]) {
+      expect(pickImprobableNode(t, () => r)).not.toBe(t.currentId);
+    }
+  });
+
+  it('returns null when there is nowhere else to go', () => {
+    const t = appendTurn(createTimeline(), turn(null, ['boot']));
+    expect(pickImprobableNode(t, () => 0.5)).toBeNull();
+  });
+
+  it('only ever picks real nodes', () => {
+    const t = forked();
+    for (let i = 0; i < 50; i++) {
+      const id = pickImprobableNode(t, () => i / 50)!;
+      expect(t.nodes[id]).toBeDefined();
+    }
+  });
+
+  it('can reach every candidate across the roll range', () => {
+    const t = forked();
+    const seen = new Set<number>();
+    for (let i = 0; i < 200; i++) seen.add(pickImprobableNode(t, () => i / 200)!);
+    expect(seen.size).toBe(Object.keys(t.nodes).length - 1);
+  });
+
+  it('quotes longer odds for a further destination', () => {
+    const t = forked();
+    const parent = Object.values(t.nodes).find((n) => n.command === 'turn on light')!;
+    const sibling = Object.values(t.nodes).find((n) => n.command === 'get up')!;
+    // 'turn on light' is one step up; 'get up' is up one and down one.
+    expect(treeDistance(t, t.currentId, sibling.id)).toBeGreaterThan(
+      treeDistance(t, t.currentId, parent.id)
+    );
+    expect(improbabilityAgainst(t, sibling.id)).toBeGreaterThan(
+      improbabilityAgainst(t, parent.id)
+    );
+  });
+
+  it('counts visits so a revisited node becomes less improbable', () => {
+    const t = forked();
+    const target = Object.values(t.nodes).find((n) => n.command === 'get up')!;
+    const before = improbabilityAgainst(t, target.id);
+    const after = improbabilityAgainst(recordVisit(t, target.id), target.id);
+    expect(after).toBeLessThan(before);
+  });
+
+  it('measures distance as zero to yourself', () => {
+    const t = forked();
+    expect(treeDistance(t, t.currentId, t.currentId!)).toBe(0);
+  });
+
+  it('quotes stable odds for the same destination', () => {
+    const t = forked();
+    const id = t.nodes[t.rootId!].childIds[0];
+    expect(improbabilityAgainst(t, id)).toBe(improbabilityAgainst(t, id));
   });
 });
