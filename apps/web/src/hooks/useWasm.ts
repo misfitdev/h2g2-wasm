@@ -11,6 +11,7 @@ interface WasmExports {
   get_location: () => string;
   get_hints_for_location: (location: string) => string;
   get_score: () => string;
+  get_seed: () => string;
   get_hint_answer: (question_idx: number, level: number) => string | undefined;
   undo: () => boolean;
   redo: () => boolean;
@@ -189,6 +190,12 @@ export function useWasm() {
     }
   }, []);
 
+  // Seed this session was started with
+  const getSeed = useCallback((): string => {
+    if (!wasmRef.current) return '';
+    return wasmRef.current.get_seed();
+  }, []);
+
   // Get hints for a location
   const getHintsForLocation = useCallback((location: string): string => {
     if (!wasmRef.current) return '[]';
@@ -211,6 +218,7 @@ export function useWasm() {
     getRoomAsciiArt,
     getLocation,
     getScore,
+    getSeed,
     getHintsForLocation,
     getHintAnswer,
     undo,

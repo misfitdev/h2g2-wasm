@@ -45,6 +45,7 @@ export function Terminal() {
     save,
     restore,
     getScore,
+    getSeed,
   } = useWasm();
 
   const {
@@ -564,6 +565,7 @@ export function Terminal() {
           location={currentLocation}
           gitHash={typeof __GIT_HASH__ !== 'undefined' ? __GIT_HASH__ : 'unknown'}
           wasmChecksum={wasmChecksum}
+          seed={getSeed()}
         />
       )}
     </div>
