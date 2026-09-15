@@ -8,9 +8,18 @@ import { HintModal } from './HintModal';
 import { DebugPanel } from './DebugPanel';
 import { CRTScreen } from './CRTScreen';
 import { GuidePane } from './GuidePane';
+import { ImprobabilityDrive } from './ImprobabilityDrive';
+import {
+  createTimeline,
+  appendTurn,
+  setCurrent,
+  transcriptFor,
+  type Timeline,
+} from '@/lib/timeline';
 import styles from './Terminal.module.css';
 
 const GUIDE_STORAGE_KEY = 'h2g2_guide_open';
+const DRIVE_STORAGE_KEY = 'h2g2_drive_open';
 
 export function Terminal() {
   const {
@@ -49,6 +58,14 @@ export function Terminal() {
   const [hintModalOpen, setHintModalOpen] = useState(false);
   const [currentLocation, setCurrentLocation] = useState('');
   const [totalHintsShown, setTotalHintsShown] = useState(0);
+  const [timeline, setTimeline] = useState<Timeline>(createTimeline);
+  const [driveOpen, setDriveOpen] = useState(() => {
+    try {
+      return localStorage.getItem(DRIVE_STORAGE_KEY) === '1';
+    } catch {
+      return false;
+    }
+  });
   const [guideOpen, setGuideOpen] = useState(() => {
     try {
       return localStorage.getItem(GUIDE_STORAGE_KEY) === '1';
@@ -79,11 +96,48 @@ export function Terminal() {
     setCurrentLocation(getLocation());
   }, [getLocation]);
 
+  // Record the state at the prompt that follows a turn, so jumping to this
+  // node lands the player exactly where they were.
+  const recordTurn = useCallback((command: string | null, lines: string[]) => {
+    const snapshot = save();
+    if (!snapshot) return;
+    setTimeline((prev) => appendTurn(prev, { command, snapshot, lines, location: getLocation() }));
+  }, [save, getLocation]);
+
+  const jumpTo = useCallback((id: number) => {
+    const node = timeline.nodes[id];
+    if (!node || id === timeline.currentId) return;
+
+    if (!restore(node.snapshot)) {
+      addLine('[The Improbability Drive declines to take you there.]');
+      return;
+    }
+
+    clearScreen();
+    addLines(transcriptFor(timeline, id));
+    setTimeline((prev) => setCurrent(prev, id));
+    syncLocation();
+    inputRef.current?.focus();
+  }, [timeline, restore, clearScreen, addLines, syncLocation, addLine]);
+
   const toggleGuide = useCallback(() => {
     setGuideOpen((prev) => {
       const next = !prev;
       try {
         localStorage.setItem(GUIDE_STORAGE_KEY, next ? '1' : '0');
+      } catch {
+        // localStorage throws when quota is exhausted or storage is blocked.
+      }
+      return next;
+    });
+    inputRef.current?.focus();
+  }, []);
+
+  const toggleDrive = useCallback(() => {
+    setDriveOpen((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem(DRIVE_STORAGE_KEY, next ? '1' : '0');
       } catch {
         // localStorage throws when quota is exhausted or storage is blocked.
       }
@@ -108,8 +162,8 @@ export function Terminal() {
   }, []);
 
   // Process game updates
-  const processUpdates = useCallback(() => {
-    if (!isInitialized) return;
+  const processUpdates = useCallback((): string[] => {
+    if (!isInitialized) return [];
 
     // Step the game
     let hasMore = true;
@@ -122,6 +176,7 @@ export function Terminal() {
     }
 
     // Get and display updates
+    const produced: string[] = [];
     const updates = getUpdates();
     if (updates) {
       const filterLine = (line: string) => {
@@ -138,10 +193,10 @@ export function Terminal() {
       };
 
       if (updates.lines) {
-        addLines(updates.lines.filter(filterLine));
+        produced.push(...updates.lines.filter(filterLine));
       } else if (updates.text) {
         const textLines = updates.text.split('\n');
-        addLines(textLines.filter(filterLine));
+        produced.push(...textLines.filter(filterLine));
       } else if (updates.output) {
         // Split on <br> but preserve multi-line HTML blocks like <pre>
         const htmlLines: string[] = [];
@@ -172,31 +227,38 @@ export function Terminal() {
           htmlLines.push(currentLine);
         }
 
-        addLines(htmlLines.filter(filterLine));
+        produced.push(...htmlLines.filter(filterLine));
       } else if (updates.message) {
-        addLine(updates.message);
+        produced.push(updates.message);
       }
     }
-  }, [isInitialized, step, getUpdates, addLine, addLines]);
+
+    if (produced.length > 0) addLines(produced);
+    return produced;
+  }, [isInitialized, step, getUpdates, addLines]);
 
   // Initial game setup
   useEffect(() => {
     if (isInitialized) {
-      addLine('═══════════════════════════════════════════════════════════════');
-      addLine('  HITCHHIKER\'S GUIDE TO THE GALAXY - TERMINAL INTERFACE');
-      addLine('═══════════════════════════════════════════════════════════════');
-      addLine('');
-      addLine('WASM module loaded successfully.');
-      addLine('Type commands and press ENTER to interact with the game.');
-      addLine('Press Ctrl+L to clear screen. Hover top of screen for controls.');
-      addLine('');
-      processUpdates();
+      const banner = [
+        '═══════════════════════════════════════════════════════════════',
+        '  HITCHHIKER\'S GUIDE TO THE GALAXY - TERMINAL INTERFACE',
+        '═══════════════════════════════════════════════════════════════',
+        '',
+        'WASM module loaded successfully.',
+        'Type commands and press ENTER to interact with the game.',
+        'Press Ctrl+L to clear screen. Hover top of screen for controls.',
+        '',
+      ];
+      banner.forEach((line) => addLine(line));
+      const produced = processUpdates();
       // The Z-machine is an external system: its opening turn must run before
       // the starting room can be read back, so this cannot be derived in render.
       // eslint-disable-next-line react-hooks/set-state-in-effect
       syncLocation();
+      recordTurn(null, [...banner, ...produced]);
     }
-  }, [isInitialized, addLine, processUpdates, syncLocation]);
+  }, [isInitialized, addLine, processUpdates, syncLocation, recordTurn]);
 
   // Display loading/error states
   useEffect(() => {
@@ -238,18 +300,20 @@ export function Terminal() {
       return;
     }
 
-    addLine(`> ${input}`, true);
+    const echoed = `> ${input}`;
+    addLine(echoed, true);
     addToHistory(input.trim());
     setInput('');
 
     if (isInitialized) {
       // Always feed input to the game, even if empty (some games require just Enter)
       feed(input.trim());
-      processUpdates();
+      const produced = processUpdates();
       // Update current location after each command
       syncLocation();
+      recordTurn(input.trim(), [echoed, ...produced]);
     }
-  }, [input, isInitialized, addLine, addToHistory, feed, processUpdates, syncLocation]);
+  }, [input, isInitialized, addLine, addToHistory, feed, processUpdates, syncLocation, recordTurn]);
 
   // Handle keyboard events
   const handleKeyDown = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
@@ -277,8 +341,11 @@ export function Terminal() {
     } else if (e.key === 'g' && e.ctrlKey) {
       e.preventDefault();
       toggleGuide();
+    } else if (e.key === 'i' && e.ctrlKey) {
+      e.preventDefault();
+      toggleDrive();
     }
-  }, [handleSubmit, navigateHistory, clearScreen, scrollToBottom, toggleGuide]);
+  }, [handleSubmit, navigateHistory, clearScreen, scrollToBottom, toggleGuide, toggleDrive]);
 
   // Control handlers
   const handleUndo = useCallback(() => {
@@ -360,7 +427,7 @@ export function Terminal() {
       {/* Output area */}
       <div
         ref={outputRef}
-        className={`${styles.output} ${guideOpen ? styles.outputWithGuide : ''}`}
+        className={`${styles.output} ${guideOpen ? styles.outputWithGuide : ''} ${driveOpen ? styles.outputWithDrive : ''}`}
         role="log"
         aria-label="Game output"
         aria-live="polite"
@@ -372,7 +439,7 @@ export function Terminal() {
       </div>
 
       {/* Input area */}
-      <div className={styles.inputArea}>
+      <div className={`${styles.inputArea} ${driveOpen ? styles.inputAreaWithDrive : ''}`}>
         <label htmlFor="game-input" className="sr-only">
           Game command input
         </label>
@@ -427,6 +494,14 @@ export function Terminal() {
       />
 
       <GuidePane location={currentLocation} open={guideOpen} onToggle={toggleGuide} />
+
+      <ImprobabilityDrive
+        timeline={timeline}
+        open={driveOpen}
+        onToggle={toggleDrive}
+        onJump={jumpTo}
+      />
+
 
       {/* Debug Panel */}
       {showDebug && (

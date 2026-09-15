@@ -1,0 +1,180 @@
+/* Timeline pane. Green phosphor: this is a terminal function, not the Guide
+   device, so it stays in the terminal's own colour. */
+
+.pane {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 20rem;
+  max-width: 85vw;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  background-color: hsl(var(--terminal-black));
+  border-right: 1px solid hsl(var(--terminal-green) / 0.4);
+  box-shadow: 8px 0 24px hsl(0 0% 0% / 0.8);
+  font-size: 0.78em;
+  transition: transform 220ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.paneOpen {
+  transform: translateX(0);
+}
+
+.paneClosed {
+  transform: translateX(-100%);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pane {
+    transition: none;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid hsl(var(--terminal-green) / 0.3);
+}
+
+.title {
+  color: hsl(var(--terminal-green-light));
+  letter-spacing: 0.15em;
+  text-shadow: 0 0 2px hsl(var(--terminal-green)), 0 0 6px hsl(var(--terminal-green) / 0.5);
+}
+
+.closeButton {
+  background: transparent;
+  border: none;
+  padding: 0.25rem;
+  cursor: pointer;
+  color: hsl(var(--terminal-green));
+  display: flex;
+  align-items: center;
+}
+
+.closeButton:hover,
+.closeButton:focus-visible {
+  color: hsl(var(--terminal-green-light));
+  outline: none;
+}
+
+.closeIcon {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Turn list */
+.list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem 0;
+}
+
+.empty {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  color: hsl(var(--terminal-green-dim));
+}
+
+.row {
+  display: flex;
+  gap: 0.4rem;
+  width: 100%;
+  padding: 0.15rem 0.75rem 0.15rem 0.5rem;
+  background: transparent;
+  border: none;
+  text-align: left;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  color: hsl(var(--terminal-green));
+}
+
+.row:hover,
+.row:focus-visible {
+  outline: none;
+  background-color: hsl(var(--terminal-green) / 0.12);
+}
+
+.rowCurrent {
+  color: hsl(var(--terminal-green-light));
+  text-shadow: 0 0 4px hsl(var(--terminal-green) / 0.6);
+}
+
+/* Abandoned branches stay legible but recede. */
+.rowOffPath {
+  color: hsl(var(--terminal-green-dim));
+}
+
+.marker {
+  width: 1ch;
+  flex-shrink: 0;
+}
+
+.command {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Edge handle */
+.handle {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  z-index: 41;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.75rem 0.4rem;
+  cursor: pointer;
+  background-color: hsl(var(--terminal-black));
+  border: 1px solid hsl(var(--terminal-green) / 0.4);
+  border-left: none;
+  color: hsl(var(--terminal-green));
+  font-family: inherit;
+  font-size: 0.6em;
+  letter-spacing: 0.2em;
+  opacity: 0.55;
+  transition: opacity 150ms ease, transform 220ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.handle:hover,
+.handle:focus-visible {
+  opacity: 1;
+  outline: none;
+  text-shadow: 0 0 6px hsl(var(--terminal-green));
+}
+
+.handleOpen {
+  transform: translateY(-50%) translateX(20rem);
+  opacity: 1;
+}
+
+@media (max-width: 30rem) {
+  .handleOpen {
+    transform: translateY(-50%) translateX(85vw);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .handle {
+    transition: none;
+  }
+}
+
+.handleIcon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.handleLabel {
+  writing-mode: vertical-rl;
+}
