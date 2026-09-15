@@ -1,0 +1,57 @@
+.strip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.2rem 1rem;
+  font-size: 0.8em;
+  color: hsl(var(--terminal-black));
+  background-color: hsl(var(--terminal-green-dim));
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* index.css sets a global `span` colour, which beats inheritance from .strip,
+   so every child here needs the inverse colour set explicitly. */
+.strip span {
+  color: hsl(120 100% 92%);
+  text-shadow: none;
+}
+
+.location {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.meter {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
+}
+
+.label {
+  letter-spacing: 0.15em;
+}
+
+.bar {
+  letter-spacing: 0;
+}
+
+.value,
+.turns {
+  font-variant-numeric: tabular-nums;
+}
+
+/* The bar is the first thing worth dropping on a narrow screen. */
+@media (max-width: 44rem) {
+  .label,
+  .bar {
+    display: none;
+  }
+}

@@ -9,6 +9,8 @@ import { DebugPanel } from './DebugPanel';
 import { CRTScreen } from './CRTScreen';
 import { GuidePane } from './GuidePane';
 import { ImprobabilityDrive } from './ImprobabilityDrive';
+import { ScoreMeter } from './ScoreMeter';
+import { milestonesCrossed } from '@/lib/scoreMilestones';
 import {
   createTimeline,
   appendTurn,
@@ -41,6 +43,7 @@ export function Terminal() {
     redo,
     save,
     restore,
+    getScore,
   } = useWasm();
 
   const {
@@ -65,6 +68,8 @@ export function Terminal() {
   const [totalHintsShown, setTotalHintsShown] = useState(0);
   const [timeline, setTimeline] = useState<Timeline>(createTimeline);
   const [flashing, setFlashing] = useState(false);
+  const [status, setStatus] = useState({ score: 0, turns: 0 });
+  const scoreRef = useRef(0);
   const [driveOpen, setDriveOpen] = useState(() => {
     try {
       return localStorage.getItem(DRIVE_STORAGE_KEY) === '1';
@@ -102,6 +107,18 @@ export function Terminal() {
     setCurrentLocation(getLocation());
   }, [getLocation]);
 
+  /** Refreshes the status strip. `announce` is false after a timeline jump,
+   *  where a score change is a rewind rather than an achievement. */
+  const syncStatus = useCallback((announce = true) => {
+    const next = getScore();
+    if (!next) return;
+    setStatus(next);
+
+    const remarks = announce ? milestonesCrossed(scoreRef.current, next.score) : [];
+    scoreRef.current = next.score;
+    remarks.forEach((remark) => addLine(`[${remark}]`));
+  }, [getScore, addLine]);
+
   // Record the state at the prompt that follows a turn, so jumping to this
   // node lands the player exactly where they were.
   const recordTurn = useCallback((command: string | null, lines: string[]) => {
@@ -123,8 +140,9 @@ export function Terminal() {
     addLines(transcriptFor(timeline, id));
     setTimeline((prev) => recordVisit(setCurrent(prev, id), id));
     syncLocation();
+    syncStatus(false);
     inputRef.current?.focus();
-  }, [timeline, restore, clearScreen, addLines, syncLocation, addLine]);
+  }, [timeline, restore, clearScreen, addLines, syncLocation, syncStatus, addLine]);
 
   const engageDrive = useCallback(() => {
     const destination = pickImprobableNode(timeline, Math.random);
@@ -277,9 +295,10 @@ export function Terminal() {
       // the starting room can be read back, so this cannot be derived in render.
       // eslint-disable-next-line react-hooks/set-state-in-effect
       syncLocation();
+      syncStatus();
       recordTurn(null, [...banner, ...produced]);
     }
-  }, [isInitialized, addLine, processUpdates, syncLocation, recordTurn]);
+  }, [isInitialized, addLine, processUpdates, syncLocation, syncStatus, recordTurn]);
 
   // Display loading/error states
   useEffect(() => {
@@ -332,9 +351,10 @@ export function Terminal() {
       const produced = processUpdates();
       // Update current location after each command
       syncLocation();
+      syncStatus();
       recordTurn(input.trim(), [echoed, ...produced]);
     }
-  }, [input, isInitialized, addLine, addToHistory, feed, processUpdates, syncLocation, recordTurn]);
+  }, [input, isInitialized, addLine, addToHistory, feed, processUpdates, syncLocation, syncStatus, recordTurn]);
 
   // Handle keyboard events
   const handleKeyDown = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
@@ -444,6 +464,8 @@ export function Terminal() {
         onClear={clearScreen}
         disabled={!isInitialized}
       />
+
+      <ScoreMeter location={currentLocation} score={status.score} turns={status.turns} />
 
       {/* Output area */}
       <div

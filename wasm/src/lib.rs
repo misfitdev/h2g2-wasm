@@ -143,6 +143,21 @@ pub fn get_location() -> String {
     })
 }
 
+/// Score and turn count as JSON, or `null` for time-based games.
+#[wasm_bindgen]
+pub fn get_score() -> String {
+    ZVM.with(|cell| {
+        if let Some(zvm) = cell.borrow_mut().as_mut() {
+            match zvm.get_score_turns() {
+                Some((score, turns)) => format!("{{\"score\":{},\"turns\":{}}}", score, turns),
+                None => "null".to_string(),
+            }
+        } else {
+            "null".to_string()
+        }
+    })
+}
+
 /// Get hint questions for a location as JSON
 #[wasm_bindgen]
 pub fn get_hints_for_location(location: String) -> String {
