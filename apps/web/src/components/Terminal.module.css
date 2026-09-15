@@ -52,10 +52,12 @@
   left: 0;
   right: 0;
   bottom: 80px; /* Space for fixed input area (approximately) */
-  padding-top: calc(var(--status-strip-height) + 0.3rem);
   overflow-y: auto;
   overflow-x: auto;
-  padding: 1rem;
+  /* Top clears the status strip; the sides reserve room for the pane handles,
+     which sit over these edges and would otherwise clip the first column.
+     One shorthand, because a separate padding-top before it loses. */
+  padding: calc(var(--status-strip-height) + 0.3rem) var(--edge-gutter) 1rem;
 }
 
 /* Input Area */

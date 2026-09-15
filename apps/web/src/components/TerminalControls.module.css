@@ -57,12 +57,13 @@
   flex-shrink: 0;
   padding: 0;
   cursor: pointer;
-  background-color: var(--panel-bg);
-  backdrop-filter: var(--panel-blur);
-  -webkit-backdrop-filter: var(--panel-blur);
   border: 1px solid hsl(var(--terminal-green) / 0.35);
   border-top: none;
   border-radius: 0 0 0.35rem 0.35rem;
+  /* backdrop-filter still composites at opacity 0, leaving a blurred ghost on
+     the status strip, so the blur is applied only in the revealed state. */
+  background-color: transparent;
+  backdrop-filter: none;
   opacity: 0;
   transition: opacity 150ms ease;
 }
@@ -71,6 +72,9 @@
 .sliderOpen .nub,
 .nub:focus-visible {
   opacity: 1;
+  background-color: var(--panel-bg);
+  backdrop-filter: var(--panel-blur);
+  -webkit-backdrop-filter: var(--panel-blur);
 }
 
 .nub:focus-visible {
@@ -84,6 +88,9 @@
   align-items: center;
   gap: 0.25rem;
   height: var(--toolbar-height);
+  /* Borders must count inside the height, or the stowed toolbar leaves a
+     1px blurred sliver on screen. */
+  box-sizing: border-box;
   flex-shrink: 0;
   padding: 0 0.5rem;
   background-color: var(--panel-bg);

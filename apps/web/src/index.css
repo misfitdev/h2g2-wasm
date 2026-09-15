@@ -76,6 +76,9 @@
 
     /* Overlay panels: translucent and blurred so they obscure the transcript
        without reading as cards floating above the screen. */
+    /* Clearance at the left and right screen edges for the pane handles. */
+    --edge-gutter: 2.5rem;
+
     --panel-bg: hsl(0 0% 2% / 0.74);
     --panel-blur: blur(10px);
     --panel-shadow: 0 0 24px hsl(0 0% 0% / 0.85);

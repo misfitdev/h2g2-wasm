@@ -127,9 +127,10 @@
 /* Edge handle */
 .handle {
   position: absolute;
-  top: 50%;
+  /* Low, just clear of the input area, so it stays reachable without
+     sitting over the transcript. */
+  bottom: 5.25rem;
   left: 0;
-  transform: translateY(-50%);
   z-index: 41;
   display: flex;
   flex-direction: column;
@@ -156,13 +157,13 @@
 }
 
 .handleOpen {
-  transform: translateY(-50%) translateX(22rem);
+  transform: translateX(22rem);
   opacity: 1;
 }
 
 @media (max-width: 30rem) {
   .handleOpen {
-    transform: translateY(-50%) translateX(85vw);
+    transform: translateX(85vw);
   }
 }
 
