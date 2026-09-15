@@ -13,9 +13,17 @@ if ! command -v mise >/dev/null 2>&1; then
 fi
 
 eval "$(mise activate bash --shims)"
-mise install
 
-# rustup targets are outside mise's remit.
-rustup target add wasm32-unknown-unknown
+# Name the tools explicitly. A bare `mise install` also resolves configs in
+# parent directories, and the Cloudflare image keeps an asdf-era
+# $HOME/.tool-versions whose entries mise cannot resolve. Versions still come
+# from mise.toml; keep this list in step with its [tools] table.
+mise install just node rust cargo:wasm-bindgen-cli
+
+# mise.toml declares the wasm32 target, but rust toolchains installed by other
+# means may not have it.
+if command -v rustup >/dev/null 2>&1; then
+    rustup target add wasm32-unknown-unknown
+fi
 
 exec just build
