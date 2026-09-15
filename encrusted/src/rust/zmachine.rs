@@ -962,6 +962,15 @@ impl Zmachine {
         AsciiArt::get_art(&name.to_lowercase())
     }
 
+    /// Score and turn count, or None when the header marks this as a
+    /// time-based game and globals 1 and 2 hold the clock instead.
+    pub fn get_score_turns(&self) -> Option<(i16, u16)> {
+        if self.memory.read_byte(0x01) & 0b0000_0010 != 0 {
+            return None;
+        }
+        Some((self.read_global(1) as i16, self.read_global(2)))
+    }
+
     pub fn get_hint_system(&mut self) -> &mut HintSystem {
         &mut self.hint_system
     }

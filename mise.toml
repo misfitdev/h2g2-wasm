@@ -3,6 +3,7 @@
 # Tasks live in the justfile; run `just` to list them.
 
 [tools]
+just = "1.58.0"
 node = "25.2.1"
 rust = { version = "stable", components = "rustfmt,clippy", targets = "wasm32-unknown-unknown" }
 "cargo:wasm-bindgen-cli" = "0.2.106"

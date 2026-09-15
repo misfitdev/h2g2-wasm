@@ -1,10 +1,12 @@
-use std::cell::RefCell;
+use std::cell::{Cell, RefCell};
 use wasm_bindgen::prelude::*;
 
 use encrusted::{Game, Options, UI, Zmachine};
 
 // Thread-local game instance
 thread_local!(static ZVM: RefCell<Option<Zmachine>> = RefCell::new(None));
+/// Seed the current session was started with; surfaced by `get_seed`.
+thread_local!(static SEED: Cell<[u32; 4]> = Cell::new([0; 4]));
 
 // Thread-local message store
 thread_local!(static MESSAGE_STORE: RefCell<std::collections::HashMap<String, String>> = RefCell::new(std::collections::HashMap::new()));
@@ -65,10 +67,40 @@ fn push_updates(zvm: &mut Zmachine) {
 pub fn create() {
     ZVM.with(|cell| {
         let ui = encrusted::ui_web::WebUI::new();
-        let opts = Options::default();
+        let mut opts = Options::default();
+        opts.rand_seed = host_seed();
+        SEED.with(|seed| seed.set(opts.rand_seed));
         let zvm = Game::load_from_ui(ui, opts);
         *cell.borrow_mut() = Some(zvm);
     });
+}
+
+/// The seed this session was started with, so a run can be reproduced.
+#[wasm_bindgen]
+pub fn get_seed() -> String {
+    SEED.with(|seed| {
+        seed.get()
+            .iter()
+            .map(|word| format!("{:08x}", word))
+            .collect::<Vec<_>>()
+            .join("")
+    })
+}
+
+/// Draws a seed from the host. getrandom's `js` feature routes this to the
+/// browser's crypto API; on failure the deterministic default stands in, so a
+/// missing entropy source degrades to a playable game rather than a panic.
+fn host_seed() -> [u32; 4] {
+    let mut bytes = [0u8; 16];
+    if getrandom::getrandom(&mut bytes).is_err() {
+        return Options::default().rand_seed;
+    }
+
+    let mut seed = [0u32; 4];
+    for (slot, chunk) in seed.iter_mut().zip(bytes.chunks_exact(4)) {
+        *slot = u32::from_le_bytes([chunk[0], chunk[1], chunk[2], chunk[3]]);
+    }
+    seed
 }
 
 /// Execute one step of the game
@@ -139,6 +171,21 @@ pub fn get_location() -> String {
             name
         } else {
             String::new()
+        }
+    })
+}
+
+/// Score and turn count as JSON, or `null` for time-based games.
+#[wasm_bindgen]
+pub fn get_score() -> String {
+    ZVM.with(|cell| {
+        if let Some(zvm) = cell.borrow_mut().as_mut() {
+            match zvm.get_score_turns() {
+                Some((score, turns)) => format!("{{\"score\":{},\"turns\":{}}}", score, turns),
+                None => "null".to_string(),
+            }
+        } else {
+            "null".to_string()
         }
     })
 }

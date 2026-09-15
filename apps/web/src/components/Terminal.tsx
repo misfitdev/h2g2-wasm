@@ -7,7 +7,27 @@ import { SaveLoadDialog } from './SaveLoadDialog';
 import { HintModal } from './HintModal';
 import { DebugPanel } from './DebugPanel';
 import { CRTScreen } from './CRTScreen';
+import { GuidePane } from './GuidePane';
+import { ImprobabilityDrive } from './ImprobabilityDrive';
+import { ScoreMeter } from './ScoreMeter';
+import { Splash } from './Splash';
+import { milestonesCrossed } from '@/lib/scoreMilestones';
+import {
+  createTimeline,
+  appendTurn,
+  setCurrent,
+  transcriptFor,
+  recordVisit,
+  pickImprobableNode,
+  improbabilityAgainst,
+  type Timeline,
+} from '@/lib/timeline';
 import styles from './Terminal.module.css';
+
+const GUIDE_STORAGE_KEY = 'h2g2_guide_open';
+const DRIVE_STORAGE_KEY = 'h2g2_drive_open';
+/** Kept in sync with the driveFlash keyframes. */
+const FLASH_DURATION = 500;
 
 export function Terminal() {
   const {
@@ -24,6 +44,8 @@ export function Terminal() {
     redo,
     save,
     restore,
+    getScore,
+    getSeed,
   } = useWasm();
 
   const {
@@ -46,6 +68,25 @@ export function Terminal() {
   const [hintModalOpen, setHintModalOpen] = useState(false);
   const [currentLocation, setCurrentLocation] = useState('');
   const [totalHintsShown, setTotalHintsShown] = useState(0);
+  const [timeline, setTimeline] = useState<Timeline>(createTimeline);
+  const [flashing, setFlashing] = useState(false);
+  const [splashDone, setSplashDone] = useState(false);
+  const [status, setStatus] = useState<{ score: number; turns: number } | null>(null);
+  const scoreRef = useRef(0);
+  const [driveOpen, setDriveOpen] = useState(() => {
+    try {
+      return localStorage.getItem(DRIVE_STORAGE_KEY) === '1';
+    } catch {
+      return false;
+    }
+  });
+  const [guideOpen, setGuideOpen] = useState(() => {
+    try {
+      return localStorage.getItem(GUIDE_STORAGE_KEY) === '1';
+    } catch {
+      return false;
+    }
+  });
   const [showDebug, setShowDebug] = useState(() => {
     if (typeof window !== 'undefined') {
       return new URLSearchParams(window.location.search).get('debug') === '1';
@@ -65,9 +106,103 @@ export function Terminal() {
   const outputRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  /** The prompt must not steal focus from the title screen. */
+  const focusTerminalInput = useCallback(() => {
+    if (splashDone) inputRef.current?.focus();
+  }, [splashDone]);
+
   const syncLocation = useCallback(() => {
     setCurrentLocation(getLocation());
   }, [getLocation]);
+
+  /** Refreshes the status strip. `announce` is false after a timeline jump,
+   *  where a score change is a rewind rather than an achievement. */
+  const syncStatus = useCallback((announce = true) => {
+    const next = getScore();
+    // Clear rather than keep stale figures when the engine reports no score:
+    // before the VM is ready, or for a time-based game where globals 1 and 2
+    // hold the clock instead.
+    setStatus(next);
+    if (!next) return;
+
+    const remarks = announce ? milestonesCrossed(scoreRef.current, next.score) : [];
+    scoreRef.current = next.score;
+    remarks.forEach((remark) => addLine(`[${remark}]`));
+  }, [getScore, addLine]);
+
+  // Record the state at the prompt that follows a turn, so jumping to this
+  // node lands the player exactly where they were.
+  const recordTurn = useCallback((command: string | null, lines: string[]) => {
+    const snapshot = save();
+    if (!snapshot) return;
+    setTimeline((prev) => appendTurn(prev, { command, snapshot, lines, location: getLocation() }));
+  }, [save, getLocation]);
+
+  const jumpTo = useCallback((id: number): boolean => {
+    const node = timeline.nodes[id];
+    if (!node || id === timeline.currentId) return false;
+
+    if (!restore(node.snapshot)) {
+      addLine('[The Improbability Drive declines to take you there.]');
+      return false;
+    }
+
+    clearScreen();
+    addLines(transcriptFor(timeline, id));
+    setTimeline((prev) => recordVisit(setCurrent(prev, id), id));
+    syncLocation();
+    syncStatus(false);
+    focusTerminalInput();
+    return true;
+  }, [timeline, restore, clearScreen, addLines, syncLocation, syncStatus, addLine, focusTerminalInput]);
+
+  const engageDrive = useCallback(() => {
+    const destination = pickImprobableNode(timeline, Math.random);
+    if (destination === null) {
+      addLine('[The drive hums, considers the one timeline available, and declines.]');
+      return;
+    }
+
+    const odds = improbabilityAgainst(timeline, destination).toLocaleString('en-US');
+    setFlashing(true);
+    window.setTimeout(() => setFlashing(false), FLASH_DURATION);
+
+    if (jumpTo(destination)) {
+      addLine(`[Improbability factor: ${odds} to 1 against. Arriving anyway.]`);
+    }
+  }, [timeline, jumpTo, addLine]);
+
+  const toggleGuide = useCallback(() => {
+    setGuideOpen((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem(GUIDE_STORAGE_KEY, next ? '1' : '0');
+      } catch {
+        // localStorage throws when quota is exhausted or storage is blocked.
+      }
+      return next;
+    });
+    focusTerminalInput();
+  }, [focusTerminalInput]);
+
+  const toggleDrive = useCallback(() => {
+    setDriveOpen((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem(DRIVE_STORAGE_KEY, next ? '1' : '0');
+      } catch {
+        // localStorage throws when quota is exhausted or storage is blocked.
+      }
+      return next;
+    });
+    focusTerminalInput();
+  }, [focusTerminalInput]);
+
+  const dismissSplash = useCallback(() => {
+    setSplashDone(true);
+    inputRef.current?.focus();
+  }, []);
+
 
   const scrollToBottom = useCallback(() => {
     if (outputRef.current) {
@@ -81,12 +216,12 @@ export function Terminal() {
 
   // Focus input on click anywhere
   const handleContainerClick = useCallback(() => {
-    inputRef.current?.focus();
-  }, []);
+    focusTerminalInput();
+  }, [focusTerminalInput]);
 
   // Process game updates
-  const processUpdates = useCallback(() => {
-    if (!isInitialized) return;
+  const processUpdates = useCallback((): string[] => {
+    if (!isInitialized) return [];
 
     // Step the game
     let hasMore = true;
@@ -99,6 +234,7 @@ export function Terminal() {
     }
 
     // Get and display updates
+    const produced: string[] = [];
     const updates = getUpdates();
     if (updates) {
       const filterLine = (line: string) => {
@@ -115,10 +251,10 @@ export function Terminal() {
       };
 
       if (updates.lines) {
-        addLines(updates.lines.filter(filterLine));
+        produced.push(...updates.lines.filter(filterLine));
       } else if (updates.text) {
         const textLines = updates.text.split('\n');
-        addLines(textLines.filter(filterLine));
+        produced.push(...textLines.filter(filterLine));
       } else if (updates.output) {
         // Split on <br> but preserve multi-line HTML blocks like <pre>
         const htmlLines: string[] = [];
@@ -149,31 +285,39 @@ export function Terminal() {
           htmlLines.push(currentLine);
         }
 
-        addLines(htmlLines.filter(filterLine));
+        produced.push(...htmlLines.filter(filterLine));
       } else if (updates.message) {
-        addLine(updates.message);
+        produced.push(updates.message);
       }
     }
-  }, [isInitialized, step, getUpdates, addLine, addLines]);
+
+    if (produced.length > 0) addLines(produced);
+    return produced;
+  }, [isInitialized, step, getUpdates, addLines]);
 
   // Initial game setup
   useEffect(() => {
     if (isInitialized) {
-      addLine('═══════════════════════════════════════════════════════════════');
-      addLine('  HITCHHIKER\'S GUIDE TO THE GALAXY - TERMINAL INTERFACE');
-      addLine('═══════════════════════════════════════════════════════════════');
-      addLine('');
-      addLine('WASM module loaded successfully.');
-      addLine('Type commands and press ENTER to interact with the game.');
-      addLine('Press Ctrl+L to clear screen. Hover top of screen for controls.');
-      addLine('');
-      processUpdates();
+      const banner = [
+        '═══════════════════════════════════════════════════════════════',
+        '  HITCHHIKER\'S GUIDE TO THE GALAXY - TERMINAL INTERFACE',
+        '═══════════════════════════════════════════════════════════════',
+        '',
+        'WASM module loaded successfully.',
+        'Type commands and press ENTER to interact with the game.',
+        'Press Ctrl+L to clear screen. Controls hide behind the tab up top.',
+        '',
+      ];
+      banner.forEach((line) => addLine(line));
+      const produced = processUpdates();
       // The Z-machine is an external system: its opening turn must run before
       // the starting room can be read back, so this cannot be derived in render.
       // eslint-disable-next-line react-hooks/set-state-in-effect
       syncLocation();
+      syncStatus();
+      recordTurn(null, [...banner, ...produced]);
     }
-  }, [isInitialized, addLine, processUpdates, syncLocation]);
+  }, [isInitialized, addLine, processUpdates, syncLocation, syncStatus, recordTurn]);
 
   // Display loading/error states
   useEffect(() => {
@@ -186,12 +330,13 @@ export function Terminal() {
     }
   }, [isLoading, error, addLine]);
 
-  // Keep focus on input field at all times
+  // Keep focus on input field at all times, once the title screen is done
+  // with it.
   useEffect(() => {
-    if (isInitialized) {
+    if (isInitialized && splashDone) {
       inputRef.current?.focus();
     }
-  }, [isInitialized, hintModalOpen]);
+  }, [isInitialized, splashDone, hintModalOpen]);
 
   // Handle command submission
   const handleSubmit = useCallback(() => {
@@ -206,27 +351,32 @@ export function Terminal() {
       if (isInitialized) {
         // Feed the command to keep game state consistent, then get location for hint modal
         feed(trimmedInput);
-        processUpdates();
+        const produced = processUpdates();
         syncLocation();
+        syncStatus();
+        recordTurn(trimmedInput, [`> ${input}`, ...produced]);
         setHintModalOpen(true);
         // Keep focus on input despite hint modal opening
-        setTimeout(() => inputRef.current?.focus(), 0);
+        setTimeout(() => focusTerminalInput(), 0);
       }
       return;
     }
 
-    addLine(`> ${input}`, true);
+    const echoed = `> ${input}`;
+    addLine(echoed, true);
     addToHistory(input.trim());
     setInput('');
 
     if (isInitialized) {
       // Always feed input to the game, even if empty (some games require just Enter)
       feed(input.trim());
-      processUpdates();
+      const produced = processUpdates();
       // Update current location after each command
       syncLocation();
+      syncStatus();
+      recordTurn(input.trim(), [echoed, ...produced]);
     }
-  }, [input, isInitialized, addLine, addToHistory, feed, processUpdates, syncLocation]);
+  }, [input, isInitialized, addLine, addToHistory, feed, processUpdates, syncLocation, syncStatus, recordTurn, focusTerminalInput]);
 
   // Handle keyboard events
   const handleKeyDown = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
@@ -251,29 +401,42 @@ export function Terminal() {
     } else if (e.key === 'l' && e.ctrlKey) {
       e.preventDefault();
       clearScreen();
+    } else if (e.key === 'g' && e.ctrlKey) {
+      e.preventDefault();
+      toggleGuide();
+    } else if (e.key === 'i' && e.ctrlKey) {
+      e.preventDefault();
+      toggleDrive();
     }
-  }, [handleSubmit, navigateHistory, clearScreen, scrollToBottom]);
+  }, [handleSubmit, navigateHistory, clearScreen, scrollToBottom, toggleGuide, toggleDrive]);
 
   // Control handlers
   const handleUndo = useCallback(() => {
     if (undo()) {
       addLine('[UNDO]');
-      processUpdates();
+      const produced = processUpdates();
       syncLocation();
+      syncStatus(false);
+      // Undo moves the VM off the current node, so check the new state in as
+      // its own turn; otherwise the next command would attach to a parent
+      // whose snapshot no longer matches the engine.
+      recordTurn('[undo]', ['[UNDO]', ...produced]);
     } else {
       addLine('[Nothing to undo]');
     }
-  }, [undo, addLine, processUpdates, syncLocation]);
+  }, [undo, addLine, processUpdates, syncLocation, syncStatus, recordTurn]);
 
   const handleRedo = useCallback(() => {
     if (redo()) {
       addLine('[REDO]');
-      processUpdates();
+      const produced = processUpdates();
       syncLocation();
+      syncStatus(false);
+      recordTurn('[redo]', ['[REDO]', ...produced]);
     } else {
       addLine('[Nothing to redo]');
     }
-  }, [redo, addLine, processUpdates, syncLocation]);
+  }, [redo, addLine, processUpdates, syncLocation, syncStatus, recordTurn]);
 
   const handleSave = useCallback((slotName: string) => {
     const saveData = save();
@@ -288,22 +451,28 @@ export function Terminal() {
   const handleLoad = useCallback((slotName: string) => {
     const saveData = loadFromSlot(slotName);
     if (saveData && restore(saveData)) {
-      addLine(`[Game loaded from slot: ${slotName}]`);
-      processUpdates();
+      const header = `[Game loaded from slot: ${slotName}]`;
+      addLine(header);
+      const lines = [header, ...processUpdates()];
+
       // Replay the last command to show context
       const lastCommand = getLastCommand();
       if (lastCommand) {
-        addLine(`> ${lastCommand}`, true);
+        const echoed = `> ${lastCommand}`;
+        addLine(echoed, true);
         feed(lastCommand);
-        processUpdates();
+        lines.push(echoed, ...processUpdates());
       }
+
       // Update location after load
       syncLocation();
+      syncStatus(false);
+      recordTurn(`[load ${slotName}]`, lines);
     } else {
       addLine('[Load failed]');
     }
     setLoadDialogOpen(false);
-  }, [loadFromSlot, restore, addLine, processUpdates, feed, getLastCommand, syncLocation]);
+  }, [loadFromSlot, restore, addLine, processUpdates, feed, getLastCommand, syncLocation, syncStatus, recordTurn]);
 
   const handleDelete = useCallback((slotName: string) => {
     if (deleteSlot(slotName)) {
@@ -329,6 +498,12 @@ export function Terminal() {
         onLoad={() => setLoadDialogOpen(true)}
         onClear={clearScreen}
         disabled={!isInitialized}
+      />
+
+      <ScoreMeter
+        location={currentLocation}
+        score={status?.score ?? null}
+        turns={status?.turns ?? null}
       />
 
       {/* Output area */}
@@ -362,7 +537,7 @@ export function Terminal() {
             className={styles.input}
             placeholder="Type a command (e.g., 'look', 'help', 'examine floor')"
             aria-label="Game command input. Type commands to interact with the game."
-            autoFocus
+            autoFocus={splashDone}
             spellCheck={false}
             autoComplete="off"
             autoCapitalize="off"
@@ -400,12 +575,28 @@ export function Terminal() {
         onHintShown={() => setTotalHintsShown(prev => prev + 1)}
       />
 
+      <GuidePane location={currentLocation} open={guideOpen} onToggle={toggleGuide} />
+
+      <ImprobabilityDrive
+        timeline={timeline}
+        open={driveOpen}
+        onToggle={toggleDrive}
+        onJump={jumpTo}
+        onEngage={engageDrive}
+      />
+
+      {flashing && <div className={styles.flash} aria-hidden="true" />}
+
+      {!splashDone && <Splash onStart={dismissSplash} />}
+
+
       {/* Debug Panel */}
       {showDebug && (
         <DebugPanel
           location={currentLocation}
           gitHash={typeof __GIT_HASH__ !== 'undefined' ? __GIT_HASH__ : 'unknown'}
           wasmChecksum={wasmChecksum}
+          seed={getSeed()}
         />
       )}
     </div>

@@ -54,7 +54,10 @@
   bottom: 80px; /* Space for fixed input area (approximately) */
   overflow-y: auto;
   overflow-x: auto;
-  padding: 1rem;
+  /* Top clears the status strip; the sides reserve room for the pane handles,
+     which sit over these edges and would otherwise clip the first column.
+     One shorthand, because a separate padding-top before it loses. */
+  padding: calc(var(--status-strip-height) + 0.3rem) var(--edge-gutter) 1rem;
 }
 
 /* Input Area */
@@ -161,5 +164,38 @@
   }
   100% {
     opacity: 1;
+  }
+}
+
+/* Improbability Drive flash. Decorative only; a reduced-motion user gets a
+   brief dim wash instead of a strobe. */
+.flash {
+  position: absolute;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  background-color: hsl(120 100% 92%);
+  animation: driveFlash 500ms ease-out forwards;
+}
+
+/* A single rise and fall. A strobe of several sharp luminance changes across
+   a full-screen overlay is a photosensitivity risk, and prefers-reduced-motion
+   does not protect anyone who has not set it. */
+@keyframes driveFlash {
+  0% { opacity: 0; }
+  18% { opacity: 0.75; }
+  100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flash {
+    background-color: hsl(var(--terminal-green) / 0.5);
+    animation: driveFade 500ms ease-out forwards;
+  }
+
+  @keyframes driveFade {
+    0% { opacity: 0; }
+    30% { opacity: 0.25; }
+    100% { opacity: 0; }
   }
 }

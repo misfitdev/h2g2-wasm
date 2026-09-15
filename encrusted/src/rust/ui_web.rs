@@ -7,6 +7,10 @@ use serde_json;
 
 use crate::traits::UI;
 
+// Provided by the web app's env-shim. wasm-ld needs the import module named
+// explicitly; without it the symbol is emitted as a plain undefined reference
+// and the link fails.
+#[link(wasm_import_module = "env")]
 extern "C" {
     fn js_message(mtype: *mut c_char, message: *mut c_char);
 }

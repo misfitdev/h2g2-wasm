@@ -1,0 +1,291 @@
+/* Sub-Etha Sens-O-Matic companion pane.
+   Amber phosphor throughout: the Guide is a separate device from the terminal,
+   and the colour split is what sells that at a glance. */
+
+.pane {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 22rem;
+  max-width: 90vw;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--panel-bg);
+  backdrop-filter: var(--panel-blur);
+  -webkit-backdrop-filter: var(--panel-blur);
+  border-left: 1px solid hsl(var(--terminal-amber) / 0.4);
+  box-shadow: var(--panel-shadow);
+  font-size: 0.78em;
+  transition: transform 220ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.paneOpen {
+  transform: translateX(0);
+}
+
+.paneClosed {
+  transform: translateX(100%);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pane {
+    transition: none;
+  }
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid hsl(var(--terminal-amber) / 0.3);
+  background-image: linear-gradient(
+    to bottom,
+    hsl(var(--terminal-amber) / 0.12),
+    transparent
+  );
+}
+
+.deviceName {
+  color: hsl(var(--terminal-amber-light));
+  letter-spacing: 0.15em;
+  text-shadow:
+    0 0 2px hsl(var(--terminal-amber)),
+    0 0 6px hsl(var(--terminal-amber) / 0.5);
+}
+
+.closeButton {
+  background: transparent;
+  border: none;
+  padding: 0.25rem;
+  cursor: pointer;
+  color: hsl(var(--terminal-amber));
+  display: flex;
+  align-items: center;
+}
+
+.closeButton:hover,
+.closeButton:focus-visible {
+  color: hsl(var(--terminal-amber-light));
+  outline: none;
+  text-shadow: 0 0 6px hsl(var(--terminal-amber));
+}
+
+.closeIcon {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Entry screen */
+.screen {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.75rem;
+  color: hsl(var(--terminal-amber-light));
+  text-shadow:
+    0 0 1px hsl(var(--terminal-amber)),
+    0 0 4px hsl(var(--terminal-amber) / 0.35);
+}
+
+.sensing {
+  margin: 0 0 0.75rem;
+  color: hsl(var(--terminal-amber));
+  letter-spacing: 0.1em;
+}
+
+.sensingValue {
+  color: hsl(var(--terminal-amber-light));
+}
+
+.title {
+  margin: 0;
+  font-size: 1.5em;
+  font-weight: normal;
+  letter-spacing: 0.08em;
+  color: hsl(var(--terminal-amber-light));
+  text-shadow:
+    0 0 3px hsl(var(--terminal-amber)),
+    0 0 10px hsl(var(--terminal-amber) / 0.5);
+}
+
+.verdict {
+  margin: 0.25rem 0 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid hsl(var(--terminal-amber) / 0.25);
+  font-style: italic;
+  color: hsl(var(--terminal-amber-light));
+}
+
+.body {
+  margin: 0;
+}
+
+.paragraph {
+  margin: 0 0 0.85rem;
+  line-height: 1.6;
+}
+
+/* Cross references */
+.crossRefs {
+  margin-top: 1.25rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid hsl(var(--terminal-amber) / 0.25);
+}
+
+.crossRefsLabel {
+  margin: 0 0 0.35rem;
+  letter-spacing: 0.15em;
+  color: hsl(var(--terminal-amber));
+}
+
+.crossRefsList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.crossRef {
+  display: block;
+  width: 100%;
+  padding: 0;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  text-align: left;
+  cursor: pointer;
+  color: hsl(var(--terminal-amber-light));
+  line-height: 1.5;
+}
+
+.crossRef:hover,
+.crossRef:focus-visible {
+  outline: none;
+  text-decoration: underline;
+  text-shadow: 0 0 6px hsl(var(--terminal-amber));
+}
+
+.crossRef::before {
+  content: '> ';
+  color: hsl(var(--terminal-amber));
+}
+
+/* Trail controls, shown in place of the sensing line while browsing. */
+.nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.navButton {
+  padding: 0;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  color: hsl(var(--terminal-amber));
+}
+
+.navButton:hover,
+.navButton:focus-visible {
+  outline: none;
+  color: hsl(var(--terminal-amber-light));
+  text-shadow: 0 0 6px hsl(var(--terminal-amber));
+}
+
+/* Footer */
+.footer {
+  margin: 0;
+  padding: 0.5rem;
+  text-align: center;
+  letter-spacing: 0.4em;
+  font-size: 1.2em;
+  color: hsl(var(--terminal-amber-light));
+  border-top: 1px solid hsl(var(--terminal-amber) / 0.3);
+  text-shadow:
+    0 0 4px hsl(var(--terminal-amber)),
+    0 0 12px hsl(var(--terminal-amber) / 0.6);
+}
+
+/* Entry-change flicker */
+@media (prefers-reduced-motion: no-preference) {
+  .flicker {
+    animation: guideFlicker 420ms steps(1, end);
+  }
+}
+
+@keyframes guideFlicker {
+  0% { opacity: 0.1; }
+  12% { opacity: 0.9; }
+  24% { opacity: 0.2; }
+  36% { opacity: 1; }
+  48% { opacity: 0.45; }
+  60% { opacity: 1; }
+  72% { opacity: 0.8; }
+  100% { opacity: 1; }
+}
+
+/* Edge handle */
+.handle {
+  position: absolute;
+  /* Low, just clear of the input area, so it stays reachable without
+     sitting over the transcript. */
+  bottom: 5.25rem;
+  right: 0;
+  z-index: 41;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.75rem 0.4rem;
+  cursor: pointer;
+  background-color: hsl(var(--terminal-black));
+  border: 1px solid hsl(var(--terminal-amber) / 0.4);
+  border-right: none;
+  color: hsl(var(--terminal-amber));
+  font-family: inherit;
+  font-size: 0.6em;
+  letter-spacing: 0.2em;
+  opacity: 0.55;
+  transition: opacity 150ms ease, transform 220ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.handle:hover,
+.handle:focus-visible {
+  opacity: 1;
+  outline: none;
+  text-shadow: 0 0 6px hsl(var(--terminal-amber));
+}
+
+.handleOpen {
+  transform: translateX(-22rem);
+  opacity: 1;
+}
+
+@media (max-width: 30rem) {
+  .handleOpen {
+    transform: translateX(-90vw);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .handle {
+    transition: none;
+  }
+}
+
+.handleIcon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.handleLabel {
+  writing-mode: vertical-rl;
+}

@@ -1,19 +1,28 @@
-/* Game control bar.
+/* Game controls.
    One color source: the button's `color`, which the lucide icons and the
    label inherit via currentColor. The phosphor glow is defined once as
    variables (--glow-dim / --glow-bright) instead of being repeated inline.
-   An always-visible handle keeps the controls discoverable; the toolbar
-   reveals on hover, keyboard focus, or tap (so touch works too). */
 
-.wrapper {
+   The toolbar stows off-screen above the status strip and slides down. The
+   nub hangs off its lower edge and rides down with it, peeking only when the
+   pointer reaches the strip. */
+
+.zone {
   position: absolute;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 50;
+  left: 0;
+  right: 0;
+  /* Hover target is the status strip band, which is where the nub peeks. */
+  height: var(--status-strip-height);
+  z-index: 60;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
+  /* The zone is only as tall as the status strip. Without this the slider is
+     stretched to that height and its children shrink to fit inside it. */
+  align-items: flex-start;
+
+  --toolbar-height: 2.6rem;
+  --nub-height: 0.7rem;
 
   --glow-dim: 0 0 1px hsl(var(--terminal-green-dim) / 0.5);
   --glow-bright:
@@ -22,70 +31,81 @@
     0 0 4px hsl(var(--terminal-green) / 0.4);
 }
 
-/* Always-visible affordance, so controls are findable (including on touch). */
-.handle {
+.slider {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: 2.75rem;
-  height: 1.25rem;
-  background-color: hsl(var(--terminal-black) / 0.85);
-  border: 1px solid hsl(var(--border));
-  border-top: none;
-  color: hsl(var(--terminal-green-dim));
-  text-shadow: var(--glow-dim);
+  /* Stowed: the toolbar sits above the viewport, nub alone at the top edge. */
+  transform: translateY(calc(-1 * var(--toolbar-height)));
+  transition: transform 240ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sliderOpen {
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slider {
+    transition: none;
+  }
+}
+
+/* Nub */
+.nub {
+  width: 2.6rem;
+  height: var(--nub-height);
+  flex-shrink: 0;
+  padding: 0;
   cursor: pointer;
-  transition: color 0.15s;
+  border: 1px solid hsl(var(--terminal-green) / 0.35);
+  border-top: none;
+  border-radius: 0 0 0.35rem 0.35rem;
+  /* backdrop-filter still composites at opacity 0, leaving a blurred ghost on
+     the status strip, so the blur is applied only in the revealed state. */
+  background-color: transparent;
+  backdrop-filter: none;
+  opacity: 0;
+  transition: opacity 150ms ease;
 }
 
-.wrapper:hover .handle,
-.wrapper:focus-within .handle {
-  color: hsl(var(--terminal-green));
-  text-shadow: var(--glow-bright);
+.zone:hover .nub,
+.sliderOpen .nub,
+.nub:focus-visible {
+  opacity: 1;
+  background-color: var(--panel-bg);
+  backdrop-filter: var(--panel-blur);
+  -webkit-backdrop-filter: var(--panel-blur);
 }
 
-.handle:focus-visible {
+.nub:focus-visible {
   outline: 2px solid hsl(var(--terminal-green));
   outline-offset: 2px;
 }
 
-.handleIcon {
-  width: 1rem;
-  height: 1rem;
-  transition: transform 0.18s ease;
-}
-
-.handleIconOpen {
-  transform: rotate(180deg);
-}
-
-/* Toolbar drops down just below the handle when revealed. */
+/* Toolbar */
 .toolbar {
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  padding: 0.375rem 0.5rem;
-  background-color: hsl(var(--terminal-black) / 0.85);
-  backdrop-filter: blur(6px);
-  border: 1px solid hsl(var(--border));
-  transition: opacity 0.18s ease, transform 0.18s ease;
+  height: var(--toolbar-height);
+  /* Borders must count inside the height, or the stowed toolbar leaves a
+     1px blurred sliver on screen. */
+  box-sizing: border-box;
+  flex-shrink: 0;
+  padding: 0 0.5rem;
+  background-color: var(--panel-bg);
+  backdrop-filter: var(--panel-blur);
+  -webkit-backdrop-filter: var(--panel-blur);
+  border: 1px solid hsl(var(--terminal-green) / 0.3);
+  border-top: none;
+  box-shadow: var(--panel-shadow);
 }
 
-.toolbar.hidden {
-  opacity: 0;
-  transform: translateX(-50%) translateY(-0.375rem);
+.hidden {
   pointer-events: none;
 }
 
-.toolbar.visible,
-.wrapper:hover .toolbar,
-.wrapper:focus-within .toolbar {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
+.visible {
   pointer-events: auto;
 }
 
@@ -103,7 +123,8 @@
   padding: 0.375rem 0.75rem;
   background: transparent;
   border: none;
-  color: hsl(var(--terminal-green-dim));
+  /* Bright enough to stay legible where the panel overlaps the status strip. */
+  color: hsl(var(--terminal-green));
   text-shadow: var(--glow-dim);
   cursor: pointer;
   font-family: 'Glass TTY VT220', 'Monaco', 'Consolas', 'Courier New', monospace;
@@ -112,7 +133,7 @@
 }
 
 .button:hover:not(:disabled) {
-  color: hsl(var(--terminal-green));
+  color: hsl(var(--terminal-green-light));
   text-shadow: var(--glow-bright);
   background-color: hsl(var(--terminal-green) / 0.12);
 }

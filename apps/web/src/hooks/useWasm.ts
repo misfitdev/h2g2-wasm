@@ -10,6 +10,8 @@ interface WasmExports {
   get_room_ascii_art: () => string | undefined;
   get_location: () => string;
   get_hints_for_location: (location: string) => string;
+  get_score: () => string;
+  get_seed: () => string;
   get_hint_answer: (question_idx: number, level: number) => string | undefined;
   undo: () => boolean;
   redo: () => boolean;
@@ -178,6 +180,22 @@ export function useWasm() {
     return wasmRef.current.get_location();
   }, []);
 
+  // Score and turn count, or null for time-based games
+  const getScore = useCallback((): { score: number; turns: number } | null => {
+    if (!wasmRef.current) return null;
+    try {
+      return JSON.parse(wasmRef.current.get_score());
+    } catch {
+      return null;
+    }
+  }, []);
+
+  // Seed this session was started with
+  const getSeed = useCallback((): string => {
+    if (!wasmRef.current) return '';
+    return wasmRef.current.get_seed();
+  }, []);
+
   // Get hints for a location
   const getHintsForLocation = useCallback((location: string): string => {
     if (!wasmRef.current) return '[]';
@@ -199,6 +217,8 @@ export function useWasm() {
     getUpdates,
     getRoomAsciiArt,
     getLocation,
+    getScore,
+    getSeed,
     getHintsForLocation,
     getHintAnswer,
     undo,
