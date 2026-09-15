@@ -7,7 +7,10 @@ import { SaveLoadDialog } from './SaveLoadDialog';
 import { HintModal } from './HintModal';
 import { DebugPanel } from './DebugPanel';
 import { CRTScreen } from './CRTScreen';
+import { GuidePane } from './GuidePane';
 import styles from './Terminal.module.css';
+
+const GUIDE_STORAGE_KEY = 'h2g2_guide_open';
 
 export function Terminal() {
   const {
@@ -46,6 +49,13 @@ export function Terminal() {
   const [hintModalOpen, setHintModalOpen] = useState(false);
   const [currentLocation, setCurrentLocation] = useState('');
   const [totalHintsShown, setTotalHintsShown] = useState(0);
+  const [guideOpen, setGuideOpen] = useState(() => {
+    try {
+      return localStorage.getItem(GUIDE_STORAGE_KEY) === '1';
+    } catch {
+      return false;
+    }
+  });
   const [showDebug, setShowDebug] = useState(() => {
     if (typeof window !== 'undefined') {
       return new URLSearchParams(window.location.search).get('debug') === '1';
@@ -68,6 +78,19 @@ export function Terminal() {
   const syncLocation = useCallback(() => {
     setCurrentLocation(getLocation());
   }, [getLocation]);
+
+  const toggleGuide = useCallback(() => {
+    setGuideOpen((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem(GUIDE_STORAGE_KEY, next ? '1' : '0');
+      } catch {
+        // localStorage throws when quota is exhausted or storage is blocked.
+      }
+      return next;
+    });
+    inputRef.current?.focus();
+  }, []);
 
   const scrollToBottom = useCallback(() => {
     if (outputRef.current) {
@@ -251,8 +274,11 @@ export function Terminal() {
     } else if (e.key === 'l' && e.ctrlKey) {
       e.preventDefault();
       clearScreen();
+    } else if (e.key === 'g' && e.ctrlKey) {
+      e.preventDefault();
+      toggleGuide();
     }
-  }, [handleSubmit, navigateHistory, clearScreen, scrollToBottom]);
+  }, [handleSubmit, navigateHistory, clearScreen, scrollToBottom, toggleGuide]);
 
   // Control handlers
   const handleUndo = useCallback(() => {
@@ -334,7 +360,7 @@ export function Terminal() {
       {/* Output area */}
       <div
         ref={outputRef}
-        className={styles.output}
+        className={`${styles.output} ${guideOpen ? styles.outputWithGuide : ''}`}
         role="log"
         aria-label="Game output"
         aria-live="polite"
@@ -399,6 +425,8 @@ export function Terminal() {
         totalHintsShown={totalHintsShown}
         onHintShown={() => setTotalHintsShown(prev => prev + 1)}
       />
+
+      <GuidePane location={currentLocation} open={guideOpen} onToggle={toggleGuide} />
 
       {/* Debug Panel */}
       {showDebug && (
