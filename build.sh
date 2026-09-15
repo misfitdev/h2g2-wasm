@@ -5,10 +5,17 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-# Provision tools in a fresh CI environment (no-op locally if already active).
-if command -v mise >/dev/null 2>&1; then
-    eval "$(mise activate bash --shims)"
-    mise install
+# Cloudflare Pages builders ship only node/npm, so bootstrap mise before asking
+# it for the rest of the toolchain (just, node, rust, wasm-bindgen).
+if ! command -v mise >/dev/null 2>&1; then
+    curl -fsSL https://mise.run | sh
+    export PATH="$HOME/.local/bin:$PATH"
 fi
+
+eval "$(mise activate bash --shims)"
+mise install
+
+# rustup targets are outside mise's remit.
+rustup target add wasm32-unknown-unknown
 
 exec just build
