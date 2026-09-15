@@ -106,6 +106,11 @@ export function Terminal() {
   const outputRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  /** The prompt must not steal focus from the title screen. */
+  const focusTerminalInput = useCallback(() => {
+    if (splashDone) inputRef.current?.focus();
+  }, [splashDone]);
+
   const syncLocation = useCallback(() => {
     setCurrentLocation(getLocation());
   }, [getLocation]);
@@ -130,13 +135,13 @@ export function Terminal() {
     setTimeline((prev) => appendTurn(prev, { command, snapshot, lines, location: getLocation() }));
   }, [save, getLocation]);
 
-  const jumpTo = useCallback((id: number) => {
+  const jumpTo = useCallback((id: number): boolean => {
     const node = timeline.nodes[id];
-    if (!node || id === timeline.currentId) return;
+    if (!node || id === timeline.currentId) return false;
 
     if (!restore(node.snapshot)) {
       addLine('[The Improbability Drive declines to take you there.]');
-      return;
+      return false;
     }
 
     clearScreen();
@@ -144,8 +149,9 @@ export function Terminal() {
     setTimeline((prev) => recordVisit(setCurrent(prev, id), id));
     syncLocation();
     syncStatus(false);
-    inputRef.current?.focus();
-  }, [timeline, restore, clearScreen, addLines, syncLocation, syncStatus, addLine]);
+    focusTerminalInput();
+    return true;
+  }, [timeline, restore, clearScreen, addLines, syncLocation, syncStatus, addLine, focusTerminalInput]);
 
   const engageDrive = useCallback(() => {
     const destination = pickImprobableNode(timeline, Math.random);
@@ -158,8 +164,9 @@ export function Terminal() {
     setFlashing(true);
     window.setTimeout(() => setFlashing(false), FLASH_DURATION);
 
-    jumpTo(destination);
-    addLine(`[Improbability factor: ${odds} to 1 against. Arriving anyway.]`);
+    if (jumpTo(destination)) {
+      addLine(`[Improbability factor: ${odds} to 1 against. Arriving anyway.]`);
+    }
   }, [timeline, jumpTo, addLine]);
 
   const toggleGuide = useCallback(() => {
@@ -172,8 +179,8 @@ export function Terminal() {
       }
       return next;
     });
-    inputRef.current?.focus();
-  }, []);
+    focusTerminalInput();
+  }, [focusTerminalInput]);
 
   const toggleDrive = useCallback(() => {
     setDriveOpen((prev) => {
@@ -193,6 +200,7 @@ export function Terminal() {
     inputRef.current?.focus();
   }, []);
 
+
   const scrollToBottom = useCallback(() => {
     if (outputRef.current) {
       outputRef.current.scrollTop = outputRef.current.scrollHeight;
@@ -205,8 +213,8 @@ export function Terminal() {
 
   // Focus input on click anywhere
   const handleContainerClick = useCallback(() => {
-    inputRef.current?.focus();
-  }, []);
+    focusTerminalInput();
+  }, [focusTerminalInput]);
 
   // Process game updates
   const processUpdates = useCallback((): string[] => {
@@ -339,11 +347,13 @@ export function Terminal() {
       if (isInitialized) {
         // Feed the command to keep game state consistent, then get location for hint modal
         feed(trimmedInput);
-        processUpdates();
+        const produced = processUpdates();
         syncLocation();
+        syncStatus();
+        recordTurn(trimmedInput, [`> ${input}`, ...produced]);
         setHintModalOpen(true);
         // Keep focus on input despite hint modal opening
-        setTimeout(() => inputRef.current?.focus(), 0);
+        setTimeout(() => focusTerminalInput(), 0);
       }
       return;
     }
@@ -400,22 +410,29 @@ export function Terminal() {
   const handleUndo = useCallback(() => {
     if (undo()) {
       addLine('[UNDO]');
-      processUpdates();
+      const produced = processUpdates();
       syncLocation();
+      syncStatus(false);
+      // Undo moves the VM off the current node, so check the new state in as
+      // its own turn; otherwise the next command would attach to a parent
+      // whose snapshot no longer matches the engine.
+      recordTurn('[undo]', ['[UNDO]', ...produced]);
     } else {
       addLine('[Nothing to undo]');
     }
-  }, [undo, addLine, processUpdates, syncLocation]);
+  }, [undo, addLine, processUpdates, syncLocation, syncStatus, recordTurn]);
 
   const handleRedo = useCallback(() => {
     if (redo()) {
       addLine('[REDO]');
-      processUpdates();
+      const produced = processUpdates();
       syncLocation();
+      syncStatus(false);
+      recordTurn('[redo]', ['[REDO]', ...produced]);
     } else {
       addLine('[Nothing to redo]');
     }
-  }, [redo, addLine, processUpdates, syncLocation]);
+  }, [redo, addLine, processUpdates, syncLocation, syncStatus, recordTurn]);
 
   const handleSave = useCallback((slotName: string) => {
     const saveData = save();
@@ -430,22 +447,28 @@ export function Terminal() {
   const handleLoad = useCallback((slotName: string) => {
     const saveData = loadFromSlot(slotName);
     if (saveData && restore(saveData)) {
-      addLine(`[Game loaded from slot: ${slotName}]`);
-      processUpdates();
+      const header = `[Game loaded from slot: ${slotName}]`;
+      addLine(header);
+      const lines = [header, ...processUpdates()];
+
       // Replay the last command to show context
       const lastCommand = getLastCommand();
       if (lastCommand) {
-        addLine(`> ${lastCommand}`, true);
+        const echoed = `> ${lastCommand}`;
+        addLine(echoed, true);
         feed(lastCommand);
-        processUpdates();
+        lines.push(echoed, ...processUpdates());
       }
+
       // Update location after load
       syncLocation();
+      syncStatus(false);
+      recordTurn(`[load ${slotName}]`, lines);
     } else {
       addLine('[Load failed]');
     }
     setLoadDialogOpen(false);
-  }, [loadFromSlot, restore, addLine, processUpdates, feed, getLastCommand, syncLocation]);
+  }, [loadFromSlot, restore, addLine, processUpdates, feed, getLastCommand, syncLocation, syncStatus, recordTurn]);
 
   const handleDelete = useCallback((slotName: string) => {
     if (deleteSlot(slotName)) {
@@ -506,7 +529,7 @@ export function Terminal() {
             className={styles.input}
             placeholder="Type a command (e.g., 'look', 'help', 'examine floor')"
             aria-label="Game command input. Type commands to interact with the game."
-            autoFocus
+            autoFocus={splashDone}
             spellCheck={false}
             autoComplete="off"
             autoCapitalize="off"

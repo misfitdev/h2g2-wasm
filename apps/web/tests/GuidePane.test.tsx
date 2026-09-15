@@ -222,3 +222,21 @@ describe('guide entry data', () => {
     expect(getGuideEntryByTitle('')).toBeNull();
   });
 });
+
+describe('alias matching is word-bounded', () => {
+  it('does not match an alias embedded inside a longer word', async () => {
+    const { getGuideEntry, FALLBACK_ENTRY } = await import('@/lib/guideEntries');
+    // 'bar' (PUBS), 'bed' (BEDS), 'hold' (VOGONS), 'pod' (HEART OF GOLD).
+    expect(getGuideEntry('Embarkation Lounge')).toBe(FALLBACK_ENTRY);
+    expect(getGuideEntry('Embedded Systems Lab')).toBe(FALLBACK_ENTRY);
+    expect(getGuideEntry('Household Annexe')).toBe(FALLBACK_ENTRY);
+    expect(getGuideEntry('Podium')).toBe(FALLBACK_ENTRY);
+  });
+
+  it('still matches an alias that stands as its own word', async () => {
+    const { getGuideEntry } = await import('@/lib/guideEntries');
+    expect(getGuideEntry('Vogon Hold, Aft Section').id).toBe('vogon-ship');
+    expect(getGuideEntry('The Bar').id).toBe('pub');
+    expect(getGuideEntry('Escape Pod 2').id).toBe('heart-of-gold');
+  });
+});

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Undo2, Redo2, Save, FolderOpen, Trash2 } from 'lucide-react';
 import styles from './TerminalControls.module.css';
 
@@ -24,11 +24,13 @@ export function TerminalControls({
 }: TerminalControlsProps) {
   const [open, setOpen] = useState(false);
   const shown = visible || open;
+  const toolbarRef = useRef<HTMLDivElement>(null);
 
   return (
     <div className={styles.zone}>
       <div className={`${styles.slider} ${shown ? styles.sliderOpen : ''}`}>
         <div
+          ref={toolbarRef}
           className={`${styles.toolbar} ${shown ? styles.visible : styles.hidden}`}
           role="toolbar"
           aria-label="Game controls"
@@ -72,7 +74,16 @@ export function TerminalControls({
           aria-expanded={shown}
           onClick={(e) => {
             e.stopPropagation();
-            setOpen((o) => !o);
+            setOpen((wasOpen) => {
+              // The toolbar precedes the nub in the DOM, so a forward Tab from
+              // the nub would skip past the controls it just revealed.
+              if (!wasOpen) {
+                requestAnimationFrame(() => {
+                  toolbarRef.current?.querySelector<HTMLButtonElement>('button:not(:disabled)')?.focus();
+                });
+              }
+              return !wasOpen;
+            });
           }}
         />
       </div>

@@ -661,8 +661,8 @@ const TOPIC_ENTRIES: GuideEntry[] = [
 const ALL_ENTRIES: GuideEntry[] = [...GUIDE_ENTRIES, ...TOPIC_ENTRIES];
 
 /**
- * Selects the Guide entry for a room. Exact alias matches win over substring
- * matches so that "Dark" cannot be shadowed by a longer entry that merely
+ * Selects the Guide entry for a room. Exact alias matches win over partial
+ * ones so that "Dark" cannot be shadowed by a longer entry that merely
  * mentions it; unmatched rooms get the fallback rather than nothing.
  */
 export function getGuideEntry(location: string): GuideEntry {
@@ -674,8 +674,13 @@ export function getGuideEntry(location: string): GuideEntry {
   );
   if (exact) return exact;
 
+  // Whole words only. Normalisation leaves single-space-separated words, so
+  // padding both sides makes `includes` a word-boundary test and still admits
+  // multi-word aliases. Plain substring matching would select PUBS for
+  // "Embarkation" on the strength of "bar".
+  const padded = ` ${normalized} `;
   const partial = GUIDE_ENTRIES.find((entry) =>
-    entry.aliases.some((alias) => normalized.includes(alias))
+    entry.aliases.some((alias) => padded.includes(` ${alias} `))
   );
   return partial ?? FALLBACK_ENTRY;
 }
