@@ -304,6 +304,357 @@ const TOPIC_ENTRIES: GuideEntry[] = [
     crossRefs: ['PUBS'],
     aliases: [],
   },
+
+  {
+    id: "doors-happy",
+    title: "DOORS, HAPPY",
+    verdict: "Fitted with Genuine People Personalities, at length.",
+    body: [
+      "A Sirius Cybernetics door does not merely open. It opens with a satisfied hum, closes with a sigh of pleasure at a job well done, and would very much like you to know that it enjoyed being of service.",
+      "The Complaints division maintains that no customer has ever objected to this. The Complaints division maintains a great many things.",
+      "It is technically possible to disable the personality circuit. It is not possible to do so without the door finding out.",
+    ],
+    crossRefs: ["SIRIUS CYBERNETICS CORPORATION", "EXITS"],
+    aliases: [],
+  },
+  {
+    id: "editors",
+    title: "EDITORS",
+    verdict: "The reason the entry is shorter than the research.",
+    body: [
+      "A field researcher once spent fifteen years on Earth and submitted a manuscript running to several volumes. The editors retained one word, and later allowed a second. The researcher regarded this as a triumph and was, by the standards of the Guide\u2019s editorial process, entirely correct.",
+      "Guide editors work to the principle that anything worth saying can be said in less space, and that anything not worth saying should be filed anyway in case it becomes worth saying later.",
+      "The Guide has never knowingly been wrong. It has occasionally been so comprehensively inaccurate that reality was held to be at fault.",
+    ],
+    crossRefs: ["EARTH", "RESEARCH, FIELD", "EXPENSES"],
+    aliases: [],
+  },
+  {
+    id: "fjords",
+    title: "FJORDS",
+    verdict: "Award-winning. You will be told.",
+    body: [
+      "Fjords are the crumpled coastal detailing applied to bespoke planets by the Magrathean design houses, and are widely held to give a continent a lovely baroque feel.",
+      "The designer responsible for the Norwegian coast won an award for it. He will mention the award. He will mention it without being asked, again shortly afterwards, and once more as you leave.",
+      "Current fashion favours flat, featureless coastline, which the profession regards as a passing madness and a personal insult.",
+    ],
+    crossRefs: ["MAGRATHEA", "RECESSIONS", "MICE"],
+    aliases: [],
+  },
+  {
+    id: "grues",
+    title: "GRUES",
+    verdict: "Probably not real. Statistically, no comfort at all.",
+    body: [
+      "The grue is the traditional explanation for what becomes of adventurers who wander about in unlit rooms. It is said to lurk, to be insatiable, and to be held off only by light.",
+      "No grue has ever been photographed, measured, or produced in court. Every account of one comes from somebody who was in the dark at the time, which the Guide notes is precisely the condition in which people are least reliable and most likely to be eaten.",
+      "Carry a torch. The argument for doing so does not depend on grues existing.",
+    ],
+    crossRefs: ["DARKNESS", "TORCHES", "STATISTICS, MISLEADING"],
+    aliases: [],
+  },
+  {
+    id: "improbability-drive",
+    title: "IMPROBABILITY DRIVE, INFINITE",
+    verdict: "Crossing vast interstellar distances without all that tedious mucking about in hyperspace.",
+    body: [
+      "The drive passes through every conceivable point in every conceivable universe at once, which means you are never entirely certain where you will arrive, in what condition, or whether the soft furnishings will have developed opinions on the way.",
+      "Finite improbability was a solved problem, useful chiefly for enlivening parties. Infinite improbability was held to be impossible until a student, tired of being told so, calculated exactly how unlikely such a machine was, fed the figure into a finite generator, and switched it on.",
+      "He was mobbed at the next awards ceremony by physicists who had had quite enough of smart-arses. The Guide records this as the only scientific breakthrough in history to have been punished on schedule.",
+    ],
+    crossRefs: ["HEART OF GOLD", "WHALES, SUDDEN", "PETUNIAS, BOWLS OF"],
+    aliases: [],
+  },
+  {
+    id: "mice",
+    title: "MICE",
+    verdict: "Not mice.",
+    body: [
+      "What Earth took for small white laboratory animals were the protrusion into our dimension of hyperintelligent pandimensional beings, who commissioned the planet, funded it, and ran it as the largest computational experiment ever attempted.",
+      "The experiments those beings appeared to be undergoing at the hands of scientists were, from the other side of the arrangement, going rather well.",
+      "They were not pleased about the demolition. They were, however, insured.",
+    ],
+    crossRefs: ["EARTH", "MAGRATHEA", "BYPASSES"],
+    aliases: [],
+  },
+  {
+    id: "petunias",
+    title: "PETUNIAS, BOWLS OF",
+    verdict: "Oh no, not again.",
+    body: [
+      "Improbability side effects occasionally produce a bowl of petunias at altitude. The bowl invariably thinks precisely one thing on the way down, which is recorded above.",
+      "The Guide holds that if we knew exactly why the bowl thought this, we would know a great deal more about the nature of the universe than we presently do.",
+      "It is usually accompanied by a whale, which has considerably more to say and far less idea what is going on.",
+    ],
+    crossRefs: ["WHALES, SUDDEN", "FALLING", "IMPROBABILITY DRIVE, INFINITE"],
+    aliases: [],
+  },
+  {
+    id: "poetry-worst",
+    title: "POETRY, WORST",
+    verdict: "Third worst in the universe, and trying harder.",
+    body: [
+      "Vogon poetry is the third worst in the universe. Second place belongs to the Azgoths of Kria, during whose recitals four of the audience died of internal haemorrhaging and the president of the Mid-Galactic Arts Nobbling Council survived only by gnawing off one of his own legs.",
+      "The worst was written by Paula Nancy Millstone Jennings of Greenbridge, Essex, and perished with the planet. The Guide files this under mercies.",
+      "Surviving a recital is possible. Praising one sincerely is not, because Vogons are impervious to flattery and exquisitely sensitive to accuracy.",
+    ],
+    crossRefs: ["VOGONS", "EARTH", "MUSCLE RELAXATION"],
+    aliases: [],
+  },
+  {
+    id: "strags",
+    title: "STRAGS",
+    verdict: "Non-hitchhiker. That is, very nearly everybody.",
+    body: [
+      "A strag is anyone who does not hitch. The category is enormous, largely content, and mostly in possession of a compass.",
+      "A strag who notices that you still have your towel after several star systems will conclude that you are a person of substance, resource and foresight, and will happily lend you a toothbrush, a flask, a map, and anything else you have contrived to lose.",
+      "The Guide stresses that this is not deception. It is simply the only reliable method anyone has found of borrowing a compass.",
+    ],
+    crossRefs: ["TOWELS", "FIRST PRINCIPLES"],
+    aliases: [],
+  },
+  {
+    id: "watches-digital",
+    title: "WATCHES, DIGITAL",
+    verdict: "Still considered a pretty neat idea.",
+    body: [
+      "Man had always assumed he was more intelligent than the dolphins because he had achieved so much \u2014 the wheel, New York, wars \u2014 while the dolphins had done nothing but muck about in the water having a good time.",
+      "The dolphins had always believed themselves far more intelligent than man, for precisely the same reasons.",
+      "The Guide lists the digital watch among Earth\u2019s achievements, in the same cautious spirit with which it lists the bypass.",
+    ],
+    crossRefs: ["EARTH", "BYPASSES"],
+    aliases: [],
+  },
+  {
+    id: "airlocks",
+    title: "AIRLOCKS",
+    verdict: "Where a Vogon conversation traditionally concludes.",
+    body: [
+      "Thirty seconds of vacuum and no paperwork whatsoever, which is the only part of the procedure a Vogon dislikes.",
+    ],
+    crossRefs: ["VOGONS"],
+    aliases: [],
+  },
+  {
+    id: "architecture-defensive",
+    title: "ARCHITECTURE, DEFENSIVE",
+    verdict: "Building as a substitute for thinking.",
+    body: [
+      "If the enemy cannot find the war, the enemy cannot win it. Neither, it emerges, can anybody else.",
+    ],
+    crossRefs: ["WAR CHAMBERS AND MAZES", "MAPS"],
+    aliases: [],
+  },
+  {
+    id: "drinks",
+    title: "DRINKS",
+    verdict: "The galaxy\u2019s principal load-bearing structure.",
+    body: [
+      "Six pints before matter transference, and several more afterwards on medical advice the Guide has declined to print.",
+    ],
+    crossRefs: ["PUBS", "MUSCLE RELAXATION"],
+    aliases: [],
+  },
+  {
+    id: "exits",
+    title: "EXITS",
+    verdict: "The most under-used feature of any room.",
+    body: [
+      "The Guide recommends locating one on arrival rather than on departure.",
+    ],
+    crossRefs: ["DOORS, HAPPY"],
+    aliases: [],
+  },
+  {
+    id: "falling",
+    title: "FALLING",
+    verdict: "Flying, minus the knack.",
+    body: [
+      "The knack lies in throwing yourself at the ground and missing. Most things that fall do not miss.",
+    ],
+    crossRefs: ["WHALES, SUDDEN", "PETUNIAS, BOWLS OF"],
+    aliases: [],
+  },
+  {
+    id: "first-principles",
+    title: "FIRST PRINCIPLES",
+    verdict: "Reasoning from nothing, at speed, under time pressure.",
+    body: [
+      "The finest example on record lasted ninety seconds and concluded at ground level.",
+    ],
+    crossRefs: ["WHALES, SUDDEN"],
+    aliases: [],
+  },
+  {
+    id: "gravity-local",
+    title: "GRAVITY, LOCAL",
+    verdict: "The reason getting out of bed is genuinely difficult.",
+    body: [
+      "Not, as is widely alleged, a character failing. The Guide has checked.",
+    ],
+    crossRefs: ["BEDS", "FALLING"],
+    aliases: [],
+  },
+  {
+    id: "lizards",
+    title: "LIZARDS",
+    verdict: "Excellent company, if your standard for company is listening.",
+    body: [
+      "On Damogran they are held to be the finest conversationalists on the planet, chiefly because they never start.",
+    ],
+    crossRefs: ["DAMOGRAN"],
+    aliases: [],
+  },
+  {
+    id: "logic-absence",
+    title: "LOGIC, ABSENCE OF",
+    verdict: "A defence mechanism in its own right.",
+    body: [
+      "The Bugblatter Beast assumes that if it cannot see you, you cannot see it. This has never once worked in its favour.",
+    ],
+    crossRefs: ["TRAAL", "TOWELS"],
+    aliases: [],
+  },
+  {
+    id: "maps",
+    title: "MAPS",
+    verdict: "Unglamorous. Decisive.",
+    body: [
+      "The Guide offers this advice knowing perfectly well that nobody takes it until the third time they pass the same junction.",
+    ],
+    crossRefs: ["WAR CHAMBERS AND MAZES"],
+    aliases: [],
+  },
+  {
+    id: "matter-transference",
+    title: "MATTER TRANSFERENCE BEAMS",
+    verdict: "Instantaneous, and deeply unpleasant.",
+    body: [
+      "Relaxation beforehand is essential; six pints is the traditional dose, and the Guide would rather not discuss the arithmetic.",
+    ],
+    crossRefs: ["PUBS", "MUSCLE RELAXATION", "PEANUTS"],
+    aliases: [],
+  },
+  {
+    id: "muscle-relaxation",
+    title: "MUSCLE RELAXATION",
+    verdict: "Compulsory before transference.",
+    body: [
+      "The only compulsory thing in the galaxy that anybody has ever looked forward to.",
+    ],
+    crossRefs: ["PUBS", "DRINKS"],
+    aliases: [],
+  },
+  {
+    id: "peat-soft",
+    title: "PEAT, SOFT",
+    verdict: "Stage eleven of the Vogon approvals process.",
+    body: [
+      "Three months minimum, after which the document is recycled as firelighters and the request is considered closed.",
+    ],
+    crossRefs: ["VOGONS"],
+    aliases: [],
+  },
+  {
+    id: "planning-permission",
+    title: "PLANNING PERMISSION",
+    verdict: "Granted. It was always going to be granted.",
+    body: [
+      "The consultation ran for nine months in a locked filing cabinet. You were entirely welcome to attend.",
+    ],
+    crossRefs: ["BYPASSES", "LEOPARDS"],
+    aliases: [],
+  },
+  {
+    id: "press-events",
+    title: "PRESS EVENTS",
+    verdict: "Ceremonies held where nobody can reach them.",
+    body: [
+      "Attendance is not the point. Attendance has never been the point.",
+    ],
+    crossRefs: ["DAMOGRAN", "SECURITY BY GEOGRAPHY"],
+    aliases: [],
+  },
+  {
+    id: "recessions",
+    title: "RECESSIONS",
+    verdict: "A good time to lock the doors and sleep.",
+    body: [
+      "Magrathea did precisely that, and remains the only economy in history to have survived one without comment.",
+    ],
+    crossRefs: ["MAGRATHEA", "FJORDS"],
+    aliases: [],
+  },
+  {
+    id: "research-field",
+    title: "RESEARCH, FIELD",
+    verdict: "Fifteen years. One word. Occasionally two.",
+    body: [
+      "The Guide considers this an excellent rate of return and has structured its contracts accordingly.",
+    ],
+    crossRefs: ["EDITORS", "EXPENSES", "EARTH"],
+    aliases: [],
+  },
+  {
+    id: "security-geography",
+    title: "SECURITY BY GEOGRAPHY",
+    verdict: "The cheapest security there is.",
+    body: [
+      "Put the thing somewhere inconvenient. Nobody will come. Nobody was ever going to come.",
+    ],
+    crossRefs: ["DAMOGRAN", "PRESS EVENTS"],
+    aliases: [],
+  },
+  {
+    id: "social-momentum",
+    title: "SOCIAL MOMENTUM",
+    verdict: "When a party stops being an event and becomes a condition.",
+    body: [
+      "Guests cease to leave, supplies begin to be requisitioned by force, and the building takes to the air.",
+    ],
+    crossRefs: ["PARTIES, INTERMINABLE"],
+    aliases: [],
+  },
+  {
+    id: "statistics-misleading",
+    title: "STATISTICS, MISLEADING",
+    verdict: "Printed in a smaller font.",
+    body: [
+      "Darkness is statistically safe. That is true, and it is not the relevant statistic.",
+    ],
+    crossRefs: ["DARKNESS", "GRUES"],
+    aliases: [],
+  },
+  {
+    id: "torches",
+    title: "TORCHES",
+    verdict: "Several species went to considerable trouble to invent one.",
+    body: [
+      "You are strongly advised to benefit from their trouble.",
+    ],
+    crossRefs: ["DARKNESS", "GRUES"],
+    aliases: [],
+  },
+  {
+    id: "wars-misplaced",
+    title: "WARS, MISPLACED",
+    verdict: "Mislaid in the filing, then in the architecture.",
+    body: [
+      "Several are believed to be ongoing. None can be located.",
+    ],
+    crossRefs: ["WAR CHAMBERS AND MAZES", "ARCHITECTURE, DEFENSIVE"],
+    aliases: [],
+  },
+  {
+    id: "expenses",
+    title: "EXPENSES",
+    verdict: "The only Guide document ever filed on time.",
+    body: [
+      "A researcher may be vague about the coordinates of an entire planet, but never about the cost of the meal he had on it.",
+    ],
+    crossRefs: ["RESEARCH, FIELD", "EDITORS"],
+    aliases: [],
+  },
 ];
 
 /** Everything reachable by headword: room entries plus topic entries. */

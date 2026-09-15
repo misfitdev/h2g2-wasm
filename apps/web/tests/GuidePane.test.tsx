@@ -157,13 +157,6 @@ describe('GuidePane cross-references', () => {
     expect(screen.getByRole('heading', { name: 'BYPASSES' })).toBeInTheDocument();
   });
 
-  it('shows a placeholder for a headword nobody has written', () => {
-    render(<GuidePane location="Bedroom" open={true} onToggle={noop} />);
-    fireEvent.click(screen.getByRole('button', { name: 'GRAVITY, LOCAL' }));
-    expect(screen.getByRole('heading', { name: 'GRAVITY LOCAL' })).toBeInTheDocument();
-    expect(screen.getByText('Not yet filed.')).toBeInTheDocument();
-  });
-
   it('resolves a cross-reference via an alternate headword', () => {
     render(<GuidePane location="Bedroom" open={true} onToggle={noop} />);
     fireEvent.click(screen.getByRole('button', { name: 'BYPASSES' }));
@@ -205,6 +198,21 @@ describe('guide entry data', () => {
     const { getGuideEntry, FALLBACK_ENTRY } = await import('@/lib/guideEntries');
     // 'towels' is a topic entry; no room should ever resolve to it.
     expect(getGuideEntry('towels')).toBe(FALLBACK_ENTRY);
+  });
+
+  it('has no headword for something never written', async () => {
+    const { getGuideEntryByTitle } = await import('@/lib/guideEntries');
+    expect(getGuideEntryByTitle('ABSOLUTELY NOTHING AT ALL')).toBeNull();
+  });
+
+  it('builds a placeholder for an unwritten headword', async () => {
+    const { unwrittenEntry } = await import('@/lib/guideEntries');
+    // No cross-reference reaches this any more, but the fallback must still
+    // hold if one is ever added without its entry.
+    const entry = unwrittenEntry('gravity, local');
+    expect(entry.title).toBe('GRAVITY LOCAL');
+    expect(entry.verdict).toBe('Not yet filed.');
+    expect(entry.aliases).toEqual([]);
   });
 
   it('matches headwords ignoring case and punctuation', async () => {
