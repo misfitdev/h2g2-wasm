@@ -63,4 +63,3 @@ test-web: install
 # Remove build artifacts, caches, and dependencies
 clean:
     rm -rf target {{web}}/node_modules {{web}}/dist
-    rm -f Cargo.lock {{web}}/package-lock.json
