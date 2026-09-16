@@ -8,23 +8,33 @@
 │  ├─ Terminal Component (game output & input)        │
 │  ├─ HintModal Component (interactive help system)   │
 │  ├─ TerminalControls (undo/redo/save/load)          │
+│  ├─ SaveLoadDialog (save slot picker)                │
+│  ├─ GuidePane, ImprobabilityDrive, ScoreMeter,       │
+│  │  Splash, CRTScreen, DebugPanel                    │
 │  └─ useWasm Hook (WASM module interface)            │
 └──────────────────┬──────────────────────────────────┘
                    │ wasm-bindgen FFI
                    ↓
 ┌─────────────────────────────────────────────────────┐
 │  WASM Module (Rust)                                 │
-│  ├─ wasm/src/lib.rs (FFI exports)                   │
+│  ├─ wasm/src/lib.rs (18 FFI exports)                 │
 │  │  ├─ create() - Initialize game                   │
+│  │  ├─ get_seed() - Session RNG seed (for repro)     │
 │  │  ├─ step() - Execute one game cycle              │
 │  │  ├─ feed(input) - Send player command            │
 │  │  ├─ get_location() - Current room name           │
+│  │  ├─ get_score() - Score/turns as JSON             │
+│  │  ├─ get_room_ascii_art() - ASCII art for room     │
+│  │  ├─ get_updates() - Push map/tree/status updates  │
+│  │  ├─ undo() / redo() - History navigation          │
 │  │  ├─ get_hints_for_location() - Hints JSON        │
 │  │  ├─ get_hint_answer() - Single hint answer       │
-│  │  ├─ save() / restore() - State persistence       │
-│  │  └─ get_messages() - Game output                 │
+│  │  ├─ save() / restore() / load_savestate()         │
+│  │  │  - State persistence                           │
+│  │  └─ store_message() / get_messages() /            │
+│  │     clear_messages() - Message buffer             │
 │  │
-│  └─ encrusted/src/rust/ (Game Engine)
+│  └─ encrusted/src/ (Game Engine)
 │     ├─ zmachine.rs (main game loop & Z-machine)
 │     ├─ hints.rs (hint system with InvisiClues data)
 │     ├─ ascii_art.rs (room ASCII art definitions)
@@ -74,14 +84,38 @@
   - Semantic HTML with role="dialog"
 
 #### TerminalControls.tsx
-- **Purpose**: Button bar (undo/redo/save/load)
-- **Features**: Auto-hide after 2s idle
+- **Purpose**: Button bar (undo/redo/save/load/clear)
+- **Features**: Collapsible toolbar toggled via a "nub" handle (not a timed auto-hide)
 - **Integration**: Calls useWasm hooks
 
 #### SaveLoadDialog.tsx
-- **Purpose**: Save slot selection UI
+- **Purpose**: Save slot selection UI (controlled component; slot list/actions passed in as props)
 - **Features**: Create/load/delete save slots
-- **Storage**: localStorage for persistence
+- **Storage**: localStorage for persistence, managed by the `useTerminal` hook
+
+#### GuidePane.tsx
+- **Purpose**: In-game "guide" panel showing lore/reference entries for the current location
+- **Data**: Backed by `apps/web/src/lib/guideEntries.ts`
+- **Features**: Toggleable panel with a flicker-in animation on open
+
+#### ImprobabilityDrive.tsx
+- **Purpose**: Timeline/branch visualization panel
+- **Data**: Backed by `apps/web/src/lib/timeline.ts`
+
+#### ScoreMeter.tsx
+- **Purpose**: Compact score/turns strip (hidden for time-based games with no score)
+- **Data**: Backed by `apps/web/src/lib/scoreMeter.ts` and `scoreMilestones.ts`
+
+#### Splash.tsx
+- **Purpose**: Title screen shown on first paint
+- **Rendering**: Draws ASCII art (`apps/web/src/lib/heartOfGold.ts`) to a canvas at native 128x76 resolution, scaled up via CSS
+
+#### CRTScreen.tsx
+- **Purpose**: Ambient CRT overlay plus a one-shot power-on boot sequence
+- **Behavior**: Purely decorative (`pointer-events: none`); power-on removed on a fixed timer rather than `animationend` so it can't get stuck on screen
+
+#### DebugPanel.tsx
+- **Purpose**: Small debug strip showing current location, git hash, WASM checksum, and RNG seed
 
 ### 2. WASM Module (Rust)
 
@@ -90,15 +124,23 @@
 // Thread-local game instance
 thread_local!(static ZVM: RefCell<Option<Zmachine>> = ...);
 
-// FFI Exports
+// FFI Exports (18 total, #[wasm_bindgen])
 pub fn create()  // Initialize game
+pub fn get_seed() -> String  // Session RNG seed, for reproducing a run
 pub fn step() -> bool  // Game step returns true if done
 pub fn feed(input: String)  // Send command to game
 pub fn get_location() -> String  // Current room
+pub fn get_score() -> String  // {"score":N,"turns":N} JSON, or "null"
 pub fn get_hints_for_location(location: String) -> String  // JSON
 pub fn get_hint_answer(question_idx: usize, level: usize) -> Option<String>
+pub fn get_room_ascii_art() -> Option<String>  // ASCII art for current room
+pub fn get_updates()  // Push map/tree/status-bar updates to the UI sink
+pub fn undo() -> bool
+pub fn redo() -> bool
 pub fn save() -> Option<String>  // Base64 encoded state
 pub fn restore(data: String)  // Load from base64
+pub fn load_savestate(data: String)  // Load a raw base64 save blob
+pub fn store_message(msg_type: String, message: String)
 pub fn get_messages() -> String  // Game output as JSON
 pub fn clear_messages()  // Clear message buffer
 ```
@@ -109,29 +151,45 @@ pub fn clear_messages()  // Clear message buffer
 - Option<T> for nullable returns (becomes null/undefined in JS)
 - Safe defaults (empty strings/None) if game not initialized
 
-#### encrusted/src/rust/zmachine.rs (2500+ lines)
+#### encrusted/src/zmachine.rs (2045 lines)
 ```rust
 pub struct Zmachine {
-    // Game state
-    memory: Vec<u8>,
-    pc: u16,  // Program counter
-    stack: Vec<u16>,
+    pub ui: Box<dyn UI>,
+    pub options: Options,
+    pub instr_log: String,
 
-    // Subsystems
-    hint_system: HintSystem,
-    ui: WebUI,
+    version: u8,
+    memory: Buffer,
+    frames: Vec<Frame>,        // Call stack (routine frames)
+    pc: usize,                 // Program counter
+
+    // Object/dictionary tables, parsed from the story file header
+    obj_table_addr: usize,
+    dictionary: HashMap<String, usize>,
 
     // Undo/redo
-    history: Vec<GameState>,
+    current_state: Option<(String, Vec<u8>)>,
+    undos: Vec<(String, Vec<u8>)>,
+    redos: Vec<(String, Vec<u8>)>,
+
+    // Subsystems
+    rng: StdRng,
+    hint_system: HintSystem,
+    secret_key: [u8; 32],      // Save-state integrity check
 }
 
 impl Zmachine {
     pub fn step(&mut self) -> bool  // Main game loop
     pub fn handle_input(&mut self, input: String)
     pub fn get_current_room(&self) -> (u16, String)
+    pub fn get_current_room_ascii_art(&self) -> Option<&'static str>
+    pub fn get_score_turns(&self) -> Option<(i16, u16)>
     pub fn get_hint_system(&mut self) -> &mut HintSystem
     pub fn get_save_state(&self) -> Option<String>
     pub fn restore(&mut self, data: &str)
+    pub fn load_savestate(&mut self, data: &str)
+    pub fn undo(&mut self) -> bool
+    pub fn redo(&mut self) -> bool
 }
 ```
 
@@ -140,7 +198,7 @@ impl Zmachine {
 - `handle_input()`: Parses command and updates game state
 - Save/restore: Binary serialization with base64 encoding
 
-#### encrusted/src/rust/hints.rs
+#### encrusted/src/hints.rs
 ```rust
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct HintQuestion {
@@ -197,7 +255,7 @@ impl HintSystem {
 **Format**:
 - Parsed at compile time with `include_str!()`
 - Embedded directly in binary (no runtime parsing)
-- ~1800 lines, ~120 questions across 7 sections
+- 1804 lines, 118 questions across 12 sections
 
 ### 3. useWasm Hook
 
@@ -334,7 +392,7 @@ Process repeats until all answers shown
 ## Performance Considerations
 
 ### WASM Size
-- Current: ~410 KB gzipped (h2g2_wasm_bg.wasm)
+- Current: ~448 KB uncompressed (h2g2_wasm_bg.wasm), ~185 KB gzipped
 - Includes: Full Z-machine emulator + InvisiClues JSON data
 - Acceptable for production (modern browsers handle this fine)
 
@@ -345,7 +403,7 @@ Process repeats until all answers shown
 
 ### CPU
 - Game loop: 100 steps per input (prevents infinite loops)
-- Hint matching: O(n) scan of ~120 questions (< 1ms)
+- Hint matching: O(n) scan of 118 questions (< 1ms)
 - JSON parsing: Only done on first hint lookup
 
 ## Testing Strategy
@@ -376,5 +434,5 @@ See [TEST_PLAN.md](./TEST_PLAN.md) for comprehensive testing plan.
 
 ---
 
-**Last Updated**: 2025-12-07
+**Last Updated**: 2026-09-16
 **Owner**: Development team

@@ -3,7 +3,7 @@ use crate::options::Options;
 use crate::traits::UI;
 use std::boxed::Box;
 
-const GAME_DATA: &[u8] = include_bytes!("../../h2g2.z3");
+const GAME_DATA: &[u8] = include_bytes!("../h2g2.z3");
 
 pub struct Game;
 

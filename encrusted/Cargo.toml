@@ -10,11 +10,7 @@ license = "MIT"
 
 [lib]
 name = "encrusted"
-path = "src/rust/lib.rs"
-
-[profile.release]
-lto = true
-opt-level = 's'
+path = "src/lib.rs"
 
 [dependencies]
 base64 = "0.22.1"

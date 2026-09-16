@@ -4,6 +4,10 @@ A web-based adaptation of the classic Hitchhiker's Guide to the Galaxy text adve
 
 **Live**: https://h2g2-wasm.pages.dev/
 
+See [`docs/`](./docs) for architecture, design, product, and test-plan
+documentation, and [`AGENTS.md`](./AGENTS.md) for agentic-development
+conventions.
+
 ## Project Structure
 
 ```
@@ -11,6 +15,8 @@ h2g2/
 ├── apps/web/              # React + Vite web application (terminal UI)
 ├── encrusted/            # Rust library (core game engine)
 ├── wasm/                 # WebAssembly build of the Rust library
+├── docs/                  # Architecture, design, product, and test-plan docs
+├── Cargo.toml             # Rust workspace (encrusted, wasm)
 ├── build.sh              # Build entrypoint for Cloudflare Pages (delegates to `just build`)
 ├── wrangler.toml         # Cloudflare Pages configuration
 ├── mise.toml             # Toolchain + environment (Node, Rust, wasm-bindgen)
@@ -68,12 +74,12 @@ The recipes wrap the underlying tools below.
 - `npm run test:ui` - Run tests with UI
 
 ### Rust Game Engine (encrusted)
-- `cargo build --release` - Build release library
-- `cargo test` - Run Rust tests (25 tests covering game logic, save/load, hints)
+- `cargo build -p encrusted --release` - Build release library
+- `cargo test -p encrusted` - Run Rust tests (25 tests covering game logic, save/load, hints)
 - `cargo clean` - Clean build artifacts
 
 ### WASM (wasm)
-- `cargo build --target wasm32-unknown-unknown --release` - Build WebAssembly
+- `cargo build -p h2g2-wasm --target wasm32-unknown-unknown --release` - Build WebAssembly
 - Uses wasm-bindgen to generate JS bindings automatically
 
 ## Technologies
@@ -134,8 +140,7 @@ Tests cover:
 
 ### Rust Tests (25 tests)
 ```bash
-cd encrusted
-cargo test --release
+cargo test -p encrusted --release
 ```
 Tests cover:
 - Game initialization and core logic
@@ -210,7 +215,7 @@ The `bindgen` recipe automatically:
 - `apps/web/src/wasm/h2g2_wasm.js` - Auto-generated wasm-bindgen bindings (git-ignored)
 
 ### Hint System
-- Rust implementation: `encrusted/src/rust/hints.rs`
+- Rust implementation: `encrusted/src/hints.rs`
 - Tag-based scoring: soft filters for relevance, hard filters for must-match tags
 - ~1800 hints stored in: `encrusted/data/invisiclues.json`
 - React UI: `apps/web/src/components/HintModal.tsx`
