@@ -38,7 +38,7 @@ build-dev: bindgen install
     cd {{web}} && npm run build:dev
 
 # Run the web dev server
-dev: install
+dev: bindgen install
     cd {{web}} && npm run dev
 
 # Preview the production build

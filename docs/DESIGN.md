@@ -52,7 +52,7 @@ This is what makes it a CRT rather than a dark webpage. Treat these as first-cla
 Custom, hand-built (no component library chrome). Every interactive element needs the full state set:
 
 - **Buttons / controls:** transparent background, dim-green default, bright-green + glow on hover. Sharp corners, hairline borders. Focus is a real visible ring (`outline: 2px solid hsl(var(--terminal-green)); outline-offset: 2px`) on every control.
-- **Control bar (`TerminalControls`):** top-edge toolbar, hover-revealed, auto-hides after 2s. Backdrop blur.
+- **Control bar (`TerminalControls`):** top-edge toolbar, toggled via a "nub" handle (no hover-reveal, no timed auto-hide). Backdrop blur.
 - **Modals (`SaveLoadDialog`, `HintModal`):** centered or top-right panels, 1-2px green borders, black fill. The save/load overlay dims behind the modal (`hsl(var(--terminal-black) / 0.9)`); the hint modal uses a green glow (`box-shadow: 0 0 20px hsl(var(--terminal-green) / 0.25)`), not a drop shadow.
 - **Inputs:** transparent, glowing green text, dim-green placeholder, border brightens on focus.
 - **`Terminal`:** the root shell — owns game state, output log, and command input; composes every other component below it.
