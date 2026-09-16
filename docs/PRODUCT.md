@@ -16,7 +16,7 @@ Context of use: a single full-screen terminal in a browser, mostly on desktop wi
 
 ## Product Purpose
 
-A faithful web port of the HHGG Z-machine game wrapped in an authentic VT220 terminal. The engine runs in Rust/WASM; the UI is a CRT emulator. Success is two things at once: a player believes they are sitting at a 1980s green-phosphor terminal, *and* they never rage-quit because they got stuck or lost progress. Modern conveniences (save slots, undo/redo, progressive hints from the original Invisiclues) exist to keep people playing a deliberately punishing game, delivered so they don't shatter the era.
+A faithful web port of the HHGG Z-machine game wrapped in an authentic VT220 terminal. The engine runs in Rust/WASM; the UI is a CRT emulator. Success is two things at once: a player believes they are sitting at a 1980s green-phosphor terminal, *and* they never rage-quit because they got stuck or lost progress. Modern conveniences (save slots, undo/redo, progressive hints from the original Invisiclues) exist to keep people playing a deliberately punishing game, delivered so they don't shatter the era. Two in-world panes carry these conveniences without breaking character: the **Guide** (Sub-Etha Sens-O-Matic, Ctrl+G) surfaces a Hitchhiker's Guide entry for the player's current location with SEE ALSO cross-references to browse; the **Improbability Drive** (Ctrl+I) is a timeline sidebar that lists past turns, lets the player jump back to any branch point, and can "ENGAGE" to jump to a random point in their own history.
 
 ## Brand Personality
 
@@ -24,7 +24,7 @@ Adamsesque: witty, dry, faintly absurd. The guiding maxim is **"Don't Panic"**, 
 
 ## Anti-references
 
-- Modern flat SaaS chrome (rounded cards, drop shadows, Inter, a settings-panel feel). This is the dominant failure mode to avoid; a few modern defaults have already leaked in (Material drop shadow on the hint modal, an emerald-400 hover tint that is not the phosphor green).
+- Modern flat SaaS chrome (rounded cards, drop shadows, Inter, a settings-panel feel). This is the dominant failure mode to avoid; a few modern defaults have already leaked in (Material drop shadow on the hint modal).
 - "Hacker movie" neon cyber aesthetic, Matrix rain, glitch-for-glitch's-sake.
 - Skeuomorphic glossy monitor bezels and glassmorphism.
 - Gamification cliches: XP bars, confetti, achievement toasts, streaks.
@@ -40,7 +40,7 @@ Adamsesque: witty, dry, faintly absurd. The guiding maxim is **"Don't Panic"**, 
 ## Accessibility & Inclusion
 
 - Target **WCAG AA**. The phosphor palette is already tuned for it (primary green ~7:1, dim ~4.5:1 on black); keep new colors inside that system rather than introducing off-palette greens.
-- **Keyboard-first.** It is a terminal; every action must be reachable and *visibly* focusable from the keyboard. Focus indicators must be real (current code relies on a non-existent `ring` property, so focus is invisible: fix before anything else).
+- **Keyboard-first.** It is a terminal; every action must be reachable and *visibly* focusable from the keyboard. Focus indicators are real, phosphor-green `outline` rings on `:focus-visible`; keep new interactive elements consistent with that pattern.
 - **Respect `prefers-reduced-motion`.** The CRT flicker, cursor blink, scanline motion, and any boot sequence need a calm static fallback that still looks like a powered-on terminal.
 - **Screen-reader path.** Game output is an `aria-live` log; preserve that, and make sure modal/hint content moves focus correctly and is announced.
 - **Touch reality.** Hover is not available on phones; any affordance that only appears on hover is effectively missing for touch users.

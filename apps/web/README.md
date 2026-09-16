@@ -1,73 +1,18 @@
-# Welcome to your Lovable project
+# H2G2 Web
 
-## Project info
+React + Vite terminal UI for the Hitchhiker's Guide to the Galaxy game. The
+game engine runs as WebAssembly, compiled from the Rust crates at the repo
+root (`encrusted/`, `wasm/`).
 
-**URL**: https://lovable.dev/projects/3ad93b06-380f-444d-959a-20e7d117f4d8
+Run everything through the root [`justfile`](../../justfile) rather than
+`npm` directly, since the WASM build has to run first:
 
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/3ad93b06-380f-444d-959a-20e7d117f4d8) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```bash
+just dev        # dev server with hot reload
+just build      # full production build -> apps/web/dist
+just test-web   # this app's vitest suite
+just lint       # eslint
 ```
 
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/3ad93b06-380f-444d-959a-20e7d117f4d8) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+See the root [README.md](../../README.md) and [docs/](../../docs) for
+project-wide setup and architecture.

@@ -27,7 +27,7 @@ pub struct HintSystem {
 
 impl HintSystem {
     pub fn new() -> Self {
-        let json_data = include_str!("../../data/invisiclues.json");
+        let json_data = include_str!("../data/invisiclues.json");
         let book: HintBook = serde_json::from_str(json_data)
             .expect("Failed to parse InvisiClues JSON");
 

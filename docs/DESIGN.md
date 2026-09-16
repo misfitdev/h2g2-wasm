@@ -24,7 +24,7 @@ Channel triplets (HSL), on pure-black background:
 | `--border` | `120 40% 20%` | Dim green hairlines |
 
 Rules:
-- Stay inside this palette. Do not introduce off-hue greens. (Current debt: `HintModal` hardcodes `rgba(52,211,153,...)`, an emerald-400 that is bluer than the phosphor green; it should use `--terminal-green`.)
+- Stay inside this palette. Do not introduce off-hue greens.
 - Amber and red are semantic only, never decoration.
 - Migration note: tokens are HSL-channel format today. If the project later moves to OKLCH, keep the same roles; do not change the look.
 
@@ -45,16 +45,23 @@ This is what makes it a CRT rather than a dark webpage. Treat these as first-cla
 - **Boot flicker:** a 0.5s opacity flicker on load (`@keyframes flicker`).
 - **Cursor blink:** 1s step-end blink.
 - Sharp corners everywhere: `--radius: 0`. Keep it. Rounded corners read as modern and break the era.
-- All of the above must gate on `prefers-reduced-motion` and degrade to a static-but-still-CRT look. (Not currently done.)
+- All of the above gate on `prefers-reduced-motion` and degrade to a static-but-still-CRT look.
 
 ## Components
 
-Custom, hand-built (no component library chrome). Every interactive element needs the full state set; today several are incomplete:
+Custom, hand-built (no component library chrome). Every interactive element needs the full state set:
 
-- **Buttons / controls:** transparent background, dim-green default, bright-green + glow on hover. Sharp corners, hairline borders. **Focus state is currently broken** (relies on a non-existent `ring` property with `outline: none`): every control must have a real visible focus ring (e.g. `outline: 2px solid hsl(var(--terminal-green)); outline-offset: 2px`).
-- **Control bar (`TerminalControls`):** top-edge toolbar, hover-revealed, auto-hides after 2s. Backdrop blur. (Discoverability and touch gaps; see critique.)
-- **Modals (`SaveLoadDialog`, `HintModal`):** centered or top-right panels, 1-2px green borders, black fill. The save/load overlay scrim is currently invalid CSS (no dim behind the modal); the hint modal carries a Material-style drop shadow that should be replaced with a green glow or hard border.
+- **Buttons / controls:** transparent background, dim-green default, bright-green + glow on hover. Sharp corners, hairline borders. Focus is a real visible ring (`outline: 2px solid hsl(var(--terminal-green)); outline-offset: 2px`) on every control.
+- **Control bar (`TerminalControls`):** top-edge toolbar, toggled via a "nub" handle (no hover-reveal, no timed auto-hide). Backdrop blur.
+- **Modals (`SaveLoadDialog`, `HintModal`):** centered or top-right panels, 1-2px green borders, black fill. The save/load overlay dims behind the modal (`hsl(var(--terminal-black) / 0.9)`); the hint modal uses a green glow (`box-shadow: 0 0 20px hsl(var(--terminal-green) / 0.25)`), not a drop shadow.
 - **Inputs:** transparent, glowing green text, dim-green placeholder, border brightens on focus.
+- **`Terminal`:** the root shell — owns game state, output log, and command input; composes every other component below it.
+- **`CRTScreen`:** decorative, pointer-events-none overlay (scanlines, beam, vignette, chromatic aberration, boot-flicker) layered above terminal text but below modals.
+- **`Splash`:** full-screen title screen rendered as a `role="dialog"`; draws the boot art to a canvas at native resolution and scales via CSS.
+- **`ScoreMeter`:** a `role="status"` strip showing current location, score bar, and turn count.
+- **`GuidePane`:** a slide-out aside (the in-fiction "Guide") with a hover/tap handle, cross-referenced entries, and its own flicker transition on entry swap.
+- **`ImprobabilityDrive`:** a slide-out aside listing the turn timeline, with manual-override jump and a randomized "engage" action.
+- **`DebugPanel`:** a fixed bottom-right readout (location, git hash, WASM checksum, seed), toggled by `?debug=1`.
 
 ## Layout
 

@@ -20,11 +20,11 @@ install:
 
 # Build the wasm crate (release)
 build-wasm:
-    cd wasm && cargo build --target wasm32-unknown-unknown --release
+    cargo build -p h2g2-wasm --target wasm32-unknown-unknown --release
 
 # Generate JS bindings from the wasm build into the web app
 bindgen: build-wasm
-    cd wasm && wasm-bindgen target/wasm32-unknown-unknown/release/h2g2_wasm.wasm --out-dir ../{{web}}/src/wasm --target web
+    wasm-bindgen target/wasm32-unknown-unknown/release/h2g2_wasm.wasm --out-dir {{web}}/src/wasm --target web
     # `env` imports do not resolve in the browser; point them at the shim.
     cd {{web}} && sed -i.bak "s|from 'env'|from '../env-shim.js'|g" src/wasm/h2g2_wasm.js && rm -f src/wasm/h2g2_wasm.js.bak
     cp {{web}}/src/wasm/h2g2_wasm_bg.wasm {{web}}/public/h2g2_wasm_bg.wasm
@@ -38,7 +38,7 @@ build-dev: bindgen install
     cd {{web}} && npm run build:dev
 
 # Run the web dev server
-dev: install
+dev: bindgen install
     cd {{web}} && npm run dev
 
 # Preview the production build
@@ -54,7 +54,7 @@ test: test-rust test-web
 
 # Run Rust tests (the wasm crate is a test-less browser-only cdylib)
 test-rust:
-    cd encrusted && cargo test
+    cargo test -p encrusted
 
 # Run web tests
 test-web: install
@@ -62,5 +62,4 @@ test-web: install
 
 # Remove build artifacts, caches, and dependencies
 clean:
-    rm -rf encrusted/target wasm/target {{web}}/node_modules {{web}}/dist
-    rm -f Cargo.lock encrusted/Cargo.lock {{web}}/package-lock.json
+    rm -rf target {{web}}/node_modules {{web}}/dist

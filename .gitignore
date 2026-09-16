@@ -23,6 +23,10 @@ node_modules/
 *.swo
 *~
 
+# Tool caches / transient agent output
+.impeccable/
+.serena/
+
 # OS
 .DS_Store
 Thumbs.db
