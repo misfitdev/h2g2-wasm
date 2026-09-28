@@ -9,6 +9,7 @@ import argparse
 import json
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 import numpy as np
@@ -18,13 +19,17 @@ GLYPHS = " .:-=+*#%@"
 CELL_WIDTH = 4
 CELL_HEIGHT = 8
 FONT_SIZE = 7
+FFPROBE_TIMEOUT_SECONDS = 30
 
 
 def probe_video(path: Path) -> tuple[int, int]:
-    result = subprocess.run(
-        ["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height", "-of", "json", str(path)],
-        check=True, capture_output=True, text=True,
-    )
+    try:
+        result = subprocess.run(
+            ["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height", "-of", "json", str(path)],
+            check=True, capture_output=True, text=True, timeout=FFPROBE_TIMEOUT_SECONDS,
+        )
+    except subprocess.TimeoutExpired as error:
+        raise RuntimeError(f"ffprobe timed out after {FFPROBE_TIMEOUT_SECONDS}s: {path}") from error
     stream = json.loads(result.stdout)["streams"][0]
     return int(stream["width"]), int(stream["height"])
 
@@ -63,21 +68,29 @@ def main() -> None:
     args = parser.parse_args()
     if args.columns < 1 or args.fps < 1:
         parser.error("columns and fps must be positive")
-    source_width, source_height = probe_video(args.source)
+    source = args.source.resolve()
+    output = args.output.resolve()
+    if source == output:
+        parser.error("source and output must be different files")
+
+    source_width, source_height = probe_video(source)
     rows = max(1, round(args.columns * CELL_WIDTH * source_height / (CELL_HEIGHT * source_width)))
     frame_bytes = args.columns * rows * 3
     atlas = glyph_atlas(args.font)
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    temporary = args.output.with_name(args.output.stem + ".tmp" + args.output.suffix)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile(
+        dir=output.parent, prefix=f".{output.stem}.", suffix=output.suffix, delete=False,
+    ) as temporary_file:
+        temporary = Path(temporary_file.name)
 
-    decoder = ["ffmpeg", "-v", "error", "-i", str(args.source)]
+    decoder = ["ffmpeg", "-v", "error", "-i", str(source)]
     if args.duration:
         decoder += ["-t", str(args.duration)]
     decoder += ["-vf", f"fps={args.fps},scale={args.columns}:{rows}:flags=area,format=rgb24", "-f", "rawvideo", "-pix_fmt", "rgb24", "pipe:1"]
     encoder = [
         "ffmpeg", "-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24",
         "-s", f"{args.columns * CELL_WIDTH}x{rows * CELL_HEIGHT}", "-r", str(args.fps),
-        "-i", "pipe:0", "-i", str(args.source), "-map", "0:v:0", "-map", "1:a:0",
+        "-i", "pipe:0", "-i", str(source), "-map", "0:v:0", "-map", "1:a:0",
         "-c:v", "libx264", "-preset", "medium", "-crf", "34", "-pix_fmt", "yuv420p",
         "-c:a", "copy", "-movflags", "+faststart", str(temporary),
     ]
@@ -85,10 +98,12 @@ def main() -> None:
         encoder.insert(-1, "-t")
         encoder.insert(-1, str(args.duration))
 
-    decoded = subprocess.Popen(decoder, stdout=subprocess.PIPE)
-    encoded = subprocess.Popen(encoder, stdin=subprocess.PIPE)
+    decoded = None
+    encoded = None
     frames = 0
     try:
+        decoded = subprocess.Popen(decoder, stdout=subprocess.PIPE)
+        encoded = subprocess.Popen(encoder, stdin=subprocess.PIPE)
         if decoded.stdout is None or encoded.stdin is None:
             raise RuntimeError("Could not open video pipes")
         while True:
@@ -106,13 +121,17 @@ def main() -> None:
         decoded.stdout.close()
         if decoded.wait() != 0 or encoded.wait() != 0:
             raise RuntimeError("ffmpeg failed to decode or encode the video")
-        temporary.replace(args.output)
-        print(f"Wrote {args.output}: {frames} frames, {args.columns}x{rows} characters")
+        temporary.replace(output)
+        print(f"Wrote {output}: {frames} frames, {args.columns}x{rows} characters")
     finally:
-        if decoded.poll() is None:
+        if decoded is not None and decoded.poll() is None:
             decoded.kill()
-        if encoded.poll() is None:
+        if encoded is not None and encoded.poll() is None:
             encoded.kill()
+        if decoded is not None:
+            decoded.wait()
+        if encoded is not None:
+            encoded.wait()
         if temporary.exists():
             temporary.unlink()
 

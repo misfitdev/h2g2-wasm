@@ -31,23 +31,43 @@ describe('Fish Easter egg', () => {
     expect(screen.getByRole('button', { name: '[ PLAY ]' })).toBeEnabled();
   });
 
-  it('plays, pauses, and replays the converted MP4 with its own audio', async () => {
+  it('tracks media playback events while playing, pausing, and replaying', () => {
     const { container } = render(<FishEasterEgg />);
     const video = loadMockVideo(container);
     const play = vi.spyOn(video, 'play').mockResolvedValue();
     const pause = vi.spyOn(video, 'pause').mockImplementation(() => {});
 
     fireEvent.click(screen.getByRole('button', { name: '[ PLAY ]' }));
-    await waitFor(() => expect(screen.getByRole('button', { name: /pause/i })).toBeInTheDocument());
     expect(play).toHaveBeenCalledOnce();
+    fireEvent.play(video);
+    expect(screen.getByRole('button', { name: /pause/i })).toBeInTheDocument();
+
+    fireEvent.pause(video);
+    expect(screen.getByRole('button', { name: '[ PLAY ]' })).toBeInTheDocument();
+    fireEvent.play(video);
     fireEvent.click(screen.getByRole('button', { name: /pause/i }));
     expect(pause).toHaveBeenCalledOnce();
+    fireEvent.pause(video);
+
     fireEvent.click(screen.getByRole('button', { name: /replay/i }));
     expect(video.currentTime).toBe(0);
     expect(play).toHaveBeenCalledTimes(2);
   });
 
-  it('offers fit and native 2880-pixel-wide views without changing the 480-column render', () => {
+  it('clears a playback error when the media successfully starts on retry', async () => {
+    const { container } = render(<FishEasterEgg />);
+    const video = loadMockVideo(container);
+    const play = vi.spyOn(video, 'play').mockRejectedValueOnce(new Error('Playback blocked')).mockResolvedValue();
+
+    fireEvent.click(screen.getByRole('button', { name: '[ PLAY ]' }));
+    expect(await screen.findByRole('alert')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: '[ PLAY ]' }));
+    await waitFor(() => expect(play).toHaveBeenCalledTimes(2));
+    fireEvent.play(video);
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+  });
+
+  it('offers fit and native-size views without changing the 480-column render', () => {
     const { container } = render(<FishEasterEgg />);
     const video = loadMockVideo(container);
     fireEvent.click(screen.getByRole('button', { name: /full size/i }));
@@ -64,12 +84,12 @@ describe('Fish Easter egg', () => {
     const drawImage = vi.fn();
     Object.defineProperty(canvas, 'getContext', { value: () => ({ drawImage }) });
     const video = loadMockVideo(container);
-    Object.defineProperty(video, 'videoWidth', { value: 2880, configurable: true });
-    Object.defineProperty(video, 'videoHeight', { value: 1200, configurable: true });
+    Object.defineProperty(video, 'videoWidth', { value: 1920, configurable: true });
+    Object.defineProperty(video, 'videoHeight', { value: 800, configurable: true });
     fireEvent.loadedData(video);
     expect(drawImage).toHaveBeenCalledOnce();
-    expect(canvas).toHaveAttribute('width', '2880');
-    expect(canvas).toHaveAttribute('height', '1200');
+    expect(canvas).toHaveAttribute('width', '1920');
+    expect(canvas).toHaveAttribute('height', '800');
     expect(screen.getByText('STILL FRAME · AUDIO AVAILABLE')).toBeInTheDocument();
   });
 });

@@ -39,11 +39,10 @@ export function FishEasterEgg() {
     if (!videoAvailable || !video) return;
     if (playing) {
       video.pause();
-      setPlaying(false);
       return;
     }
     if (video.ended) video.currentTime = 0;
-    void video.play().then(() => setPlaying(true)).catch(() => setVideoError(true));
+    void video.play().catch(() => setVideoError(true));
   }, [playing, videoAvailable]);
 
   const replay = useCallback(() => {
@@ -51,7 +50,7 @@ export function FishEasterEgg() {
     if (!videoAvailable || !video) return;
     video.currentTime = 0;
     setElapsed(0);
-    void video.play().then(() => setPlaying(true)).catch(() => setVideoError(true));
+    void video.play().catch(() => setVideoError(true));
   }, [videoAvailable]);
 
   return (
@@ -94,6 +93,11 @@ export function FishEasterEgg() {
             }
           }}
           onTimeUpdate={(event) => setElapsed(event.currentTarget.currentTime * 1000)}
+          onPlay={() => {
+            setPlaying(true);
+            setVideoError(false);
+          }}
+          onPause={() => setPlaying(false)}
           onEnded={() => setPlaying(false)}
           onError={() => {
             setVideoAvailable(false);
