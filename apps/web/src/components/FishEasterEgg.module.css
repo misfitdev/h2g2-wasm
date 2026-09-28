@@ -1,0 +1,108 @@
+.screen {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  background: hsl(var(--terminal-black));
+  color: hsl(var(--terminal-green));
+  font-family: 'Glass TTY VT220', 'Courier New', monospace;
+  text-shadow: 0 0 3px hsl(var(--terminal-green-glow) / 0.7);
+}
+
+.controls,
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid hsl(var(--border));
+  font-size: 0.9rem;
+}
+
+.controls button {
+  display: inline-block;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid hsl(var(--terminal-green-dim));
+  border-radius: 0;
+  background: transparent;
+  color: hsl(var(--terminal-green));
+  cursor: pointer;
+}
+
+.controls button:hover {
+  border-color: hsl(var(--terminal-green-light));
+  color: hsl(var(--terminal-green-light));
+}
+
+.controls button:disabled {
+  color: hsl(var(--terminal-green-dim));
+  cursor: not-allowed;
+}
+
+.controls button:focus-visible {
+  outline: 2px solid hsl(var(--terminal-green));
+  outline-offset: 2px;
+}
+
+.viewport {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.heading {
+  margin: 0;
+  padding: 0.7rem 1rem 0;
+  text-align: center;
+  font-size: clamp(1rem, 1.5vw, 1.5rem);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+}
+
+.video {
+  display: block;
+  margin: auto;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  box-shadow: 0 0 18px hsl(var(--terminal-green-glow) / 0.15);
+}
+
+.fullSize {
+  max-width: none;
+  max-height: none;
+  flex: none;
+}
+
+.audioOnlyVideo {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.missing {
+  margin: auto;
+  max-width: 48rem;
+  text-align: center;
+}
+
+.footer {
+  justify-content: space-between;
+  border-top: 1px solid hsl(var(--border));
+  border-bottom: 0;
+}
+
+.footer p {
+  margin: 0;
+}
