@@ -8,6 +8,9 @@ wasm/pkg/
 apps/web/public/h2g2_wasm*
 apps/web/src/wasm/
 
+# Keep the unconverted movie out of the shipped public assets.
+apps/web/public/video/fish.mp4
+
 # Save files
 *.sav
 

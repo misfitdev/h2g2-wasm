@@ -6,7 +6,7 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 # Cloudflare Pages builders ship only node/npm, so bootstrap mise before asking
-# it for the rest of the toolchain (just, node, rust, wasm-bindgen).
+# it for the rest of the toolchain (just, node, rust, wasm-bindgen, git-lfs).
 #
 # Pinned and checksummed rather than `curl https://mise.run | sh`: that pipes
 # mutable remote content straight into a shell, so whoever controls the script
@@ -45,7 +45,30 @@ eval "$(mise activate bash --shims)"
 # parent directories, and the Cloudflare image keeps an asdf-era
 # $HOME/.tool-versions whose entries mise cannot resolve. Versions still come
 # from mise.toml; keep this list in step with its [tools] table.
-mise install just node rust cargo:wasm-bindgen-cli
+mise install just node rust cargo:wasm-bindgen-cli git-lfs
+
+# Pages does not document automatic Git LFS hydration. Pull the one production
+# media asset explicitly, then fail closed rather than deploying a pointer file
+# or an asset over Pages' 25 MiB per-file limit.
+fish_video="apps/web/public/video/fish-ascii.mp4"
+git lfs pull --include="$fish_video" --exclude=""
+
+if [ ! -f "$fish_video" ]; then
+    echo "build.sh: missing LFS asset: $fish_video" >&2
+    exit 1
+fi
+
+fish_bytes="$(wc -c < "$fish_video" | tr -d ' ')"
+pages_asset_limit=$((25 * 1024 * 1024))
+if [ "$fish_bytes" -gt "$pages_asset_limit" ]; then
+    echo "build.sh: $fish_video is ${fish_bytes} bytes; Cloudflare Pages allows 25 MiB." >&2
+    exit 1
+fi
+
+if [ "$(dd if="$fish_video" bs=1 skip=4 count=4 2>/dev/null)" != "ftyp" ]; then
+    echo "build.sh: $fish_video is not a hydrated MP4 (Git LFS pointer suspected)." >&2
+    exit 1
+fi
 
 # mise.toml declares the wasm32 target, but rust toolchains installed by other
 # means may not have it.
